@@ -44,6 +44,7 @@ not be avoided (the plugin uses the first approach). This is a principal
 constraint that can't be evaded.
 
 ## Status
+A picture is worth a thousand words. Data and styles from https://openmaptiles.org.
 #### OSM-liberty
 ![osm-liberty 2](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-2.png)
 ![osm-liberty 5](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-5.png)
@@ -57,3 +58,4 @@ constraint that can't be evaded.
 ![klokantech-basic 9](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-9.png)
 ![klokantech-basic 13](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-13.png)
 ![klokantech-basic 14](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-14.png)
+
