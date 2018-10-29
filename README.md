@@ -19,7 +19,7 @@ QPixmap::loadFromData() functions. The zoom number is passed as ASCII string
 to the functions:
 ```cpp
 QPixmap pm;
-pm.loadFromData(tileData(_zoom), QString::number(_zoom).toLatin1());
+pm.loadFromData(tileData, QString::number(zoom).toLatin1());
 ```
 
 ## Build
