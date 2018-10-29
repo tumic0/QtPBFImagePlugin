@@ -29,7 +29,7 @@ Build requirements:
 
 Build steps:
 ```shell
-qmake gpxsee.pro
+qmake pbfplugin.pro
 make
 ```
 
