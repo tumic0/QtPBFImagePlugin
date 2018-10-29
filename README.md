@@ -42,3 +42,18 @@ As the plugin only has isolated info about a single tile image, texts
 overlapping to neighbour tiles can not be displayed or their overlapping can
 not be avoided (the plugin uses the first approach). This is a principal
 constraint that can't be evaded.
+
+## Status
+#### OSM-liberty
+![osm-liberty 2](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-2.png)
+![osm-liberty 5](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-5.png)
+![osm-liberty 9](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-9.png)
+![osm-liberty 11](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-11.png)
+![osm-liberty 14](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-14.png)
+
+#### Klokantech-basic
+![klokantech-basic 2](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-2.png)
+![klokantech-basic 4](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-4.png)
+![klokantech-basic 9](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-9.png)
+![klokantech-basic 13](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-13.png)
+![klokantech-basic 14](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-14.png)
