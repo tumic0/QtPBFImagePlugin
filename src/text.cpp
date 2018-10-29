@@ -2,6 +2,7 @@
 #include <QFontMetrics>
 #include <QPainter>
 #include "text.h"
+#include "textitem.h"
 #include "textpathitem.h"
 
 
@@ -51,27 +52,16 @@ void Text::addLabel(const QString &text, const QPointF &pos, const QFont &font,
 	if (text.isEmpty())
 		return;
 
-	QFontMetrics fm(font);
-	int limit = fm.width('M') * maxTextWidth;
-	int flags = Qt::AlignCenter | Qt::TextWordWrap | Qt::TextDontClip;
-
-	QRect br = fm.boundingRect(QRect(0, 0, limit, 0), flags, text);
-	if (!br.isValid())
+	TextItem *ti = new TextItem(text, pos, font, maxTextWidth);
+	addItem(ti);
+	if (!sceneRect().contains(ti->sceneBoundingRect())) {
+		delete ti;
 		return;
-	br.moveTo((pos - QPointF(br.width() / 2.0, br.height() / 2.0)).toPoint());
-	if (!sceneRect().contains(br))
-		return;
-	QPixmap pm(br.size());
-	pm.fill(Qt::transparent);
-	QPainter p(&pm);
-	p.setFont(font);
-	p.setPen(pen);
-	p.drawText(pm.rect(), flags, text);
+	}
 
-	QGraphicsPixmapItem *pi = addPixmap(pm);
-	pi->setPos(br.topLeft());
+	ti->setPen(pen);
 
-	QList<QGraphicsItem*> ci = collidingItems(pi);
+	QList<QGraphicsItem*> ci = collidingItems(ti);
 	for (int i = 0; i < ci.size(); i++)
 		ci[i]->setVisible(false);
 }
@@ -95,13 +85,13 @@ void Text::addLabel(const QString &text, const QPainterPath &path,
 		const QPainterPath &segment = list.at(i);
 		TextPathItem *pi = new TextPathItem(text, reverse(segment)
 		  ? segment.toReversed() : segment, font);
-		pi->setPen(pen);
 		addItem(pi);
-
 		if (!sceneRect().contains(pi->sceneBoundingRect())) {
 			delete pi;
 			continue;
 		}
+
+		pi->setPen(pen);
 
 		QList<QGraphicsItem*> ci = collidingItems(pi);
 		for (int j = 0; j < ci.size(); j++)

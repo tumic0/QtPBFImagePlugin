@@ -18,7 +18,8 @@ HEADERS += src/pbfhandler.h \
     src/text.h \
     src/tile.h \
     src/function.h \
-    src/textpathitem.h
+    src/textpathitem.h \
+    src/textitem.h
 SOURCES += src/pbfplugin.cpp \
     src/pbfhandler.cpp \
     src/gzip.cpp \
@@ -27,7 +28,8 @@ SOURCES += src/pbfplugin.cpp \
     src/color.cpp \
     src/text.cpp \
     src/function.cpp \
-    src/textpathitem.cpp
+    src/textpathitem.cpp \
+    src/textitem.cpp
 
 LIBS += -lprotobuf-lite
 
