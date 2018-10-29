@@ -12,10 +12,10 @@ public:
 
 	int size() const {return _background.width();}
 	Text &text() {return _text;}
-	QPainter *painter() {return &_painter;}
+	QPainter &painter() {return _painter;}
 
-	QImage &render() {
-		_text.render(painter());
+	const QImage &render() {
+		_text.render(&painter());
 		return _background;
 	}
 

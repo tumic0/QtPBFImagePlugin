@@ -344,17 +344,17 @@ bool Style::Layer::match(int zoom, const QVariantMap &tags) const
 void Style::Layer::drawPath(int zoom, const QPainterPath &path,
   Tile &tile) const
 {
-	QPainter *p = tile.painter();
+	QPainter &p = tile.painter();
 
 	QPen pen(_paint.pen(_type, zoom));
 	pen.setJoinStyle(_layout.lineJoin());
 	pen.setCapStyle(_layout.lineCap());
 
-	p->setRenderHint(QPainter::Antialiasing, _paint.antialias(_type));
-	p->setPen(pen);
-	p->setBrush(_paint.brush(_type, zoom));
-	p->setOpacity(_paint.opacity(_type, zoom));
-	p->drawPath(path);
+	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type));
+	p.setPen(pen);
+	p.setBrush(_paint.brush(_type, zoom));
+	p.setOpacity(_paint.opacity(_type, zoom));
+	p.drawPath(path);
 }
 
 void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
@@ -422,8 +422,8 @@ void Style::drawBackground(Tile &tile)
 	path.addRect(QRectF(0, 0, tile.size(), tile.size()));
 
 	if (_styles.isEmpty()) {
-		tile.painter()->setBrush(Qt::lightGray);
-		tile.painter()->drawPath(path);
+		tile.painter().setBrush(Qt::lightGray);
+		tile.painter().drawPath(path);
 	} else if (_styles.first().isBackground())
 		_styles.first().drawPath(_zoom, path, tile);
 }
