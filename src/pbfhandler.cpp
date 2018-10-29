@@ -29,7 +29,7 @@ bool PBFHandler::read(QImage *image)
 
 	bool ok;
 	int zoom = format().toInt(&ok);
-	*image = PBF::image(ba, ok ? zoom : -1, _style);
+	*image = PBF::image(ba, ok ? zoom : -1, _style, 256);
 
 	return !image->isNull();
 }

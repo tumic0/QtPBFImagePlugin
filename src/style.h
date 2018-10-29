@@ -77,10 +77,10 @@ private:
 		class Layout {
 		public:
 			Layout() : _textSize(16), _textMaxWidth(10), _lineCap(Qt::FlatCap),
-			  _lineJoin(Qt::MiterJoin) {}
+			  _lineJoin(Qt::MiterJoin), _capitalize(false) {}
 			Layout(const QJsonObject &json);
 
-			bool showText(int zoom) const {return _textSize.value(zoom) > 0;}
+			bool capitalize() const {return _capitalize;}
 			qreal maxTextWidth(int zoom) const {return _textMaxWidth.value(zoom);}
 			const QString &field() const {return _textField;}
 			const QStringList &keys() const {return _keys;}
@@ -95,6 +95,7 @@ private:
 			FunctionF _textMaxWidth;
 			Qt::PenCapStyle _lineCap;
 			Qt::PenJoinStyle _lineJoin;
+			bool _capitalize;
 		};
 
 		class Paint {

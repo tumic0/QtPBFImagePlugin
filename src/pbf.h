@@ -8,7 +8,7 @@ class Style;
 
 namespace PBF
 {
-	QImage image(const QByteArray &data, int zoom, Style *style);
+	QImage image(const QByteArray &data, int zoom, Style *style, int size);
 }
 
 #endif // PBF_H

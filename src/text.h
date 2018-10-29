@@ -6,8 +6,8 @@
 class Text : public QGraphicsScene
 {
 public:
-	Text(QObject *parent = 0) : QGraphicsScene(parent)
-	  {setSceneRect(0, 0, 256, 256);}
+	Text(int size, QObject *parent = 0) : QGraphicsScene(parent)
+	  {setSceneRect(0, 0, size, size);}
 
 	void addLabel(const QString &text, const QPointF &pos, const QFont &font,
 	  const QPen &pen, qreal maxTextWidth);

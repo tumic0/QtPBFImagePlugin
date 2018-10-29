@@ -7,20 +7,22 @@
 
 class Tile {
 public:
-	Tile() : _background(256, 256, QImage::Format_ARGB32) {}
+	Tile(int size) : _background(size, size, QImage::Format_ARGB32),
+	  _text(size), _painter(&_background) {}
 
+	int size() const {return _background.width();}
 	Text &text() {return _text;}
-	QImage &background() {return _background;}
+	QPainter *painter() {return &_painter;}
 
 	QImage &render() {
-		QPainter p(&_background);
-		_text.render(&p);
+		_text.render(painter());
 		return _background;
 	}
 
 private:
-	Text _text;
 	QImage _background;
+	Text _text;
+	QPainter _painter;
 };
 
 #endif // TILE_H

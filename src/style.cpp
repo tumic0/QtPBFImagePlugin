@@ -236,7 +236,7 @@ bool Style::Layer::Paint::antialias(Layer::Type type) const
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
   : _textSize(16), _textMaxWidth(10), _lineCap(Qt::FlatCap),
-  _lineJoin(Qt::MiterJoin)
+  _lineJoin(Qt::MiterJoin), _capitalize(false)
 {
 	if (!(json.contains("text-field") && json["text-field"].isString()))
 		return;
@@ -260,6 +260,9 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 		_textMaxWidth = FunctionF(json["text-max-width"].toObject());
 	if (json.contains("text-max-width") && json["text-max-width"].isDouble())
 		_textMaxWidth = json["text-max-width"].toDouble();
+
+	if (json.contains("text-transform") && json["text-transform"].isString())
+		_capitalize = json["text-transform"].toString() == "uppercase";
 
 	if (json.contains("line-cap") && json["line-cap"].isString()) {
 		if (json["line-cap"].toString() == "round")
@@ -341,39 +344,35 @@ bool Style::Layer::match(int zoom, const QVariantMap &tags) const
 void Style::Layer::drawPath(int zoom, const QPainterPath &path,
   Tile &tile) const
 {
-	QPainter p(&(tile.background()));
+	QPainter *p = tile.painter();
 
 	QPen pen(_paint.pen(_type, zoom));
 	pen.setJoinStyle(_layout.lineJoin());
 	pen.setCapStyle(_layout.lineCap());
 
-	p.setRenderHint(QPainter::Antialiasing,
-	  _paint.antialias(_type));
-	p.setPen(pen);
-	p.setBrush(_paint.brush(_type, zoom));
-	p.setOpacity(_paint.opacity(_type, zoom));
-	p.drawPath(path);
+	p->setRenderHint(QPainter::Antialiasing, _paint.antialias(_type));
+	p->setPen(pen);
+	p->setBrush(_paint.brush(_type, zoom));
+	p->setOpacity(_paint.opacity(_type, zoom));
+	p->drawPath(path);
 }
 
 void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
   const QVariantMap &tags, Tile &tile) const
 {
-	if (!_layout.showText(zoom))
-		return;
-
 	QString text(_layout.field());
 	for (int i = 0; i < _layout.keys().size(); i++) {
 		const QString &key = _layout.keys().at(i);
 		const QVariant val = tags.value(key);
-		text.replace(QString("{%1}").arg(key), val.toString());
+		text.replace(QString("{%1}").arg(key), _layout.capitalize()
+		  ? val.toString().toUpper() : val.toString());
 	}
 
-	const QPainterPath::Element &e = path.elementAt(0);
 	QPen pen(_paint.pen(_type, zoom));
 	QFont font(_layout.font(zoom));
 
-	if (path.elementCount() == 1)
-		tile.text().addLabel(text.trimmed(), QPointF(e.x, e.y), font, pen,
+	if (path.elementCount() == 1 && path.elementAt(0).isMoveTo())
+		tile.text().addLabel(text.trimmed(), path.elementAt(0), font, pen,
 		  _layout.maxTextWidth(zoom));
 	else
 		tile.text().addLabel(text.trimmed(), path, font, pen);
@@ -419,15 +418,12 @@ void Style::drawFeature(int layer, const QPainterPath &path,
 
 void Style::drawBackground(Tile &tile)
 {
-	QPainterPath p;
-	p.addRect(tile.background().rect());
+	QPainterPath path;
+	path.addRect(QRectF(0, 0, tile.size(), tile.size()));
 
 	if (_styles.isEmpty()) {
-		tile.background().fill(Qt::lightGray);
-		return;
-	}
-
-	for (int i = 0; i < _styles.size(); i++)
-		if (_styles.at(i).isBackground())
-			_styles.at(i).drawPath(_zoom, p, tile);
+		tile.painter()->setBrush(Qt::lightGray);
+		tile.painter()->drawPath(path);
+	} else if (_styles.first().isBackground())
+		_styles.first().drawPath(_zoom, path, tile);
 }

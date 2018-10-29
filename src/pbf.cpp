@@ -121,14 +121,14 @@ static void feature(const Feature &feature, Style *style, int styleLayer,
 
 static void layer(const Layer &layer, Style *style, int styleLayer, Tile &tile)
 {
-	qreal factor = layer.data->extent() / 256.0;
+	qreal factor = layer.data->extent() / (qreal)tile.size();
 
 	for (int i = 0; i < layer.data->features_size(); i++)
 		feature(Feature(&(layer.data->features(i)), &(layer.keys),
 		  &(layer.values)), style, styleLayer, factor, tile);
 }
 
-QImage PBF::image(const QByteArray &data, int zoom, Style *style)
+QImage PBF::image(const QByteArray &data, int zoom, Style *style, int size)
 {
 	vector_tile::Tile tile;
 	if (!tile.ParseFromArray(data.constData(), data.size())) {
@@ -136,7 +136,7 @@ QImage PBF::image(const QByteArray &data, int zoom, Style *style)
 		return QImage();
 	}
 
-	Tile t;
+	Tile t(size);
 
 	style->setZoom(zoom);
 	style->drawBackground(t);
