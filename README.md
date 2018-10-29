@@ -3,7 +3,7 @@ Qt image plugin for displaying Mapbox vector tiles
 
 ## Description
 QtPBFImagePlugin is a Qt image plugin that enables applications capable of
-displaying raster MBTiles maps to also display vector (PBF) tiles without
+displaying raster MBTiles maps to also display PBF vector tiles without
 (almost, see usage) any application modifications.
 
 Standard Mapbox GL Styles are used for styling the maps. Most style features
@@ -11,8 +11,8 @@ used by [Maputnik](http://editor.openmaptiles.org) are supported. The style
 is loaded from /usr/share/pbf/style.json or ~/.pbf/style.json if it exists.
 
 ## Usage
-Due to a major design flaw in the Mapbox vector tiles specification (the zoom
-is not part of the PBF data), the plugin can not be used "as is", but passing
+Due to a major design flaw in the Mapbox vector tiles specification - the zoom
+is not part of the PBF data - the plugin can not be used "as is", but passing
 the zoom level is necessary. This is done by exploiting the optional format
 parameter of the QImage constructor or the QImage::fromData() or
 QPixmap::loadFromData() functions. The zoom number is passed as ASCII string
