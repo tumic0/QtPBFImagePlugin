@@ -14,63 +14,90 @@
 Style::Layer::Filter::Filter(const QJsonArray &json)
   : _type(Unknown), _not(false)
 {
+#define INVALID_FILTER(json) \
+	{qWarning() << json << ": invalid filter"; return;}
+
 	if (json.isEmpty())
-		return;
+		INVALID_FILTER(json);
 
 	QString type = json.at(0).toString();
 
 	if (type == "==") {
+		if (json.size() != 3)
+			INVALID_FILTER(json);
 		_type = EQ;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(),
 		  json.at(2).toVariant());
 	} else if (type == "!=") {
+		if (json.size() != 3)
+			INVALID_FILTER(json);
 		_type = NE;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(),
 		  json.at(2).toVariant());
 	} else if (type == "<") {
+		if (json.size() != 3)
+			INVALID_FILTER(json);
 		_type = LT;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(),
 		  json.at(2).toVariant());
 	} else if (type == "<=") {
+		if (json.size() != 3)
+			INVALID_FILTER(json);
 		_type = LE;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(),
 		  json.at(2).toVariant());
 	} else if (type == ">") {
+		if (json.size() != 3)
+			INVALID_FILTER(json);
 		_type = GT;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(),
 		  json.at(2).toVariant());
 	} else if (type == ">=") {
+		if (json.size() != 3)
+			INVALID_FILTER(json);
 		_type = GE;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(),
 		  json.at(2).toVariant());
 	} else if (type == "all") {
+		if (json.size() < 2)
+			INVALID_FILTER(json);
 		_type = All;
 		for (int i = 1; i < json.size(); i++)
 			_filters.append(Filter(json.at(i).toArray()));
 	} else if (type == "any") {
+		if (json.size() < 2)
+			INVALID_FILTER(json);
 		_type = Any;
 		for (int i = 1; i < json.size(); i++)
 			_filters.append(Filter(json.at(i).toArray()));
 	} else if (type == "in") {
+		if (json.size() < 3)
+			INVALID_FILTER(json);
 		_type = In;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(), QVariant());
 		for (int i = 2; i < json.size(); i++)
 			_set.insert(json.at(i).toString());
 	}  else if (type == "!in") {
+		if (json.size() < 3)
+			INVALID_FILTER(json);
 		_type = In;
 		_not = true;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(), QVariant());
 		for (int i = 2; i < json.size(); i++)
 			_set.insert(json.at(i).toString());
 	} else if (type == "has") {
+		if (json.size() < 2)
+			INVALID_FILTER(json);
 		_type = Has;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(), QVariant());
 	} else if (type == "!has") {
+		if (json.size() < 2)
+			INVALID_FILTER(json);
 		_type = Has;
 		_not = true;
 		_kv = QPair<QString, QVariant>(json.at(1).toString(), QVariant());
 	} else
-		qWarning() << json << ": invalid filter";
+		INVALID_FILTER(json);
 }
 
 bool Style::Layer::Filter::match(const QVariantMap &tags) const
