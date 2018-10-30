@@ -9,7 +9,7 @@ TextItem::TextItem(const QString &text, const QPointF &pos, const QFont &font,
   _font(font)
 {
 	QFontMetrics fm(font);
-	int limit = fm.width('M') * maxTextWidth;
+	int limit = font.pixelSize() * maxTextWidth;
 
 	QRect br = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, text);
 	Q_ASSERT(br.isValid());
