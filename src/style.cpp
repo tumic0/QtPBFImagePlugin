@@ -196,25 +196,32 @@ QPen Style::Layer::Paint::pen(Type type, int zoom) const
 {
 	QPen pen(Qt::NoPen);
 	qreal width;
+	QColor color;
 
 	switch (type) {
 		case Line:
 			width = _lineWidth.value(zoom);
-			if (_lineColor.value(zoom).isValid() && width > 0) {
-				pen = QPen(_lineColor.value(zoom), width);
+			color = _lineColor.value(zoom);
+			if (color.isValid() && width > 0) {
+				pen = QPen(color, width);
 				if (!_lineDasharray.isEmpty())
 					pen.setDashPattern(_lineDasharray);
 			}
 			break;
 		case Fill:
-			if (_fillOutlineColor.value(zoom).isValid())
-				pen = QPen(_fillOutlineColor.value(zoom));
-			else if (_fillColor.value(zoom).isValid())
-				pen = QPen(_fillColor.value(zoom));
+			color = _fillOutlineColor.value(zoom);
+			if (color.isValid())
+				pen = QPen(color);
+			else {
+				color = _fillColor.value(zoom);
+				if (color.isValid())
+					pen = QPen(color);
+			}
 			break;
 		case Symbol:
-			if (_textColor.value(zoom).isValid())
-				pen = QPen(_textColor.value(zoom));
+			color = _textColor.value(zoom);
+			if (color.isValid())
+				pen = QPen(color);
 			break;
 		default:
 			break;
@@ -225,13 +232,15 @@ QPen Style::Layer::Paint::pen(Type type, int zoom) const
 
 QBrush Style::Layer::Paint::brush(Type type, int zoom) const
 {
+	QColor color;
+
 	switch (type) {
 		case Fill:
-			return _fillColor.value(zoom).isValid()
-			  ? QBrush(_fillColor.value(zoom)) : QBrush(Qt::NoBrush);
+			color = _fillColor.value(zoom);
+			return color.isValid() ? QBrush(color) : QBrush(Qt::NoBrush);
 		case Background:
-			return _backgroundColor.value(zoom).isValid()
-			  ? QBrush(_backgroundColor.value(zoom)) : QBrush(Qt::NoBrush);
+			color = _backgroundColor.value(zoom);
+			return color.isValid() ? QBrush(color) : QBrush(Qt::NoBrush);
 		default:
 			return QBrush(Qt::NoBrush);
 	}
@@ -360,26 +369,26 @@ bool Style::Layer::match(int zoom, const QVariantMap &tags) const
 			return false;
 	}
 
-	if (_type == Line && _paint.pen(_type, zoom).style() == Qt::NoPen)
-		return false;
-	if (_type == Fill && _paint.brush(_type, zoom) == Qt::NoBrush)
-		return false;
-
 	return _filter.match(tags);
 }
 
 void Style::Layer::drawPath(int zoom, const QPainterPath &path,
   Tile &tile) const
 {
-	QPainter &p = tile.painter();
-
 	QPen pen(_paint.pen(_type, zoom));
+	if (_type == Line && pen.style() == Qt::NoPen)
+		return;
+	QBrush brush(_paint.brush(_type, zoom));
+	if (_type == Fill && brush.style() == Qt::NoBrush)
+		return;
+
 	pen.setJoinStyle(_layout.lineJoin());
 	pen.setCapStyle(_layout.lineCap());
 
+	QPainter &p = tile.painter();
 	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type));
 	p.setPen(pen);
-	p.setBrush(_paint.brush(_type, zoom));
+	p.setBrush(brush);
 	p.setOpacity(_paint.opacity(_type, zoom));
 	p.drawPath(path);
 }
