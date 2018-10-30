@@ -139,7 +139,7 @@ bool Style::Layer::Filter::match(const QVariantMap &tags) const
 }
 
 Style::Layer::Paint::Paint(const QJsonObject &json)
-  : _fillOpacity(1.0), _lineOpacity(1.0), _fillAntialias(true)
+  : _fillOpacity(1.0), _lineOpacity(1.0), _lineWidth(1.0), _fillAntialias(true)
 {
 	if (json.contains("fill-opacity") && json["fill-opacity"].isDouble())
 		_fillOpacity = FunctionF(json["fill-opacity"].toDouble());

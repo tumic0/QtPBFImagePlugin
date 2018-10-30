@@ -100,8 +100,8 @@ private:
 
 		class Paint {
 		public:
-			Paint() : _fillOpacity(1.0), _lineOpacity(1.0), _fillAntialias(true)
-			  {}
+			Paint() : _fillOpacity(1.0), _lineOpacity(1.0), _lineWidth(1.0),
+			  _fillAntialias(true) {}
 			Paint(const QJsonObject &json);
 
 			QPen pen(Layer::Type type, int zoom) const;
