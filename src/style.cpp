@@ -271,7 +271,7 @@ bool Style::Layer::Paint::antialias(Layer::Type type) const
 }
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
-  : _textSize(16), _textMaxWidth(10), _lineCap(Qt::FlatCap),
+  : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _lineCap(Qt::FlatCap),
   _lineJoin(Qt::MiterJoin), _capitalize(false)
 {
 	if (!(json.contains("text-field") && json["text-field"].isString()))
@@ -291,11 +291,14 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 		_textSize = FunctionF(json["text-size"].toObject());
 	else if (json.contains("text-size") && json["text-size"].isDouble())
 		_textSize = json["text-size"].toDouble();
-
 	if (json.contains("text-max-width") && json["text-max-width"].isObject())
 		_textMaxWidth = FunctionF(json["text-max-width"].toObject());
-	if (json.contains("text-max-width") && json["text-max-width"].isDouble())
+	else if (json.contains("text-max-width") && json["text-max-width"].isDouble())
 		_textMaxWidth = json["text-max-width"].toDouble();
+	if (json.contains("text-max-angle") && json["text-max-angle"].isObject())
+		_textMaxWidth = FunctionF(json["text-max-angle"].toObject());
+	else if (json.contains("text-max-angle") && json["text-max-angle"].isDouble())
+		_textMaxWidth = json["text-max-angle"].toDouble();
 
 	if (json.contains("text-transform") && json["text-transform"].isString())
 		_capitalize = json["text-transform"].toString() == "uppercase";
@@ -411,7 +414,8 @@ void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
 		tile.text().addLabel(text.trimmed(), path.elementAt(0), font, pen,
 		  _layout.maxTextWidth(zoom));
 	else
-		tile.text().addLabel(text.trimmed(), path, font, pen);
+		tile.text().addLabel(text.trimmed(), path, font, pen,
+		  _layout.maxTextAngle(zoom));
 }
 
 bool Style::load(const QString &fileName)
@@ -454,12 +458,14 @@ void Style::drawFeature(int layer, const QPainterPath &path,
 
 void Style::drawBackground(Tile &tile)
 {
+	QRectF rect(0, 0, tile.size(), tile.size());
 	QPainterPath path;
-	path.addRect(QRectF(0, 0, tile.size(), tile.size()));
+	path.addRect(rect);
 
 	if (_styles.isEmpty()) {
 		tile.painter().setBrush(Qt::lightGray);
-		tile.painter().drawPath(path);
+		tile.painter().setPen(Qt::NoPen);
+		tile.painter().drawRect(rect);
 	} else if (_styles.first().isBackground())
 		_styles.first().drawPath(_zoom, path, tile);
 }

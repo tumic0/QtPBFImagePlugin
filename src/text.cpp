@@ -14,23 +14,30 @@ static QPainterPath subpath(const QPainterPath &path, int start, int end)
 	return p;
 }
 
-static QList<QPainterPath> segments(const QPainterPath &path, qreal segmentLimit,
-  qreal pathLimit)
+static QList<QPainterPath> segments(const QPainterPath &path, qreal pathLimit,
+  qreal maxAngle, qreal charWidth, const QRectF &tileRect)
 {
 	QList<QPainterPath> list;
 	int start = 0;
 	qreal length = 0;
+	qreal angle = -1;
 
 	for (int i = 1; i < path.elementCount(); i++) {
 		QLineF l(path.elementAt(i-1), path.elementAt(i));
+		qreal a = l.angle();
 		qreal sl = l.length();
-		if (sl < segmentLimit || length > pathLimit) {
+		if (angle < 0)
+			angle = a;
+		if (!tileRect.contains(path.elementAt(i))
+		  || sl < charWidth || qAbs(angle - a) > maxAngle
+		  || length > pathLimit) {
 			if (length > pathLimit)
 				list.append(subpath(path, start, i - 1));
 			start = i;
 			length = 0;
 		} else
 			length += sl;
+		angle = a;
 	}
 
 	if (length > pathLimit)
@@ -51,6 +58,8 @@ void Text::addLabel(const QString &text, const QPointF &pos, const QFont &font,
 {
 	if (text.isEmpty())
 		return;
+	if (!sceneRect().contains(pos))
+		return;
 
 	TextItem *ti = new TextItem(text, pos, font, maxTextWidth);
 	addItem(ti);
@@ -67,7 +76,7 @@ void Text::addLabel(const QString &text, const QPointF &pos, const QFont &font,
 }
 
 void Text::addLabel(const QString &text, const QPainterPath &path,
-  const QFont &font, const QPen &pen)
+  const QFont &font, const QPen &pen, qreal maxAngle)
 {
 	if (path.elementCount() < 2 || !path.elementAt(0).isMoveTo())
 		return;
@@ -80,7 +89,8 @@ void Text::addLabel(const QString &text, const QPainterPath &path,
 	if (textWidth > path.length())
 		return;
 
-	QList<QPainterPath> list(segments(path, fm.width('M'), textWidth));
+	QList<QPainterPath> list(segments(path, textWidth, maxAngle,
+	  fm.averageCharWidth(), sceneRect()));
 	for (int i = 0; i < list.size(); i++) {
 		const QPainterPath &segment = list.at(i);
 		TextPathItem *pi = new TextPathItem(text, reverse(segment)
