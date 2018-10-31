@@ -49,7 +49,6 @@ private:
 			Fill,
 			Line,
 			Background,
-			Vector,
 			Symbol
 		};
 

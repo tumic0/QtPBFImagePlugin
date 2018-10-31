@@ -332,8 +332,6 @@ Style::Layer::Layer(const QJsonObject &json)
 		_type = Line;
 	else if (type == "background")
 		_type = Background;
-	else if (type == "vector")
-		_type = Vector;
 	else if (type == "symbol")
 		_type = Symbol;
 
