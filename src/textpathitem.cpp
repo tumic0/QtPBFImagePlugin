@@ -36,7 +36,7 @@ void TextPathItem::paint(QPainter *painter,
 
 		painter->translate(point);
 		painter->rotate(-angle);
-		painter->drawText(QPoint(0, 0), _text.at(i));
+		painter->drawText(QPoint(0, fm.descent()), _text.at(i));
 		painter->resetTransform();
 
 		int width = fm.charWidth(_text, i);
