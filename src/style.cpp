@@ -59,14 +59,10 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 		_kv = QPair<QString, QVariant>(json.at(1).toString(),
 		  json.at(2).toVariant());
 	} else if (type == "all") {
-		if (json.size() < 2)
-			INVALID_FILTER(json);
 		_type = All;
 		for (int i = 1; i < json.size(); i++)
 			_filters.append(Filter(json.at(i).toArray()));
 	} else if (type == "any") {
-		if (json.size() < 2)
-			INVALID_FILTER(json);
 		_type = Any;
 		for (int i = 1; i < json.size(); i++)
 			_filters.append(Filter(json.at(i).toArray()));
