@@ -121,7 +121,7 @@ static void feature(const Feature &feature, Style *style, int styleLayer,
 
 static void layer(const Layer &layer, Style *style, int styleLayer, Tile &tile)
 {
-	if (layer.data->version() != 2)
+	if (layer.data->version() > 2)
 		return;
 
 	qreal factor = layer.data->extent() / (qreal)tile.size();
