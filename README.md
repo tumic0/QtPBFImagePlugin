@@ -8,7 +8,10 @@ displaying raster MBTiles maps to also display PBF vector tiles without
 
 Standard Mapbox GL Styles are used for styling the maps. Most style features
 used by [Maputnik](http://editor.openmaptiles.org) are supported. The style
-is loaded from /usr/share/pbf/style.json or ~/.pbf/style.json if it exists.
+is loaded from the
+[$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style/style.json
+file on plugin load. A default fallback style (Klokantech-basic) for
+OpenMapTiles is part of the plugin.
 
 ## Usage
 Due to a major design flaw in the Mapbox vector tiles specification - the zoom
