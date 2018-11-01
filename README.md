@@ -16,7 +16,7 @@ OpenMapTiles is part of the plugin.
 ## Usage
 Due to a major design flaw in the Mapbox vector tiles specification - the zoom
 is not part of the PBF data - the plugin can not be used "as is", but passing
-the zoom level is necessary. This is done by exploiting the optional format
+the zoom level is necessary. This is done by exploiting the optional *format*
 parameter of the QImage constructor or the QImage::fromData() or
 QPixmap::loadFromData() functions. The zoom number is passed as ASCII string
 to the functions:
@@ -29,6 +29,7 @@ pm.loadFromData(tileData, QString::number(zoom).toLatin1());
 Build requirements:
 * QT 5.x
 * Google Protocol Buffers (protobuf-lite)
+* Zlib
 
 Build steps:
 ```shell
