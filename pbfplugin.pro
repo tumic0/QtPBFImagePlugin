@@ -30,6 +30,7 @@ SOURCES += src/pbfplugin.cpp \
     src/function.cpp \
     src/textpathitem.cpp \
     src/textitem.cpp
+RESOURCES += pbfplugin.qrc
 
 LIBS += -lprotobuf-lite
 

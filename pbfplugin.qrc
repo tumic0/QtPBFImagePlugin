@@ -1,0 +1,5 @@
+<RCC>
+	<qresource prefix="/">
+		<file>style/style.json</file>
+	</qresource>
+</RCC>

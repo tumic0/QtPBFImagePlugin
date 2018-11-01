@@ -1,20 +1,20 @@
-#include <QDir>
-#include <QDebug>
+#include <QStandardPaths>
 #include "pbfplugin.h"
 #include "pbfhandler.h"
 #include "style.h"
 
 
-#define GLOBAL_CONFIG "/usr/share/pbf/style.json"
-#define USER_CONFIG   QDir::homePath() + "/.pbf/style.json"
-
 PBFPlugin::PBFPlugin()
 {
 	_style = new Style(this);
 
-	if (!_style->load(USER_CONFIG))
-		if (!_style->load(GLOBAL_CONFIG))
-			qCritical() << "Map style not found";
+	QString style(QStandardPaths::locate(QStandardPaths::AppDataLocation,
+	  "style/style.json"));
+
+	if (style.isEmpty() || !_style->load(style)) {
+		Q_INIT_RESOURCE(pbfplugin);
+		_style->load(":/style/style.json");
+	}
 }
 
 QImageIOPlugin::Capabilities PBFPlugin::capabilities(QIODevice *device,

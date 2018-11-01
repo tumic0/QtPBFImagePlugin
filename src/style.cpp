@@ -415,12 +415,21 @@ void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
 bool Style::load(const QString &fileName)
 {
 	QFile file(fileName);
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+		qCritical() << fileName << ": error opening file";
 		return false;
+	}
 	QByteArray ba(file.readAll());
 	file.close();
 
-	QJsonObject json(QJsonDocument::fromJson(ba).object());
+	QJsonParseError error;
+	QJsonDocument doc(QJsonDocument::fromJson(ba, &error));
+	if (doc.isNull()) {
+		qCritical() << fileName << ":" << error.errorString();
+		return false;
+	}
+
+	QJsonObject json(doc.object());
 	if (json.contains("layers") && json["layers"].isArray()) {
 		QJsonArray layers = json["layers"].toArray();
 		for (int i = 0; i < layers.size(); i++)
