@@ -10,7 +10,7 @@
 
 PBFPlugin::PBFPlugin()
 {
-	_style = new Style();
+	_style = new Style(this);
 
 	if (!_style->load(USER_CONFIG))
 		if (!_style->load(GLOBAL_CONFIG))

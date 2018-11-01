@@ -1,6 +1,7 @@
 #ifndef STYLE_H
 #define STYLE_H
 
+#include <QObject>
 #include <QString>
 #include <QVariantMap>
 #include <QStringList>
@@ -14,9 +15,11 @@ class QPainter;
 class QPainterPath;
 class Tile;
 
-class Style
+class Style : public QObject
 {
 public:
+	Style(QObject *parent = 0) : QObject(parent) {}
+
 	bool load(const QString &fileName);
 
 	void setZoom(int zoom) {_zoom = zoom;}
