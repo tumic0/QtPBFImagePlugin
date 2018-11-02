@@ -6,6 +6,8 @@
 #include "pbfhandler.h"
 
 
+#define TILE_SIZE 512
+
 #define GZIP_MAGIC 0x1F8B0800
 
 bool PBFHandler::canRead() const
@@ -29,7 +31,7 @@ bool PBFHandler::read(QImage *image)
 
 	bool ok;
 	int zoom = format().toInt(&ok);
-	*image = PBF::image(ba, ok ? zoom : -1, _style, 256);
+	*image = PBF::image(ba, ok ? zoom : -1, _style, TILE_SIZE);
 
 	return !image->isNull();
 }
@@ -41,7 +43,7 @@ bool PBFHandler::supportsOption(ImageOption option) const
 
 QVariant PBFHandler::option(ImageOption option) const
 {
-	return (option == Size) ? QSize(256, 256) : QVariant();
+	return (option == Size) ? QSize(TILE_SIZE, TILE_SIZE) : QVariant();
 }
 
 QByteArray PBFHandler::name() const
