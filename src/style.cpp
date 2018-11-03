@@ -401,6 +401,9 @@ void Style::Layer::drawPath(int zoom, const QPainterPath &path,
 void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
   const QVariantMap &tags, Tile &tile) const
 {
+	if (_layout.keys().isEmpty())
+		return;
+
 	QString text(_layout.field());
 	for (int i = 0; i < _layout.keys().size(); i++) {
 		const QString &key = _layout.keys().at(i);
@@ -409,14 +412,18 @@ void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
 		  ? val.toString().toUpper() : val.toString());
 	}
 
+	QString tt(text.trimmed());
+	if (tt.isEmpty())
+		return;
+
 	QPen pen(_paint.pen(_type, zoom));
 	QFont font(_layout.font(zoom));
 
 	if (path.elementCount() == 1 && path.elementAt(0).isMoveTo())
-		tile.text().addLabel(text.trimmed(), path.elementAt(0), font, pen,
+		tile.text().addLabel(tt, path.elementAt(0), font, pen,
 		  _layout.maxTextWidth(zoom));
 	else
-		tile.text().addLabel(text.trimmed(), path, font, pen,
+		tile.text().addLabel(tt, path, font, pen,
 		  _layout.maxTextAngle(zoom), _layout.symbolSpacing(zoom));
 }
 
