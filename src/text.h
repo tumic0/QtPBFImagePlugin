@@ -12,7 +12,7 @@ public:
 	void addLabel(const QString &text, const QPointF &pos, const QFont &font,
 	  const QPen &pen, qreal maxTextWidth);
 	void addLabel(const QString &text, const QPainterPath &path,
-	  const QFont &font, const QPen &pen, qreal maxAngle);
+	  const QFont &font, const QPen &pen, qreal maxAngle, qreal symbolSpacing);
 };
 
 #endif // TEXT_H

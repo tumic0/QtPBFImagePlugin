@@ -22,9 +22,9 @@ private:
 
 class FunctionC {
 public:
-	FunctionC(const QColor &deflt = QColor())
+	FunctionC(const QColor &deflt = QColor(Qt::black))
 	  : _default(deflt), _base(1.0) {}
-	FunctionC(const QJsonObject &json, const QColor &dflt = QColor());
+	FunctionC(const QJsonObject &json, const QColor &dflt = QColor(Qt::black));
 
 	QColor value(qreal x) const;
 

@@ -141,11 +141,14 @@ Style::Layer::Paint::Paint(const QJsonObject &json)
 		_fillOpacity = FunctionF(json["fill-opacity"].toDouble());
 	else if (json.contains("fill-opacity") && json["fill-opacity"].isObject())
 		_fillOpacity = FunctionF(json["fill-opacity"].toObject());
-	if (json.contains("fill-color") && json["fill-color"].isString())
+	if (json.contains("fill-color") && json["fill-color"].isString()) {
 		_fillColor = FunctionC(Color::fromJsonString(
 		  json["fill-color"].toString()));
-	if (json.contains("fill-color") && json["fill-color"].isObject())
+		_fillOutlineColor = _fillColor;
+	} else if (json.contains("fill-color") && json["fill-color"].isObject()) {
 		_fillColor = FunctionC(json["fill-color"].toObject());
+		_fillOutlineColor = _fillColor;
+	}
 	if (json.contains("fill-outline-color")
 	  && json["fill-outline-color"].isString())
 		_fillOutlineColor = FunctionC(Color::fromJsonString(
@@ -155,6 +158,11 @@ Style::Layer::Paint::Paint(const QJsonObject &json)
 		_fillOutlineColor = FunctionC(json["fill-outline-color"].toObject());
 	if (json.contains("fill-antialias") && json["fill-antialias"].isBool())
 		_fillAntialias = json["fill-antialias"].toBool();
+	if (json.contains("fill-pattern")) {
+		_fillColor = FunctionC(QColor());
+		_fillOutlineColor = FunctionC(QColor());
+	}
+
 
 	if (json.contains("line-color") && json["line-color"].isString())
 		_lineColor = FunctionC(Color::fromJsonString(json["line-color"]
@@ -208,11 +216,6 @@ QPen Style::Layer::Paint::pen(Type type, int zoom) const
 			color = _fillOutlineColor.value(zoom);
 			if (color.isValid())
 				pen = QPen(color);
-			else {
-				color = _fillColor.value(zoom);
-				if (color.isValid())
-					pen = QPen(color);
-			}
 			break;
 		case Symbol:
 			color = _textColor.value(zoom);
@@ -267,8 +270,8 @@ bool Style::Layer::Paint::antialias(Layer::Type type) const
 }
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
-  : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _lineCap(Qt::FlatCap),
-  _lineJoin(Qt::MiterJoin), _capitalize(false)
+  : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _symbolSpacing(250),
+  _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin), _capitalize(false)
 {
 	if (!(json.contains("text-field") && json["text-field"].isString()))
 		return;
@@ -295,6 +298,11 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 		_textMaxWidth = FunctionF(json["text-max-angle"].toObject());
 	else if (json.contains("text-max-angle") && json["text-max-angle"].isDouble())
 		_textMaxWidth = json["text-max-angle"].toDouble();
+
+	if (json.contains("symbol-spacing") && json["symbol-spacing"].isObject())
+		_symbolSpacing = json["symbol-spacing"].toObject();
+	else if (json.contains("symbol-spacing") && json["symbol-spacing"].isDouble())
+		_symbolSpacing = json["symbol-spacing"].toDouble();
 
 	if (json.contains("text-transform") && json["text-transform"].isString())
 		_capitalize = json["text-transform"].toString() == "uppercase";
@@ -409,7 +417,7 @@ void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
 		  _layout.maxTextWidth(zoom));
 	else
 		tile.text().addLabel(text.trimmed(), path, font, pen,
-		  _layout.maxTextAngle(zoom));
+		  _layout.maxTextAngle(zoom), _layout.symbolSpacing(zoom));
 }
 
 bool Style::load(const QString &fileName)
