@@ -3,8 +3,6 @@ TEMPLATE = lib
 CONFIG += plugin
 QT += gui widgets
 
-VERSION = 1.0.0
-
 PROTOS = protobuf/vector_tile.proto
 include(protobuf/vector_tile.pri)
 
@@ -32,7 +30,16 @@ SOURCES += src/pbfplugin.cpp \
     src/textitem.cpp
 RESOURCES += pbfplugin.qrc
 
-LIBS += -lprotobuf-lite
+unix {
+    LIBS += -lprotobuf-lite \
+        -lz
+}
+win32 {
+    INCLUDEPATH += $$PROTOBUF/include \
+        $$ZLIB/include
+    LIBS += $$PROTOBUF/lib/libprotobuf-lite.lib \
+        $$ZLIB/lib/zlibstatic.lib
+}
 
 target.path += $$[QT_INSTALL_PLUGINS]/imageformats
 INSTALLS += target
