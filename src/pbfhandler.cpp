@@ -6,7 +6,7 @@
 #include "pbfhandler.h"
 
 
-#define TILE_SIZE 512
+#define TILE_SIZE 256
 
 #define GZIP_MAGIC 0x1F8B0800
 
