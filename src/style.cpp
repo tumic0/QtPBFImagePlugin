@@ -269,8 +269,8 @@ bool Style::Layer::Paint::antialias(Layer::Type type) const
 }
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
-  : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _symbolSpacing(250),
-  _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin), _capitalize(false)
+  : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _lineCap(Qt::FlatCap),
+  _lineJoin(Qt::MiterJoin), _capitalize(false)
 {
 	if (!(json.contains("text-field") && json["text-field"].isString()))
 		return;
@@ -297,11 +297,6 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 		_textMaxWidth = FunctionF(json["text-max-angle"].toObject());
 	else if (json.contains("text-max-angle") && json["text-max-angle"].isDouble())
 		_textMaxWidth = json["text-max-angle"].toDouble();
-
-	if (json.contains("symbol-spacing") && json["symbol-spacing"].isObject())
-		_symbolSpacing = json["symbol-spacing"].toObject();
-	else if (json.contains("symbol-spacing") && json["symbol-spacing"].isDouble())
-		_symbolSpacing = json["symbol-spacing"].toDouble();
 
 	if (json.contains("text-transform") && json["text-transform"].isString())
 		_capitalize = json["text-transform"].toString() == "uppercase";
@@ -422,8 +417,7 @@ void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
 		tile.text().addLabel(tt, path.elementAt(0), font, pen,
 		  _layout.maxTextWidth(zoom));
 	else
-		tile.text().addLabel(tt, path, font, pen,
-		  _layout.maxTextAngle(zoom), _layout.symbolSpacing(zoom));
+		tile.text().addLabel(tt, path, font, pen, _layout.maxTextAngle(zoom));
 }
 
 bool Style::load(const QString &fileName)

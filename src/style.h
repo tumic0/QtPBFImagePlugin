@@ -79,8 +79,8 @@ private:
 		class Layout {
 		public:
 			Layout() : _textSize(16), _textMaxWidth(10), _textMaxAngle(45),
-			  _symbolSpacing(250), _lineCap(Qt::FlatCap),
-			  _lineJoin(Qt::MiterJoin), _capitalize(false) {}
+			  _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin),
+			  _capitalize(false) {}
 			Layout(const QJsonObject &json);
 
 			bool capitalize() const {return _capitalize;}
@@ -88,8 +88,6 @@ private:
 			  {return _textMaxWidth.value(zoom);}
 			qreal maxTextAngle(int zoom) const
 			  {return _textMaxAngle.value(zoom);}
-			qreal symbolSpacing(int zoom) const
-			  {return _symbolSpacing.value(zoom);}
 			const QString &field() const {return _textField;}
 			const QStringList &keys() const {return _keys;}
 			QFont font(int zoom) const;
@@ -102,7 +100,6 @@ private:
 			FunctionF _textSize;
 			FunctionF _textMaxWidth;
 			FunctionF _textMaxAngle;
-			FunctionF _symbolSpacing;
 			Qt::PenCapStyle _lineCap;
 			Qt::PenJoinStyle _lineJoin;
 			bool _capitalize;

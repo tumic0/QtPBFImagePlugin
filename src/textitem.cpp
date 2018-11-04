@@ -26,4 +26,7 @@ void TextItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
 	painter->setFont(_font);
 	painter->setPen(_pen);
 	painter->drawText(_boundingRect, FLAGS, _text);
+
+	//painter->setPen(Qt::red);
+	//painter->drawRect(_boundingRect);
 }
