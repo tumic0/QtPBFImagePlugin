@@ -26,12 +26,12 @@ pm.loadFromData(tileData, QString::number(zoom).toLatin1());
 ```
 
 ## Build
-### Build requirements:
+### Requirements
 * QT 5.x
 * Google Protocol Buffers (protobuf-lite)
 * Zlib
 
-### Build steps:
+### Build steps
 #### Linux
 ```shell
 qmake pbfplugin.pro
