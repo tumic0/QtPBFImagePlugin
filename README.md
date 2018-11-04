@@ -27,7 +27,7 @@ pm.loadFromData(tileData, QString::number(zoom).toLatin1());
 
 ## Build
 ### Requirements
-* QT 5.x
+* Qt 5
 * Google Protocol Buffers (protobuf-lite)
 * Zlib
 
