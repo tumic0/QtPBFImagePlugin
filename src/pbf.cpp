@@ -17,26 +17,6 @@ using namespace google::protobuf;
 #define LINESTRING vector_tile::Tile_GeomType::Tile_GeomType_LINESTRING
 #define POINT vector_tile::Tile_GeomType::Tile_GeomType_POINT
 
-struct Layer
-{
-	Layer(const vector_tile::Tile_Layer *data) : data(data) {}
-
-	const vector_tile::Tile_Layer *data;
-	QVector<QString> keys;
-	QVector<QVariant> values;
-};
-
-struct Feature
-{
-	Feature(const vector_tile::Tile_Feature *data, const QVector<QString> *keys,
-	  const QVector<QVariant> *values) : data(data), keys(keys),
-	  values(values) {}
-
-	const vector_tile::Tile_Feature *data;
-	const QVector<QString> *keys;
-	const QVector<QVariant> *values;
-};
-
 static QVariant value(const vector_tile::Tile_Value &val)
 {
 	if (val.has_bool_value())
@@ -57,55 +37,94 @@ static QVariant value(const vector_tile::Tile_Value &val)
 		return QVariant();
 }
 
+class Feature
+{
+public:
+	Feature(const vector_tile::Tile_Feature *data, const QVector<QString> *keys,
+	  const QVector<QVariant> *values) : _data(data)
+	{
+		for (int i = 0; i < data->tags_size(); i = i + 2)
+			_tags.insert(keys->at(data->tags(i)), values->at(data->tags(i+1)));
+
+		switch (data->type()) {
+			case POLYGON:
+				_tags.insert("$type", QVariant("Polygon"));
+				break;
+			case LINESTRING:
+				_tags.insert("$type", QVariant("LineString"));
+				break;
+			case POINT:
+				_tags.insert("$type", QVariant("Point"));
+				break;
+			default:
+				break;
+		}
+	}
+
+	const QVariantMap &tags() const {return _tags;}
+	const vector_tile::Tile_Feature *data() const {return _data;}
+
+private:
+	QVariantMap _tags;
+	const vector_tile::Tile_Feature *_data;
+};
+
+class Layer
+{
+public:
+	Layer(const vector_tile::Tile_Layer *data) : _data(data)
+	{
+		QVector<QString> keys;
+		QVector<QVariant> values;
+
+		for (int i = 0; i < data->keys_size(); i++)
+			keys.append(QString::fromStdString(data->keys(i)));
+		for (int i = 0; i < data->values_size(); i++)
+			values.append(value(data->values(i)));
+
+		for (int i = 0; i < data->features_size(); i++)
+			_features.append(Feature(&(data->features(i)), &keys, &values));
+	}
+
+	const QList<Feature> &features() const {return _features;}
+	const vector_tile::Tile_Layer *data() const {return _data;}
+
+private:
+	const vector_tile::Tile_Layer *_data;
+	QList<Feature> _features;
+};
+
 static QPoint parameters(quint32 v1, quint32 v2)
 {
 	return QPoint((v1 >> 1) ^ (-(v1 & 1)), ((v2 >> 1) ^ (-(v2 & 1))));
 }
 
-static void feature(const Feature &feature, Style *style, int styleLayer,
+static void drawFeature(const Feature &feature, Style *style, int styleLayer,
   qreal factor, Tile &tile)
 {
-	QVariantMap tags;
-	for (int i = 0; i < feature.data->tags_size(); i = i + 2)
-		tags.insert(feature.keys->at(feature.data->tags(i)),
-		  feature.values->at(feature.data->tags(i+1)));
-	switch (feature.data->type()) {
-		case POLYGON:
-			tags.insert("$type", QVariant("Polygon"));
-			break;
-		case LINESTRING:
-			tags.insert("$type", QVariant("LineString"));
-			break;
-		case POINT:
-			tags.insert("$type", QVariant("Point"));
-			break;
-		default:
-			break;
-	}
-
-	if (!style->match(styleLayer, tags))
+	if (!style->match(styleLayer, feature.tags()))
 		return;
 
 	QPoint cursor;
 	QPainterPath path;
 
-	for (int i = 0; i < feature.data->geometry_size(); i++) {
-		quint32 g = feature.data->geometry(i);
+	for (int i = 0; i < feature.data()->geometry_size(); i++) {
+		quint32 g = feature.data()->geometry(i);
 		unsigned cmdId = g & 0x7;
 		unsigned cmdCount = g >> 3;
 
 		if (cmdId == MOVE_TO) {
 			for (unsigned j = 0; j < cmdCount; j++) {
-				QPoint offset = parameters(feature.data->geometry(i+1),
-				  feature.data->geometry(i+2));
+				QPoint offset = parameters(feature.data()->geometry(i+1),
+				  feature.data()->geometry(i+2));
 				i += 2;
 				cursor += offset;
 				path.moveTo(QPointF(cursor) / factor);
 			}
 		} else if (cmdId == LINE_TO) {
 			for (unsigned j = 0; j < cmdCount; j++) {
-				QPoint offset = parameters(feature.data->geometry(i+1),
-				  feature.data->geometry(i+2));
+				QPoint offset = parameters(feature.data()->geometry(i+1),
+				  feature.data()->geometry(i+2));
 				i += 2;
 				cursor += offset;
 				path.lineTo(QPointF(cursor) / factor);
@@ -116,19 +135,19 @@ static void feature(const Feature &feature, Style *style, int styleLayer,
 		}
 	}
 
-	style->drawFeature(styleLayer, path, tags, tile);
+	style->drawFeature(styleLayer, path, feature.tags(), tile);
 }
 
-static void layer(const Layer &layer, Style *style, int styleLayer, Tile &tile)
+static void drawLayer(const Layer &layer, Style *style, int styleLayer,
+  Tile &tile)
 {
-	if (layer.data->version() > 2)
+	if (layer.data()->version() > 2)
 		return;
 
-	qreal factor = layer.data->extent() / (qreal)tile.size();
+	qreal factor = layer.data()->extent() / (qreal)tile.size();
 
-	for (int i = 0; i < layer.data->features_size(); i++)
-		feature(Feature(&(layer.data->features(i)), &(layer.keys),
-		  &(layer.values)), style, styleLayer, factor, tile);
+	for (int i = 0; i < layer.features().size(); i++)
+		drawFeature(layer.features().at(i), style, styleLayer, factor, tile);
 }
 
 QImage PBF::image(const QByteArray &data, int zoom, Style *style, int size)
@@ -147,14 +166,9 @@ QImage PBF::image(const QByteArray &data, int zoom, Style *style, int size)
 	QMap<QString, Layer> layers;
 	for (int i = 0; i <  tile.layers_size(); i++) {
 		const vector_tile::Tile_Layer &layer = tile.layers(i);
-		Layer l(&layer);
-
-		for (int j = 0; j < layer.keys_size(); j++)
-			l.keys.append(QString::fromStdString(layer.keys(j)));
-		for (int j = 0; j < layer.values_size(); j++)
-			l.values.append(value(layer.values(j)));
-
-		layers.insert(QString::fromStdString(tile.layers(i).name()), l);
+		QString name(QString::fromStdString(layer.name()));
+		if (style->sourceLayers().contains(name))
+			layers.insert(name, Layer(&layer));
 	}
 
 	// Process data in order of style layers
@@ -164,7 +178,7 @@ QImage PBF::image(const QByteArray &data, int zoom, Style *style, int size)
 		if (it == layers.constEnd())
 			continue;
 
-		layer(*it, style, i, t);
+		drawLayer(*it, style, i, t);
 	}
 
 	return t.render();
