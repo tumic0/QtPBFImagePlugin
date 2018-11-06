@@ -10,6 +10,7 @@ TextPathItem::TextPathItem(const QString &text, const QPainterPath &path,
 	QFontMetrics fm(font);
 	QPainterPathStroker s;
 	s.setWidth(fm.height());
+	s.setCapStyle(Qt::FlatCap);
 	_shape = s.createStroke(path).simplified();
 }
 
