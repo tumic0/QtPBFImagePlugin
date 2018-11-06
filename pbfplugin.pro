@@ -17,7 +17,8 @@ HEADERS += src/pbfhandler.h \
     src/tile.h \
     src/function.h \
     src/textpathitem.h \
-    src/textitem.h
+    src/textitem.h \
+    src/font.h
 SOURCES += src/pbfplugin.cpp \
     src/pbfhandler.cpp \
     src/gzip.cpp \
@@ -27,7 +28,8 @@ SOURCES += src/pbfplugin.cpp \
     src/text.cpp \
     src/function.cpp \
     src/textpathitem.cpp \
-    src/textitem.cpp
+    src/textitem.cpp \
+    src/font.cpp
 RESOURCES += pbfplugin.qrc
 
 unix {

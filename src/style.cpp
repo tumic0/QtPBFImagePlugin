@@ -6,6 +6,7 @@
 #include <QDebug>
 #include "text.h"
 #include "color.h"
+#include "font.h"
 #include "tile.h"
 #include "style.h"
 
@@ -134,7 +135,7 @@ bool Style::Layer::Filter::match(const QVariantMap &tags) const
 }
 
 Style::Layer::Paint::Paint(const QJsonObject &json)
-  : _fillOpacity(1.0), _lineOpacity(1.0), _lineWidth(1.0), _fillAntialias(true)
+  : _fillOpacity(1.0), _lineOpacity(1.0), _lineWidth(1.0)
 {
 	if (json.contains("fill-opacity") && json["fill-opacity"].isDouble())
 		_fillOpacity = FunctionF(json["fill-opacity"].toDouble());
@@ -156,7 +157,9 @@ Style::Layer::Paint::Paint(const QJsonObject &json)
 	  && json["fill-outline-color"].isObject())
 		_fillOutlineColor = FunctionC(json["fill-outline-color"].toObject());
 	if (json.contains("fill-antialias") && json["fill-antialias"].isBool())
-		_fillAntialias = json["fill-antialias"].toBool();
+		_fillAntialias = FunctionB(json["fill-antialias"].toBool());
+	else if (json.contains("fill-antialias") && json["fill-antialias"].isObject())
+		_fillAntialias = FunctionB(json["fill-antialias"].toObject());
 	if (json.contains("fill-pattern")) {
 		_fillColor = FunctionC(QColor());
 		_fillOutlineColor = FunctionC(QColor());
@@ -256,11 +259,11 @@ qreal Style::Layer::Paint::opacity(Type type, int zoom) const
 	}
 }
 
-bool Style::Layer::Paint::antialias(Layer::Type type) const
+bool Style::Layer::Paint::antialias(Layer::Type type, int zoom) const
 {
 	switch (type) {
 		case Fill:
-			return _fillAntialias;
+			return _fillAntialias.value(zoom);
 		case Line:
 			return true;
 		default:
@@ -297,7 +300,8 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 		_textMaxWidth = FunctionF(json["text-max-angle"].toObject());
 	else if (json.contains("text-max-angle") && json["text-max-angle"].isDouble())
 		_textMaxWidth = json["text-max-angle"].toDouble();
-
+	if (json.contains("text-font") && json["text-font"].isArray())
+		_font = Font::fromJsonArray(json["text-font"].toArray());
 	if (json.contains("text-transform") && json["text-transform"].isString())
 		_capitalize = json["text-transform"].toString() == "uppercase";
 
@@ -317,8 +321,8 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 
 QFont Style::Layer::Layout::font(int zoom) const
 {
-	QFont font;
-	font.setPixelSize(_textSize.value(zoom));
+	QFont font(_font);
+	font.setPixelSize(qRound(_textSize.value(zoom)));
 
 	return font;
 }
@@ -385,7 +389,7 @@ void Style::Layer::drawPath(int zoom, const QPainterPath &path,
 	pen.setCapStyle(_layout.lineCap());
 
 	QPainter &p = tile.painter();
-	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type));
+	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type, zoom));
 	p.setPen(pen);
 	p.setBrush(brush);
 	p.setOpacity(_paint.opacity(_type, zoom));

@@ -7,6 +7,18 @@
 
 class QJsonObject;
 
+class FunctionB {
+public:
+	FunctionB(bool deflt = true) : _default(deflt) {}
+	FunctionB(const QJsonObject &json, bool dflt = true);
+
+	bool value(qreal x) const;
+
+private:
+	QList<QPair<qreal, bool> > _stops;
+	bool _default;
+};
+
 class FunctionF {
 public:
 	FunctionF(qreal deflt = 0) : _default(deflt), _base(1.0) {}

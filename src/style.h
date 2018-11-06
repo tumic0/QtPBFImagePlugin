@@ -8,6 +8,7 @@
 #include <QSet>
 #include <QPen>
 #include <QBrush>
+#include <QFont>
 #include "function.h"
 
 
@@ -102,19 +103,19 @@ private:
 			FunctionF _textMaxAngle;
 			Qt::PenCapStyle _lineCap;
 			Qt::PenJoinStyle _lineJoin;
+			QFont _font;
 			bool _capitalize;
 		};
 
 		class Paint {
 		public:
-			Paint() : _fillOpacity(1.0), _lineOpacity(1.0), _lineWidth(1.0),
-			  _fillAntialias(true) {}
+			Paint() : _fillOpacity(1.0), _lineOpacity(1.0), _lineWidth(1.0) {}
 			Paint(const QJsonObject &json);
 
 			QPen pen(Layer::Type type, int zoom) const;
 			QBrush brush(Layer::Type type, int zoom) const;
 			qreal opacity(Layer::Type type, int zoom) const;
-			bool antialias(Layer::Type type) const;
+			bool antialias(Layer::Type type, int zoom) const;
 
 		private:
 			FunctionC _textColor;
@@ -125,7 +126,7 @@ private:
 			FunctionF _fillOpacity;
 			FunctionF _lineOpacity;
 			FunctionF _lineWidth;
-			bool _fillAntialias;
+			FunctionB _fillAntialias;
 			QVector<qreal> _lineDasharray;
 		};
 
