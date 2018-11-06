@@ -122,7 +122,9 @@ static QPainterPath textPath(const QPainterPath &path, qreal textWidth,
 		angle = a;
 	}
 
-	return QPainterPath();
+	return (length > textWidth)
+	  ? subpath(lines, last, lines.size() - 1, length - textWidth)
+	  : QPainterPath();
 }
 
 static bool reverse(const QPainterPath &path)

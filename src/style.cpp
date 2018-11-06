@@ -322,7 +322,7 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 QFont Style::Layer::Layout::font(int zoom) const
 {
 	QFont font(_font);
-	font.setPixelSize(qRound(_textSize.value(zoom)));
+	font.setPixelSize(_textSize.value(zoom));
 
 	return font;
 }
