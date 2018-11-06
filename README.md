@@ -40,7 +40,7 @@ make
 #### Windows
 ```shell
 qmake PROTOBUF=path/to/protobuf ZLIB=path/to/zlib pbfplugin.pro
-make
+nmake
 ```
 
 ## Install
