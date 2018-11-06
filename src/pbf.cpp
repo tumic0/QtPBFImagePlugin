@@ -7,7 +7,6 @@
 #include "tile.h"
 #include "pbf.h"
 
-using namespace google::protobuf;
 
 #define MOVE_TO    1
 #define LINE_TO    2
