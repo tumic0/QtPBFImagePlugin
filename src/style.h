@@ -81,7 +81,7 @@ private:
 		public:
 			Layout() : _textSize(16), _textMaxWidth(10), _textMaxAngle(45),
 			  _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin),
-			  _capitalize(false) {}
+			  _font("Open Sans"), _capitalize(false) {}
 			Layout(const QJsonObject &json);
 
 			bool capitalize() const {return _capitalize;}

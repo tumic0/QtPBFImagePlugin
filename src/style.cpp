@@ -273,7 +273,7 @@ bool Style::Layer::Paint::antialias(Layer::Type type, int zoom) const
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
   : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _lineCap(Qt::FlatCap),
-  _lineJoin(Qt::MiterJoin), _capitalize(false)
+  _lineJoin(Qt::MiterJoin), _font("Open Sans"), _capitalize(false)
 {
 	if (!(json.contains("text-field") && json["text-field"].isString()))
 		return;
