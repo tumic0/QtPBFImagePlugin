@@ -13,13 +13,13 @@ TextItem::TextItem(const QString &text, const QPointF &pos, const QFont &font,
 	// Italic fonts overflow the computed bounding rect, so reduce it
 	// a little bit.
 	if (font.italic())
-		limit -= fm.averageCharWidth();
+		limit -= font.pixelSize();
 
 	QRect br = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, text);
 	Q_ASSERT(br.isValid());
 	// Expand the bounding rect back to the real content size
 	if (font.italic())
-		br.adjust(-fm.averageCharWidth() / 2, 0, fm.averageCharWidth() / 2, 0);
+		br.adjust(-font.pixelSize() / 2, 0, font.pixelSize() / 2, 0);
 	setPos((pos - QPointF(br.width() / 2.0, br.height() / 2.0)).toPoint());
 	_boundingRect = QRectF(0, 0, br.width(), br.height());
 }
