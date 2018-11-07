@@ -16,6 +16,7 @@
 #define LINESTRING vector_tile::Tile_GeomType::Tile_GeomType_LINESTRING
 #define POINT vector_tile::Tile_GeomType::Tile_GeomType_POINT
 
+
 static QVariant value(const vector_tile::Tile_Value &val)
 {
 	if (val.has_bool_value())
@@ -93,9 +94,15 @@ private:
 	QList<Feature> _features;
 };
 
-static QPoint parameters(quint32 v1, quint32 v2)
+static inline qint32 zigzag32decode(quint32 value)
 {
-	return QPoint((v1 >> 1) ^ (-(v1 & 1)), ((v2 >> 1) ^ (-(v2 & 1))));
+	return static_cast<qint32>((value >> 1u) ^ static_cast<quint32>(
+	  -static_cast<qint32>(value & 1u)));
+}
+
+static inline QPoint parameters(quint32 v1, quint32 v2)
+{
+	return QPoint(zigzag32decode(v1), zigzag32decode(v2));
 }
 
 static void drawFeature(const Feature &feature, Style *style, int styleLayer,
@@ -162,6 +169,7 @@ QImage PBF::image(const QByteArray &data, int zoom, Style *style, int size)
 	style->setZoom(zoom);
 	style->drawBackground(t);
 
+	// Prepare source layers
 	QMap<QString, Layer> layers;
 	for (int i = 0; i <  tile.layers_size(); i++) {
 		const vector_tile::Tile_Layer &layer = tile.layers(i);
@@ -170,7 +178,7 @@ QImage PBF::image(const QByteArray &data, int zoom, Style *style, int size)
 			layers.insert(name, Layer(&layer));
 	}
 
-	// Process data in order of style layers
+	// Process source layers in order of style layers
 	for (int i = 0; i < style->sourceLayers().size(); i++) {
 		QMap<QString, Layer>::const_iterator it = layers.find(
 		  style->sourceLayers().at(i));
