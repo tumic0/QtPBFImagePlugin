@@ -125,6 +125,7 @@ QFont Font::fromJsonArray(const QJsonArray &json)
 			font.setWeight(weight);
 			font.setStretch(stretch);
 			font.setStyle(style);
+			return font;
 		}
 	}
 
