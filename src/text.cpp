@@ -139,18 +139,10 @@ void Text::addLabel(const QString &text, const QPointF &pos, const QFont &font,
 {
 	if (text.isEmpty())
 		return;
-	if (!sceneRect().contains(pos))
-		return;
 
 	TextItem *ti = new TextItem(text, pos, font, maxTextWidth);
-	addItem(ti);
-	if (!sceneRect().contains(ti->sceneBoundingRect())) {
-		delete ti;
-		return;
-	}
-
 	ti->setPen(pen);
-
+	addItem(ti);
 	QList<QGraphicsItem*> ci = collidingItems(ti);
 	for (int i = 0; i < ci.size(); i++)
 		ci[i]->setVisible(false);

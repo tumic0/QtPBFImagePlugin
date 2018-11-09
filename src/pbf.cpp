@@ -69,6 +69,11 @@ private:
 	const vector_tile::Tile_Feature *_data;
 };
 
+bool cmp(const Feature &f1, const Feature &f2)
+{
+	return f1.data()->id() < f2.data()->id();
+}
+
 class Layer
 {
 public:
@@ -84,6 +89,7 @@ public:
 
 		for (int i = 0; i < data->features_size(); i++)
 			_features.append(Feature(&(data->features(i)), &keys, &values));
+		qSort(_features.begin(), _features.end(), cmp);
 	}
 
 	const QList<Feature> &features() const {return _features;}
