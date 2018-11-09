@@ -14,8 +14,8 @@ static QList<QPair<QString, QFont::Weight> > weights()
 	list.append(QPair<QString, QFont::Weight>("Regular", QFont::Normal));
 	list.append(QPair<QString, QFont::Weight>("Medium", QFont::Medium));
 	list.append(QPair<QString, QFont::Weight>("Demi Bold", QFont::DemiBold));
-	list.append(QPair<QString, QFont::Weight>("Bold", QFont::Bold));
 	list.append(QPair<QString, QFont::Weight>("Extra Bold", QFont::ExtraBold));
+	list.append(QPair<QString, QFont::Weight>("Bold", QFont::Bold));
 	list.append(QPair<QString, QFont::Weight>("Black", QFont::Black));
 
 	return list;
@@ -29,16 +29,16 @@ static QList<QPair<QString, QFont::Stretch> > stretches()
 	  QFont::UltraCondensed));
 	list.append(QPair<QString, QFont::Stretch>("Extra Condensed",
 	  QFont::ExtraCondensed));
-	list.append(QPair<QString, QFont::Stretch>("Condensed",
-	  QFont::Condensed));
 	list.append(QPair<QString, QFont::Stretch>("Semi Expanded",
 	  QFont::SemiExpanded));
-	list.append(QPair<QString, QFont::Stretch>("Expanded",
-	  QFont::Expanded));
 	list.append(QPair<QString, QFont::Stretch>("Extra Expanded",
 	  QFont::ExtraExpanded));
 	list.append(QPair<QString, QFont::Stretch>("Ultra Expanded",
 	  QFont::UltraExpanded));
+	list.append(QPair<QString, QFont::Stretch>("Condensed",
+	  QFont::Condensed));
+	list.append(QPair<QString, QFont::Stretch>("Expanded",
+	  QFont::Expanded));
 
 	return list;
 }
