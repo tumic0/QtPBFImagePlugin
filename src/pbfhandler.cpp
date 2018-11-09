@@ -8,7 +8,10 @@
 
 #define TILE_SIZE 256
 
-#define GZIP_MAGIC 0x1F8B0800
+#define GZIP_MAGIC      0x1F8B0800
+#define GZIP_MAGIC_MASK 0xFFFFFF00
+#define PBF_MAGIC       0x1A000000
+#define PBF_MAGIC_MASK  0xFF000000
 
 bool PBFHandler::canRead() const
 {
@@ -19,13 +22,30 @@ bool PBFHandler::canRead(QIODevice *device)
 {
 	quint32 magic;
 	qint64 size = device->peek((char*)&magic, sizeof(magic));
-	return (size == sizeof(magic)
-	  && (qFromBigEndian(magic) & 0xFFFFFF00) == GZIP_MAGIC);
+	if (size != sizeof(magic))
+		return false;
+
+	if ((qFromBigEndian(magic) & GZIP_MAGIC_MASK) == GZIP_MAGIC)
+		return true;
+	if ((qFromBigEndian(magic) & PBF_MAGIC_MASK) == PBF_MAGIC)
+		return true;
+
+	return false;
 }
 
 bool PBFHandler::read(QImage *image)
 {
-	QByteArray ba = Gzip::uncompress(device()->readAll());
+	quint32 magic;
+	qint64 size = device()->peek((char*)&magic, sizeof(magic));
+	if (size != sizeof(magic))
+		return false;
+
+	QByteArray ba;
+
+	if ((qFromBigEndian(magic) & GZIP_MAGIC_MASK) == GZIP_MAGIC)
+		ba = Gzip::uncompress(device()->readAll());
+	else if ((qFromBigEndian(magic) & PBF_MAGIC_MASK) == PBF_MAGIC)
+		ba = device()->readAll();
 	if (ba.isNull())
 		return false;
 
