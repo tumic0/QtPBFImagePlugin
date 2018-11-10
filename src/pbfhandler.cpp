@@ -13,6 +13,22 @@
 #define PBF_MAGIC       0x1A000000
 #define PBF_MAGIC_MASK  0xFF000000
 
+static bool isMagic(quint32 magic, quint32 mask, quint32 value)
+{
+	return ((qFromBigEndian(value) & mask) == magic);
+}
+
+static bool isGZIPPBF(quint32 magic)
+{
+	return isMagic(GZIP_MAGIC, GZIP_MAGIC_MASK, magic);
+}
+
+static bool isPlainPBF(quint32 magic)
+{
+	return isMagic(PBF_MAGIC, PBF_MAGIC_MASK, magic);
+}
+
+
 bool PBFHandler::canRead() const
 {
 	return canRead(device());
@@ -25,12 +41,7 @@ bool PBFHandler::canRead(QIODevice *device)
 	if (size != sizeof(magic))
 		return false;
 
-	if ((qFromBigEndian(magic) & GZIP_MAGIC_MASK) == GZIP_MAGIC)
-		return true;
-	if ((qFromBigEndian(magic) & PBF_MAGIC_MASK) == PBF_MAGIC)
-		return true;
-
-	return false;
+	return (isGZIPPBF(magic) || isPlainPBF(magic));
 }
 
 bool PBFHandler::read(QImage *image)
@@ -42,9 +53,9 @@ bool PBFHandler::read(QImage *image)
 
 	QByteArray ba;
 
-	if ((qFromBigEndian(magic) & GZIP_MAGIC_MASK) == GZIP_MAGIC)
+	if (isGZIPPBF(magic))
 		ba = Gzip::uncompress(device()->readAll());
-	else if ((qFromBigEndian(magic) & PBF_MAGIC_MASK) == PBF_MAGIC)
+	else if (isPlainPBF(magic))
 		ba = device()->readAll();
 	if (ba.isNull())
 		return false;
