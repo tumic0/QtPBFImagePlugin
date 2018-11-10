@@ -96,7 +96,7 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 		INVALID_FILTER(json);
 }
 
-bool Style::Layer::Filter::match(const QVariantMap &tags) const
+bool Style::Layer::Filter::match(const QVariantHash &tags) const
 {
 	switch (_type) {
 		case None:
@@ -363,7 +363,7 @@ Style::Layer::Layer(const QJsonObject &json)
 		_paint = Paint(json["paint"].toObject());
 }
 
-bool Style::Layer::match(int zoom, const QVariantMap &tags) const
+bool Style::Layer::match(int zoom, const QVariantHash &tags) const
 {
 	if (zoom >= 0) {
 		if (_minZoom > 0 && zoom < _minZoom)
@@ -397,7 +397,7 @@ void Style::Layer::drawPath(int zoom, const QPainterPath &path,
 }
 
 void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
-  const QVariantMap &tags, Tile &tile) const
+  const QVariantHash &tags, Tile &tile) const
 {
 	if (_layout.keys().isEmpty())
 		return;
@@ -455,13 +455,13 @@ bool Style::load(const QString &fileName)
 	return true;
 }
 
-bool Style::match(int layer, const QVariantMap &tags)
+bool Style::match(int layer, const QVariantHash &tags)
 {
 	return _styles.at(layer).match(_zoom, tags);
 }
 
 void Style::drawFeature(int layer, const QPainterPath &path,
-  const QVariantMap &tags, Tile &tile)
+  const QVariantHash &tags, Tile &tile)
 {
 	const Layer &sl = _styles.at(layer);
 

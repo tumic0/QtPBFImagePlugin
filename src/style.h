@@ -3,7 +3,7 @@
 
 #include <QObject>
 #include <QString>
-#include <QVariantMap>
+#include <QVariantHash>
 #include <QStringList>
 #include <QSet>
 #include <QPen>
@@ -26,11 +26,11 @@ public:
 	void setZoom(int zoom) {_zoom = zoom;}
 
 	const QStringList &sourceLayers() const {return _sourceLayers;}
-	bool match(int layer, const QVariantMap &tags);
+	bool match(int layer, const QVariantHash &tags);
 
 	void drawBackground(Tile &tile);
 	void drawFeature(int layer, const QPainterPath &path,
-	  const QVariantMap &tags, Tile &tile);
+	  const QVariantHash &tags, Tile &tile);
 
 private:
 	class Layer {
@@ -42,10 +42,10 @@ private:
 		bool isBackground() const {return (_type == Background);}
 		bool isSymbol() const {return (_type == Symbol);}
 
-		bool match(int zoom, const QVariantMap &tags) const;
+		bool match(int zoom, const QVariantHash &tags) const;
 		void drawPath(int zoom, const QPainterPath &path, Tile &tile) const;
 		void drawSymbol(int zoom, const QPainterPath &path,
-		  const QVariantMap &tags, Tile &tile) const;
+		  const QVariantHash &tags, Tile &tile) const;
 
 	private:
 		enum Type {
@@ -61,7 +61,7 @@ private:
 			Filter() : _type(None) {}
 			Filter(const QJsonArray &json);
 
-			bool match(const QVariantMap &tags) const;
+			bool match(const QVariantHash &tags) const;
 		private:
 			enum Type {
 				None, Unknown,

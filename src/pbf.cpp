@@ -1,7 +1,7 @@
 #include <QByteArray>
 #include <QPainter>
 #include <QDebug>
-#include <QVariantMap>
+#include <QVariantHash>
 #include "vector_tile.pb.h"
 #include "style.h"
 #include "tile.h"
@@ -40,6 +40,7 @@ static QVariant value(const vector_tile::Tile_Value &val)
 class Feature
 {
 public:
+	Feature() : _data(0) {}
 	Feature(const vector_tile::Tile_Feature *data, const QVector<QString> *keys,
 	  const QVector<QVariant> *values) : _data(data)
 	{
@@ -61,11 +62,11 @@ public:
 		}
 	}
 
-	const QVariantMap &tags() const {return _tags;}
+	const QVariantHash &tags() const {return _tags;}
 	const vector_tile::Tile_Feature *data() const {return _data;}
 
 private:
-	QVariantMap _tags;
+	QVariantHash _tags;
 	const vector_tile::Tile_Feature *_data;
 };
 
@@ -87,17 +88,18 @@ public:
 		for (int i = 0; i < data->values_size(); i++)
 			values.append(value(data->values(i)));
 
+		_features.reserve(data->features_size());
 		for (int i = 0; i < data->features_size(); i++)
 			_features.append(Feature(&(data->features(i)), &keys, &values));
 		qSort(_features.begin(), _features.end(), cmp);
 	}
 
-	const QList<Feature> &features() const {return _features;}
+	const QVector<Feature> &features() const {return _features;}
 	const vector_tile::Tile_Layer *data() const {return _data;}
 
 private:
 	const vector_tile::Tile_Layer *_data;
-	QList<Feature> _features;
+	QVector<Feature> _features;
 };
 
 static inline qint32 zigzag32decode(quint32 value)
