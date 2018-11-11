@@ -10,7 +10,7 @@ Standard Mapbox GL Styles are used for styling the maps. Most style features
 used by [Maputnik](http://editor.openmaptiles.org) are supported. The style
 is loaded from the
 [$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style/style.json
-file on plugin load. A default fallback style (Klokantech-basic) for
+file on plugin load. A default fallback style (OSM-Liberty) for
 OpenMapTiles is part of the plugin.
 
 ## Usage
