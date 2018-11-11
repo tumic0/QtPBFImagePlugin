@@ -3,8 +3,6 @@
 
 #include <QPainterPath>
 
-#include <QDebug>
-
 class TextItem
 {
 public:
