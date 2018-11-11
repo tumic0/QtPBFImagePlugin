@@ -33,7 +33,7 @@ SOURCES += src/pbfplugin.cpp \
     src/font.cpp
 RESOURCES += pbfplugin.qrc
 
-unix {
+unix:!macx{
     LIBS += -lprotobuf-lite \
         -lz
 }
@@ -42,6 +42,11 @@ win32 {
         $$ZLIB/include
     LIBS += $$PROTOBUF/lib/libprotobuf-lite.lib \
         $$ZLIB/lib/zlibstatic.lib
+}
+macx {
+    INCLUDEPATH += $$PROTOBUF/include
+    LIBS += $$PROTOBUF/lib/libprotobuf-lite.a \
+        -lz
 }
 
 target.path += $$[QT_INSTALL_PLUGINS]/imageformats
