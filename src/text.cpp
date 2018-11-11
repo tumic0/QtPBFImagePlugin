@@ -1,8 +1,7 @@
-#include <QGraphicsPixmapItem>
 #include <QFontMetrics>
 #include <QPainter>
 #include "text.h"
-#include "textitem.h"
+#include "textpointitem.h"
 #include "textpathitem.h"
 
 
@@ -134,16 +133,32 @@ static bool reverse(const QPainterPath &path)
 	return (angle > 90 && angle < 270) ? true : false;
 }
 
+
+Text::~Text()
+{
+	for (int i = 0; i < _items.size(); i++)
+		delete _items[i];
+}
+
+void Text::render(QPainter *painter)
+{
+	for (int i = 0; i < _items.size(); i++) {
+		const TextItem *ti = _items.at(i);
+		if (ti->isVisible() && _sceneRect.intersects(ti->boundingRect()))
+			ti->paint(painter);
+	}
+}
+
 void Text::addLabel(const QString &text, const QPointF &pos, const QFont &font,
   const QPen &pen, qreal maxTextWidth)
 {
 	if (text.isEmpty())
 		return;
 
-	TextItem *ti = new TextItem(text, pos, font, maxTextWidth);
+	TextPointItem *ti = new TextPointItem(text, pos, font, maxTextWidth);
 	ti->setPen(pen);
 	addItem(ti);
-	QList<QGraphicsItem*> ci = collidingItems(ti);
+	QList<TextItem*> ci = collidingItems(ti);
 	for (int i = 0; i < ci.size(); i++)
 		ci[i]->setVisible(false);
 }
@@ -163,21 +178,37 @@ void Text::addLabel(const QString &text, const QPainterPath &path,
 		return;
 
 	QPainterPath tp(textPath(path, textWidth, maxAngle, fm.averageCharWidth(),
-	  sceneRect()));
+	  _sceneRect));
 	if (tp.isEmpty())
 		return;
 
 	TextPathItem *pi = new TextPathItem(text, reverse(tp) ? tp.toReversed()
 	  : tp, font);
-	addItem(pi);
-	if (!sceneRect().contains(pi->sceneBoundingRect())) {
+	if (!_sceneRect.contains(pi->boundingRect())) {
 		delete pi;
 		return;
 	}
-
 	pi->setPen(pen);
 
-	QList<QGraphicsItem*> ci = collidingItems(pi);
+	addItem(pi);
+
+	QList<TextItem*> ci = collidingItems(pi);
 	for (int j = 0; j < ci.size(); j++)
 		ci[j]->setVisible(false);
+}
+
+QList<TextItem*> Text::collidingItems(const TextItem *item) const
+{
+	QList<TextItem*> list;
+
+	if (!item->isVisible())
+		return list;
+
+	for (int i = 0; i < _items.size();i ++) {
+		const TextItem *ti = _items.at(i);
+		if (ti != item && ti->isVisible() && ti->collidesWithItem(item))
+			list.append(const_cast<TextItem*>(ti));
+	}
+
+	return list;
 }

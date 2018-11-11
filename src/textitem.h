@@ -1,28 +1,36 @@
 #ifndef TEXTITEM_H
 #define TEXTITEM_H
 
-#include <QGraphicsItem>
-#include <QPen>
-#include <QFont>
-#include <QString>
+#include <QPainterPath>
 
-class TextItem : public QGraphicsItem
+#include <QDebug>
+
+class TextItem
 {
 public:
-	TextItem(const QString &text, const QPointF &pos, const QFont &font,
-	  int maxTextWidth, QGraphicsItem *parent = 0);
+	TextItem() : _visible(true) {}
+	virtual ~TextItem() {}
 
-	QRectF boundingRect() const {return _boundingRect;}
-	void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
-	  QWidget *widget);
+	virtual QPainterPath shape() const = 0;
+	virtual QRectF boundingRect() const = 0;
+	virtual void paint(QPainter *painter) const = 0;
 
-	void setPen(const QPen &pen) {_pen = pen;}
+	bool isVisible() const {return _visible;}
+	void setVisible(bool visible) {_visible = visible;}
+
+	bool collidesWithItem(const TextItem *other) const
+	{
+		QRectF r1(boundingRect());
+		QRectF r2(other->boundingRect());
+
+		if (r1.isEmpty() || r2.isEmpty() || !r1.intersects(r2))
+			return false;
+
+		return other->shape().intersects(shape());
+	}
 
 private:
-	QString _text;
-	QRectF _boundingRect;
-	QFont _font;
-	QPen _pen;
+	bool _visible;
 };
 
 #endif // TEXTITEM_H

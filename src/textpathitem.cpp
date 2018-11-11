@@ -4,22 +4,18 @@
 
 
 TextPathItem::TextPathItem(const QString &text, const QPainterPath &path,
-  const QFont &font, QGraphicsItem *parent) : QGraphicsItem(parent),
-  _text(text), _path(path), _font(font)
+  const QFont &font) : _text(text), _path(path), _font(font)
 {
 	QFontMetrics fm(font);
 	QPainterPathStroker s;
 	s.setWidth(fm.height());
 	s.setCapStyle(Qt::FlatCap);
 	_shape = s.createStroke(path).simplified();
+	_boundingRect = _shape.boundingRect();
 }
 
-void TextPathItem::paint(QPainter *painter,
-  const QStyleOptionGraphicsItem *option, QWidget *widget)
+void TextPathItem::paint(QPainter *painter) const
 {
-	Q_UNUSED(option);
-	Q_UNUSED(widget);
-
 	QFontMetrics fm(_font);
 	int textWidth = fm.width(_text);
 

@@ -1,7 +1,7 @@
 TARGET  = pbf
 TEMPLATE = lib
 CONFIG += plugin
-QT += gui widgets
+QT += gui
 
 PROTOS = protobuf/vector_tile.proto
 include(protobuf/vector_tile.pri)
@@ -17,8 +17,9 @@ HEADERS += src/pbfhandler.h \
     src/tile.h \
     src/function.h \
     src/textpathitem.h \
-    src/textitem.h \
-    src/font.h
+    src/textpointitem.h \
+    src/font.h \
+    src/textitem.h
 SOURCES += src/pbfplugin.cpp \
     src/pbfhandler.cpp \
     src/gzip.cpp \
@@ -28,7 +29,7 @@ SOURCES += src/pbfplugin.cpp \
     src/text.cpp \
     src/function.cpp \
     src/textpathitem.cpp \
-    src/textitem.cpp \
+    src/textpointitem.cpp \
     src/font.cpp
 RESOURCES += pbfplugin.qrc
 
