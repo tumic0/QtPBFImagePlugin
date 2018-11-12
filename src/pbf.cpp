@@ -114,7 +114,7 @@ static inline QPoint parameters(quint32 v1, quint32 v2)
 }
 
 static void drawFeature(const Feature &feature, Style *style, int styleLayer,
-  qreal factor, Tile &tile)
+  const QSizeF &factor, Tile &tile)
 {
 	if (!style->match(styleLayer, feature.tags()))
 		return;
@@ -133,7 +133,8 @@ static void drawFeature(const Feature &feature, Style *style, int styleLayer,
 				  feature.data()->geometry(i+2));
 				i += 2;
 				cursor += offset;
-				path.moveTo(QPointF(cursor) / factor);
+				path.moveTo(QPointF(cursor.x() * factor.width(),
+				  cursor.y() * factor.height()));
 			}
 		} else if (cmdId == LINE_TO) {
 			for (unsigned j = 0; j < cmdCount; j++) {
@@ -141,7 +142,8 @@ static void drawFeature(const Feature &feature, Style *style, int styleLayer,
 				  feature.data()->geometry(i+2));
 				i += 2;
 				cursor += offset;
-				path.lineTo(QPointF(cursor) / factor);
+				path.lineTo(QPointF(cursor.x() * factor.width(),
+				  cursor.y() * factor.height()));
 			}
 		} else if (cmdId == CLOSE_PATH) {
 			path.closeSubpath();
@@ -158,21 +160,23 @@ static void drawLayer(const Layer &layer, Style *style, int styleLayer,
 	if (layer.data()->version() > 2)
 		return;
 
-	qreal factor = layer.data()->extent() / (qreal)tile.size();
+	QSizeF factor(tile.size().width() / (qreal)layer.data()->extent(),
+	  tile.size().height() / (qreal)layer.data()->extent());
 
 	for (int i = 0; i < layer.features().size(); i++)
 		drawFeature(layer.features().at(i), style, styleLayer, factor, tile);
 }
 
-QImage PBF::image(const QByteArray &data, int zoom, Style *style, int size)
+bool PBF::render(const QByteArray &data, int zoom, Style *style, qreal scale,
+  QImage *image)
 {
 	vector_tile::Tile tile;
 	if (!tile.ParseFromArray(data.constData(), data.size())) {
 		qCritical() << "Invalid tile protocol buffer data";
-		return QImage();
+		return false;
 	}
 
-	Tile t(size);
+	Tile t(image, scale);
 
 	style->setZoom(zoom);
 	style->drawBackground(t);
@@ -196,5 +200,7 @@ QImage PBF::image(const QByteArray &data, int zoom, Style *style, int size)
 		drawLayer(*it, style, i, t);
 	}
 
-	return t.render();
+	t.render();
+
+	return true;
 }

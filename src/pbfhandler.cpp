@@ -47,12 +47,10 @@ bool PBFHandler::canRead(QIODevice *device)
 bool PBFHandler::read(QImage *image)
 {
 	quint32 magic;
-	qint64 size = device()->peek((char*)&magic, sizeof(magic));
-	if (size != sizeof(magic))
+	if (device()->peek((char*)&magic, sizeof(magic)) != sizeof(magic))
 		return false;
 
 	QByteArray ba;
-
 	if (isGZIPPBF(magic))
 		ba = Gzip::uncompress(device()->readAll());
 	else if (isPlainPBF(magic))
@@ -62,14 +60,28 @@ bool PBFHandler::read(QImage *image)
 
 	bool ok;
 	int zoom = format().toInt(&ok);
-	*image = PBF::image(ba, ok ? zoom : -1, _style, TILE_SIZE);
 
-	return !image->isNull();
+	QSize size = _scaledSize.isValid()
+	  ? _scaledSize : QSize(TILE_SIZE, TILE_SIZE);
+	qreal scale = _scaledSize.isValid()
+	  ? qMax(_scaledSize.width() / TILE_SIZE, _scaledSize.height() / TILE_SIZE)
+	  : 1.0;
+	*image = QImage(size, QImage::Format_ARGB32);
+
+	return PBF::render(ba, ok ? zoom : -1, _style, scale, image);
 }
 
 bool PBFHandler::supportsOption(ImageOption option) const
 {
-	return (option == Size);
+	return (option == Size || option == ScaledSize);
+}
+
+
+void PBFHandler::setOption(QImageIOHandler::ImageOption option,
+  const QVariant &value)
+{
+	if (option == ScaledSize)
+		_scaledSize = value.toSize();
 }
 
 QVariant PBFHandler::option(ImageOption option) const

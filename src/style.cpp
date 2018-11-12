@@ -473,7 +473,7 @@ void Style::drawFeature(int layer, const QPainterPath &path,
 
 void Style::drawBackground(Tile &tile)
 {
-	QRectF rect(0, 0, tile.size(), tile.size());
+	QRectF rect(QPointF(0, 0), tile.size());
 	QPainterPath path;
 	path.addRect(rect);
 

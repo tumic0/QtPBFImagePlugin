@@ -7,20 +7,17 @@
 
 class Tile {
 public:
-	Tile(int size) : _background(size, size, QImage::Format_ARGB32),
-	  _text(size), _painter(&_background) {}
+	Tile(QImage *img, qreal scale)
+	  : _size(img->size()), _text(img->size(), scale), _painter(img) {}
 
-	int size() const {return _background.width();}
+	QSize size() const {return _size;}
 	Text &text() {return _text;}
 	QPainter &painter() {return _painter;}
 
-	const QImage &render() {
-		_text.render(&painter());
-		return _background;
-	}
+	void render() {_text.render(&_painter);}
 
 private:
-	QImage _background;
+	QSize _size;
 	Text _text;
 	QPainter _painter;
 };

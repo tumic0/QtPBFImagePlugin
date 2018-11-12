@@ -6,9 +6,8 @@
 TextPathItem::TextPathItem(const QString &text, const QPainterPath &path,
   const QFont &font) : _text(text), _path(path), _font(font)
 {
-	QFontMetrics fm(font);
 	QPainterPathStroker s;
-	s.setWidth(fm.height());
+	s.setWidth(font.pixelSize());
 	s.setCapStyle(Qt::FlatCap);
 	_shape = s.createStroke(path).simplified();
 	_boundingRect = _shape.boundingRect();

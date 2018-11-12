@@ -6,7 +6,8 @@
 class Text
 {
 public:
-	Text(int size) : _sceneRect(QRectF(0, 0, size, size)) {}
+	Text(const QSize &size, qreal scale)
+	  : _sceneRect(QRectF(QPointF(0, 0), size)), _fontScale(scale) {}
 	~Text();
 
 	void render(QPainter *painter);
@@ -21,6 +22,7 @@ private:
 	QList<TextItem *> collidingItems(const TextItem *item) const;
 
 	QRectF _sceneRect;
+	qreal _fontScale;
 	QList<TextItem *> _items;
 };
 

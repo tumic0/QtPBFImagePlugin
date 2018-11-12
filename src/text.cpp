@@ -155,7 +155,15 @@ void Text::addLabel(const QString &text, const QPointF &pos, const QFont &font,
 	if (text.isEmpty())
 		return;
 
-	TextPointItem *ti = new TextPointItem(text, pos, font, maxTextWidth);
+	TextPointItem *ti;
+
+	if (_fontScale != 1.0) {
+		QFont scaledFont(font);
+		scaledFont.setPixelSize(font.pixelSize() * _fontScale);
+		ti = new TextPointItem(text, pos, scaledFont, maxTextWidth);
+	} else
+		ti = new TextPointItem(text, pos, font, maxTextWidth);
+
 	ti->setPen(pen);
 	addItem(ti);
 	QList<TextItem*> ci = collidingItems(ti);
@@ -171,19 +179,20 @@ void Text::addLabel(const QString &text, const QPainterPath &path,
 	if (text.isEmpty())
 		return;
 
-	QFontMetrics fm(font);
-	int textWidth = fm.width(text);
+	QFont scaledFont(font);
+	scaledFont.setPixelSize(font.pixelSize() * _fontScale);
 
+	int textWidth = text.size() * scaledFont.pixelSize() * 0.6;
 	if (textWidth > path.length())
 		return;
 
-	QPainterPath tp(textPath(path, textWidth, maxAngle, fm.averageCharWidth(),
-	  _sceneRect));
+	QPainterPath tp(textPath(path, textWidth, maxAngle,
+	  scaledFont.pixelSize() / 2, _sceneRect));
 	if (tp.isEmpty())
 		return;
 
 	TextPathItem *pi = new TextPathItem(text, reverse(tp) ? tp.toReversed()
-	  : tp, font);
+	  : tp, scaledFont);
 	if (!_sceneRect.contains(pi->boundingRect())) {
 		delete pi;
 		return;

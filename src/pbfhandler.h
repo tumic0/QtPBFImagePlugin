@@ -4,6 +4,7 @@
 #include <QImageIOHandler>
 #include <QImage>
 #include <QVariant>
+#include <QSize>
 
 class Style;
 
@@ -19,11 +20,13 @@ public:
 	QByteArray name() const;
 	QVariant option(ImageOption option) const;
 	bool supportsOption(ImageOption option) const;
+	void setOption(QImageIOHandler::ImageOption option, const QVariant &value);
 
 	static bool canRead(QIODevice *device);
 
 private:
 	Style *_style;
+	QSize _scaledSize;
 };
 
 #endif // PBFHANDLER_H
