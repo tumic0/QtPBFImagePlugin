@@ -11,6 +11,40 @@
 #include "style.h"
 
 
+static void jsonColor(const QJsonObject &json, const char *name, FunctionC &var)
+{
+	if (json.contains(name)) {
+		const QJsonValue value = json[name];
+		if (value.isString())
+			var = FunctionC(Color::fromJsonString(value.toString()));
+		else if (value.isObject())
+			var = FunctionC(value.toObject());
+	}
+}
+
+static void jsonFloat(const QJsonObject &json, const char *name, FunctionF &var)
+{
+	if (json.contains(name)) {
+		const QJsonValue value = json[name];
+		if (value.isDouble())
+			var = FunctionF(value.toDouble());
+		else if (value.isObject())
+			var = FunctionF(value.toObject());
+	}
+}
+
+static void jsonBool(const QJsonObject &json, const char *name, FunctionB &var)
+{
+	if (json.contains(name)) {
+		QJsonValue value = json[name];
+		if (value.isBool())
+			var = FunctionB(value.toBool());
+		else if (value.isObject())
+			var = FunctionB(value.toObject());
+	}
+}
+
+
 Style::Layer::Filter::Filter(const QJsonArray &json)
   : _type(Unknown), _not(false)
 {
@@ -137,65 +171,32 @@ bool Style::Layer::Filter::match(const QVariantHash &tags) const
 Style::Layer::Paint::Paint(const QJsonObject &json)
   : _fillOpacity(1.0), _lineOpacity(1.0), _lineWidth(1.0)
 {
-	if (json.contains("fill-opacity") && json["fill-opacity"].isDouble())
-		_fillOpacity = FunctionF(json["fill-opacity"].toDouble());
-	else if (json.contains("fill-opacity") && json["fill-opacity"].isObject())
-		_fillOpacity = FunctionF(json["fill-opacity"].toObject());
-	if (json.contains("fill-color") && json["fill-color"].isString()) {
-		_fillColor = FunctionC(Color::fromJsonString(
-		  json["fill-color"].toString()));
-		_fillOutlineColor = _fillColor;
-	} else if (json.contains("fill-color") && json["fill-color"].isObject()) {
-		_fillColor = FunctionC(json["fill-color"].toObject());
-		_fillOutlineColor = _fillColor;
-	}
-	if (json.contains("fill-outline-color")
-	  && json["fill-outline-color"].isString())
-		_fillOutlineColor = FunctionC(Color::fromJsonString(
-		  json["fill-outline-color"].toString()));
-	if (json.contains("fill-outline-color")
-	  && json["fill-outline-color"].isObject())
-		_fillOutlineColor = FunctionC(json["fill-outline-color"].toObject());
-	if (json.contains("fill-antialias") && json["fill-antialias"].isBool())
-		_fillAntialias = FunctionB(json["fill-antialias"].toBool());
-	else if (json.contains("fill-antialias") && json["fill-antialias"].isObject())
-		_fillAntialias = FunctionB(json["fill-antialias"].toObject());
+	// fill
+	jsonFloat(json, "fill-opacity", _fillOpacity);
+	jsonColor(json, "fill-color", _fillColor);
+	_fillOutlineColor = _fillColor;
+	jsonColor(json, "fill-outline-color", _fillOutlineColor);
+	jsonBool(json, "fill-antialias",_fillAntialias);
 	if (json.contains("fill-pattern")) {
 		_fillColor = FunctionC(QColor());
 		_fillOutlineColor = FunctionC(QColor());
 	}
 
-
-	if (json.contains("line-color") && json["line-color"].isString())
-		_lineColor = FunctionC(Color::fromJsonString(json["line-color"]
-		  .toString()));
-	if (json.contains("line-color") && json["line-color"].isObject())
-		_lineColor = FunctionC(json["line-color"].toObject());
-	if (json.contains("line-width") && json["line-width"].isObject())
-		_lineWidth = FunctionF(json["line-width"].toObject());
-	else if (json.contains("line-width") && json["line-width"].isDouble())
-		_lineWidth = FunctionF(json["line-width"].toDouble());
-	if (json.contains("line-opacity") && json["line-opacity"].isDouble())
-		_lineOpacity = FunctionF(json["line-opacity"].toDouble());
-	else if (json.contains("line-opacity") && json["line-opacity"].isObject())
-		_lineOpacity = FunctionF(json["line-opacity"].toObject());
+	// line
+	jsonColor(json, "line-color", _lineColor);
+	jsonFloat(json, "line-width", _lineWidth);
+	jsonFloat(json, "line-opacity", _lineOpacity);
 	if (json.contains("line-dasharray") && json["line-dasharray"].isArray()) {
 		QJsonArray array = json["line-dasharray"].toArray();
 		for (int i = 0; i < array.size(); i++)
 			_lineDasharray.append(array.at(i).toDouble());
 	}
 
-	if (json.contains("background-color") && json["background-color"].isString())
-		_backgroundColor = FunctionC(Color::fromJsonString(
-		  json["background-color"].toString()));
-	if (json.contains("background-color") && json["background-color"].isObject())
-		_backgroundColor = FunctionC(json["background-color"].toObject());
+	// background
+	jsonColor(json, "background-color", _backgroundColor);
 
-	if (json.contains("text-color") && json["text-color"].isString())
-		_textColor = FunctionC(Color::fromJsonString(json["text-color"]
-		  .toString()));
-	if (json.contains("text-color") && json["text-color"].isObject())
-		_textColor = FunctionC(json["text-color"].toObject());
+	// text
+	jsonColor(json, "text-color", _textColor);
 }
 
 QPen Style::Layer::Paint::pen(Type type, int zoom) const
@@ -275,36 +276,6 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
   : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _lineCap(Qt::FlatCap),
   _lineJoin(Qt::MiterJoin), _font("Open Sans"), _capitalize(false)
 {
-	if (!(json.contains("text-field") && json["text-field"].isString()))
-		return;
-
-	_textField = json["text-field"].toString();
-
-	QRegExp rx("\\{[^\\}]*\\}");
-	int pos = 0;
-	while ((pos = rx.indexIn(_textField, pos)) != -1) {
-		QString match = rx.capturedTexts().first();
-		_keys.append(match.mid(1, match.size() - 2));
-		pos += rx.matchedLength();
-	}
-
-	if (json.contains("text-size") && json["text-size"].isObject())
-		_textSize = FunctionF(json["text-size"].toObject());
-	else if (json.contains("text-size") && json["text-size"].isDouble())
-		_textSize = json["text-size"].toDouble();
-	if (json.contains("text-max-width") && json["text-max-width"].isObject())
-		_textMaxWidth = FunctionF(json["text-max-width"].toObject());
-	else if (json.contains("text-max-width") && json["text-max-width"].isDouble())
-		_textMaxWidth = json["text-max-width"].toDouble();
-	if (json.contains("text-max-angle") && json["text-max-angle"].isObject())
-		_textMaxWidth = FunctionF(json["text-max-angle"].toObject());
-	else if (json.contains("text-max-angle") && json["text-max-angle"].isDouble())
-		_textMaxWidth = json["text-max-angle"].toDouble();
-	if (json.contains("text-font") && json["text-font"].isArray())
-		_font = Font::fromJsonArray(json["text-font"].toArray());
-	if (json.contains("text-transform") && json["text-transform"].isString())
-		_capitalize = json["text-transform"].toString() == "uppercase";
-
 	if (json.contains("line-cap") && json["line-cap"].isString()) {
 		if (json["line-cap"].toString() == "round")
 			_lineCap = Qt::RoundCap;
@@ -317,6 +288,26 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 		else if (json["line-join"].toString() == "round")
 			_lineJoin = Qt::RoundJoin;
 	}
+
+	if (!(json.contains("text-field") && json["text-field"].isString()))
+		return;
+	_textField = json["text-field"].toString();
+
+	QRegExp rx("\\{[^\\}]*\\}");
+	int pos = 0;
+	while ((pos = rx.indexIn(_textField, pos)) != -1) {
+		QString match = rx.capturedTexts().first();
+		_keys.append(match.mid(1, match.size() - 2));
+		pos += rx.matchedLength();
+	}
+
+	jsonFloat(json, "text-size", _textSize);
+	jsonFloat(json, "text-max-width", _textMaxWidth);
+	jsonFloat(json, "text-max-angle", _textMaxAngle);
+	if (json.contains("text-font") && json["text-font"].isArray())
+		_font = Font::fromJsonArray(json["text-font"].toArray());
+	if (json.contains("text-transform") && json["text-transform"].isString())
+		_capitalize = json["text-transform"].toString() == "uppercase";
 }
 
 QFont Style::Layer::Layout::font(int zoom) const
@@ -389,11 +380,13 @@ void Style::Layer::drawPath(int zoom, const QPainterPath &path,
 	pen.setCapStyle(_layout.lineCap());
 
 	QPainter &p = tile.painter();
+	p.save();
 	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type, zoom));
 	p.setPen(pen);
 	p.setBrush(brush);
 	p.setOpacity(_paint.opacity(_type, zoom));
 	p.drawPath(path);
+	p.restore();
 }
 
 void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
