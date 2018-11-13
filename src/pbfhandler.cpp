@@ -31,7 +31,11 @@ static bool isPlainPBF(quint32 magic)
 
 bool PBFHandler::canRead() const
 {
-	return canRead(device());
+	if (canRead(device())) {
+		setFormat("pbf");
+		return true;
+	} else
+		return false;
 }
 
 bool PBFHandler::canRead(QIODevice *device)
@@ -87,9 +91,4 @@ void PBFHandler::setOption(QImageIOHandler::ImageOption option,
 QVariant PBFHandler::option(ImageOption option) const
 {
 	return (option == Size) ? QSize(TILE_SIZE, TILE_SIZE) : QVariant();
-}
-
-QByteArray PBFHandler::name() const
-{
-	return "pbf";
 }

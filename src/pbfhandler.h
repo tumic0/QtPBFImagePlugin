@@ -17,7 +17,6 @@ public:
 	bool canRead() const;
 	bool read(QImage *image);
 
-	QByteArray name() const;
 	QVariant option(ImageOption option) const;
 	bool supportsOption(ImageOption option) const;
 	void setOption(QImageIOHandler::ImageOption option, const QVariant &value);
