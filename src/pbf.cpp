@@ -163,9 +163,11 @@ static void drawLayer(const Layer &layer, Style *style, int styleLayer,
 	QSizeF factor(tile.size().width() / (qreal)layer.data()->extent(),
 	  tile.size().height() / (qreal)layer.data()->extent());
 
+	tile.painter().save();
 	style->setPainter(styleLayer, tile);
 	for (int i = 0; i < layer.features().size(); i++)
 		processFeature(layer.features().at(i), style, styleLayer, factor, tile);
+	tile.painter().restore();
 }
 
 bool PBF::render(const QByteArray &data, int zoom, Style *style, qreal scale,
