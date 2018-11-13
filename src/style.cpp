@@ -276,6 +276,7 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
   : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _lineCap(Qt::FlatCap),
   _lineJoin(Qt::MiterJoin), _font("Open Sans"), _capitalize(false)
 {
+	// line
 	if (json.contains("line-cap") && json["line-cap"].isString()) {
 		if (json["line-cap"].toString() == "round")
 			_lineCap = Qt::RoundCap;
@@ -289,6 +290,7 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 			_lineJoin = Qt::RoundJoin;
 	}
 
+	// text
 	if (!(json.contains("text-field") && json["text-field"].isString()))
 		return;
 	_textField = json["text-field"].toString();
@@ -366,7 +368,7 @@ bool Style::Layer::match(int zoom, const QVariantHash &tags) const
 	return _filter.match(tags);
 }
 
-void Style::Layer::setPainter(int zoom, Tile &tile) const
+void Style::Layer::setPathPainter(int zoom, Tile &tile) const
 {
 	QPen pen(_paint.pen(_type, zoom));
 	QBrush brush(_paint.brush(_type, zoom));
@@ -379,6 +381,16 @@ void Style::Layer::setPainter(int zoom, Tile &tile) const
 	p.setPen(pen);
 	p.setBrush(brush);
 	p.setOpacity(_paint.opacity(_type, zoom));
+}
+
+void Style::Layer::setSymbolPainter(int zoom, Tile &tile) const
+{
+	QPen pen(_paint.pen(_type, zoom));
+	QFont font(_layout.font(zoom));
+
+	QPainter &p = tile.painter();
+	p.setPen(pen);
+	p.setFont(font);
 }
 
 void Style::Layer::addSymbol(int zoom, const QPainterPath &path,
@@ -399,14 +411,12 @@ void Style::Layer::addSymbol(int zoom, const QPainterPath &path,
 	if (tt.isEmpty())
 		return;
 
-	QPen pen(_paint.pen(_type, zoom));
-	QFont font(_layout.font(zoom));
-
 	if (path.elementCount() == 1 && path.elementAt(0).isMoveTo())
-		tile.text().addLabel(tt, path.elementAt(0), font, pen,
+		tile.text().addLabel(tt, path.elementAt(0), tile.painter(),
 		  _layout.maxTextWidth(zoom));
 	else
-		tile.text().addLabel(tt, path, font, pen, _layout.maxTextAngle(zoom));
+		tile.text().addLabel(tt, path, tile.painter(),
+		  _layout.maxTextAngle(zoom));
 }
 
 bool Style::load(const QString &fileName)
@@ -450,10 +460,12 @@ void Style::setPainter(int layer, Tile &tile)
 	const Layer &sl = _styles.at(layer);
 
 	if (sl.isPath())
-		sl.setPainter(_zoom, tile);
+		sl.setPathPainter(_zoom, tile);
+	else if (sl.isSymbol())
+		sl.setSymbolPainter(_zoom, tile);
 }
 
-void Style::processFeature(int layer, const QPainterPath &path,
+void Style::drawFeature(int layer, const QPainterPath &path,
   const QVariantHash &tags, Tile &tile)
 {
 	const Layer &sl = _styles.at(layer);
@@ -475,7 +487,7 @@ void Style::drawBackground(Tile &tile)
 		tile.painter().setPen(Qt::NoPen);
 		tile.painter().drawRect(rect);
 	} else if (_styles.first().isBackground()) {
-		_styles.first().setPainter(_zoom, tile);
+		_styles.first().setPathPainter(_zoom, tile);
 		tile.painter().drawPath(path);
 	}
 }

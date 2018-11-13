@@ -12,10 +12,10 @@ public:
 
 	void render(QPainter *painter) const;
 
-	void addLabel(const QString &text, const QPointF &pos, const QFont &font,
-	  const QPen &pen, qreal maxTextWidth);
+	void addLabel(const QString &text, const QPointF &pos,
+	  const QPainter &painter, qreal maxTextWidth);
 	void addLabel(const QString &text, const QPainterPath &path,
-	  const QFont &font, const QPen &pen, qreal maxAngle);
+	  const QPainter &painter, qreal maxAngle);
 
 private:
 	void addItem(TextItem *item) {_items.append(item);}

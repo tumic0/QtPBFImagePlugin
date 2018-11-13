@@ -30,12 +30,13 @@ public:
 
 	void drawBackground(Tile &tile);
 	void setPainter(int layer, Tile &tile);
-	void processFeature(int layer, const QPainterPath &path,
+	void drawFeature(int layer, const QPainterPath &path,
 	  const QVariantHash &tags, Tile &tile);
 
 private:
 	class Layer {
 	public:
+		Layer() : _type(Unknown), _minZoom(-1), _maxZoom(-1) {}
 		Layer(const QJsonObject &json);
 
 		const QString &sourceLayer() const {return _sourceLayer;}
@@ -44,7 +45,8 @@ private:
 		bool isSymbol() const {return (_type == Symbol);}
 
 		bool match(int zoom, const QVariantHash &tags) const;
-		void setPainter(int zoom, Tile &tile) const;
+		void setPathPainter(int zoom, Tile &tile) const;
+		void setSymbolPainter(int zoom, Tile &tile) const;
 		void addSymbol(int zoom, const QPainterPath &path,
 		  const QVariantHash &tags, Tile &tile) const;
 
@@ -140,7 +142,7 @@ private:
 	};
 
 	int _zoom;
-	QList<Layer> _styles;
+	QVector<Layer> _styles;
 	QStringList _sourceLayers;
 };
 

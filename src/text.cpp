@@ -149,8 +149,8 @@ void Text::render(QPainter *painter) const
 	}
 }
 
-void Text::addLabel(const QString &text, const QPointF &pos, const QFont &font,
-  const QPen &pen, qreal maxTextWidth)
+void Text::addLabel(const QString &text, const QPointF &pos,
+  const QPainter &painter, qreal maxTextWidth)
 {
 	if (text.isEmpty())
 		return;
@@ -158,13 +158,13 @@ void Text::addLabel(const QString &text, const QPointF &pos, const QFont &font,
 	TextPointItem *ti;
 
 	if (_fontScale != 1.0) {
-		QFont scaledFont(font);
-		scaledFont.setPixelSize(font.pixelSize() * _fontScale);
+		QFont scaledFont(painter.font());
+		scaledFont.setPixelSize(painter.font().pixelSize() * _fontScale);
 		ti = new TextPointItem(text, pos, scaledFont, maxTextWidth);
 	} else
-		ti = new TextPointItem(text, pos, font, maxTextWidth);
+		ti = new TextPointItem(text, pos, painter.font(), maxTextWidth);
 
-	ti->setPen(pen);
+	ti->setPen(painter.pen());
 	addItem(ti);
 	QList<TextItem*> ci = collidingItems(ti);
 	for (int i = 0; i < ci.size(); i++)
@@ -172,15 +172,15 @@ void Text::addLabel(const QString &text, const QPointF &pos, const QFont &font,
 }
 
 void Text::addLabel(const QString &text, const QPainterPath &path,
-  const QFont &font, const QPen &pen, qreal maxAngle)
+  const QPainter &painter, qreal maxAngle)
 {
 	if (path.isEmpty())
 		return;
 	if (text.isEmpty())
 		return;
 
-	QFont scaledFont(font);
-	scaledFont.setPixelSize(font.pixelSize() * _fontScale);
+	QFont scaledFont(painter.font());
+	scaledFont.setPixelSize(painter.font().pixelSize() * _fontScale);
 
 	int textWidth = text.size() * scaledFont.pixelSize() * 0.6;
 	if (textWidth > path.length())
@@ -197,7 +197,7 @@ void Text::addLabel(const QString &text, const QPainterPath &path,
 		delete pi;
 		return;
 	}
-	pi->setPen(pen);
+	pi->setPen(painter.pen());
 
 	addItem(pi);
 

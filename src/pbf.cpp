@@ -113,7 +113,7 @@ static inline QPoint parameters(quint32 v1, quint32 v2)
 	return QPoint(zigzag32decode(v1), zigzag32decode(v2));
 }
 
-static void processFeature(const Feature &feature, Style *style, int styleLayer,
+static void drawFeature(const Feature &feature, Style *style, int styleLayer,
   const QSizeF &factor, Tile &tile)
 {
 	if (!style->match(styleLayer, feature.tags()))
@@ -151,7 +151,7 @@ static void processFeature(const Feature &feature, Style *style, int styleLayer,
 		}
 	}
 
-	style->processFeature(styleLayer, path, feature.tags(), tile);
+	style->drawFeature(styleLayer, path, feature.tags(), tile);
 }
 
 static void drawLayer(const Layer &layer, Style *style, int styleLayer,
@@ -163,11 +163,9 @@ static void drawLayer(const Layer &layer, Style *style, int styleLayer,
 	QSizeF factor(tile.size().width() / (qreal)layer.data()->extent(),
 	  tile.size().height() / (qreal)layer.data()->extent());
 
-	tile.painter().save();
 	style->setPainter(styleLayer, tile);
 	for (int i = 0; i < layer.features().size(); i++)
-		processFeature(layer.features().at(i), style, styleLayer, factor, tile);
-	tile.painter().restore();
+		drawFeature(layer.features().at(i), style, styleLayer, factor, tile);
 }
 
 bool PBF::render(const QByteArray &data, int zoom, Style *style, qreal scale,
@@ -193,6 +191,8 @@ bool PBF::render(const QByteArray &data, int zoom, Style *style, qreal scale,
 			layers.insert(name, Layer(&layer));
 	}
 
+	t.painter().save();
+
 	// Process source layers in order of style layers
 	for (int i = 0; i < style->sourceLayers().size(); i++) {
 		QMap<QString, Layer>::const_iterator it = layers.find(
@@ -203,6 +203,7 @@ bool PBF::render(const QByteArray &data, int zoom, Style *style, qreal scale,
 		drawLayer(*it, style, i, t);
 	}
 
+	t.painter().restore();
 	t.text().render(&t.painter());
 
 	return true;
