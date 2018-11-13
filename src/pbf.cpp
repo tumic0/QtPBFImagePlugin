@@ -113,7 +113,7 @@ static inline QPoint parameters(quint32 v1, quint32 v2)
 	return QPoint(zigzag32decode(v1), zigzag32decode(v2));
 }
 
-static void drawFeature(const Feature &feature, Style *style, int styleLayer,
+static void processFeature(const Feature &feature, Style *style, int styleLayer,
   const QSizeF &factor, Tile &tile)
 {
 	if (!style->match(styleLayer, feature.tags()))
@@ -151,7 +151,7 @@ static void drawFeature(const Feature &feature, Style *style, int styleLayer,
 		}
 	}
 
-	style->drawFeature(styleLayer, path, feature.tags(), tile);
+	style->processFeature(styleLayer, path, feature.tags(), tile);
 }
 
 static void drawLayer(const Layer &layer, Style *style, int styleLayer,
@@ -163,8 +163,9 @@ static void drawLayer(const Layer &layer, Style *style, int styleLayer,
 	QSizeF factor(tile.size().width() / (qreal)layer.data()->extent(),
 	  tile.size().height() / (qreal)layer.data()->extent());
 
+	style->setPainter(styleLayer, tile);
 	for (int i = 0; i < layer.features().size(); i++)
-		drawFeature(layer.features().at(i), style, styleLayer, factor, tile);
+		processFeature(layer.features().at(i), style, styleLayer, factor, tile);
 }
 
 bool PBF::render(const QByteArray &data, int zoom, Style *style, qreal scale,
@@ -200,7 +201,7 @@ bool PBF::render(const QByteArray &data, int zoom, Style *style, qreal scale,
 		drawLayer(*it, style, i, t);
 	}
 
-	t.render();
+	t.text().render(&t.painter());
 
 	return true;
 }

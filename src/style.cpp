@@ -366,30 +366,22 @@ bool Style::Layer::match(int zoom, const QVariantHash &tags) const
 	return _filter.match(tags);
 }
 
-void Style::Layer::drawPath(int zoom, const QPainterPath &path,
-  Tile &tile) const
+void Style::Layer::setPainter(int zoom, Tile &tile) const
 {
 	QPen pen(_paint.pen(_type, zoom));
-	if (_type == Line && pen.style() == Qt::NoPen)
-		return;
 	QBrush brush(_paint.brush(_type, zoom));
-	if (_type == Fill && brush.style() == Qt::NoBrush)
-		return;
 
 	pen.setJoinStyle(_layout.lineJoin());
 	pen.setCapStyle(_layout.lineCap());
 
 	QPainter &p = tile.painter();
-	p.save();
 	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type, zoom));
 	p.setPen(pen);
 	p.setBrush(brush);
 	p.setOpacity(_paint.opacity(_type, zoom));
-	p.drawPath(path);
-	p.restore();
 }
 
-void Style::Layer::drawSymbol(int zoom, const QPainterPath &path,
+void Style::Layer::addSymbol(int zoom, const QPainterPath &path,
   const QVariantHash &tags, Tile &tile) const
 {
 	if (_layout.keys().isEmpty())
@@ -453,15 +445,23 @@ bool Style::match(int layer, const QVariantHash &tags)
 	return _styles.at(layer).match(_zoom, tags);
 }
 
-void Style::drawFeature(int layer, const QPainterPath &path,
+void Style::setPainter(int layer, Tile &tile)
+{
+	const Layer &sl = _styles.at(layer);
+
+	if (sl.isPath())
+		sl.setPainter(_zoom, tile);
+}
+
+void Style::processFeature(int layer, const QPainterPath &path,
   const QVariantHash &tags, Tile &tile)
 {
 	const Layer &sl = _styles.at(layer);
 
 	if (sl.isPath())
-		sl.drawPath(_zoom, path, tile);
+		tile.painter().drawPath(path);
 	else if (sl.isSymbol())
-		sl.drawSymbol(_zoom, path, tags, tile);
+		sl.addSymbol(_zoom, path, tags, tile);
 }
 
 void Style::drawBackground(Tile &tile)
@@ -474,6 +474,8 @@ void Style::drawBackground(Tile &tile)
 		tile.painter().setBrush(Qt::lightGray);
 		tile.painter().setPen(Qt::NoPen);
 		tile.painter().drawRect(rect);
-	} else if (_styles.first().isBackground())
-		_styles.first().drawPath(_zoom, path, tile);
+	} else if (_styles.first().isBackground()) {
+		_styles.first().setPainter(_zoom, tile);
+		tile.painter().drawPath(path);
+	}
 }

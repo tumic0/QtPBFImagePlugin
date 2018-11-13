@@ -10,7 +10,7 @@ public:
 	  : _sceneRect(QRectF(QPointF(0, 0), size)), _fontScale(scale) {}
 	~Text();
 
-	void render(QPainter *painter);
+	void render(QPainter *painter) const;
 
 	void addLabel(const QString &text, const QPointF &pos, const QFont &font,
 	  const QPen &pen, qreal maxTextWidth);

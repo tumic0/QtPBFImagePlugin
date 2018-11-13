@@ -29,7 +29,8 @@ public:
 	bool match(int layer, const QVariantHash &tags);
 
 	void drawBackground(Tile &tile);
-	void drawFeature(int layer, const QPainterPath &path,
+	void setPainter(int layer, Tile &tile);
+	void processFeature(int layer, const QPainterPath &path,
 	  const QVariantHash &tags, Tile &tile);
 
 private:
@@ -43,8 +44,8 @@ private:
 		bool isSymbol() const {return (_type == Symbol);}
 
 		bool match(int zoom, const QVariantHash &tags) const;
-		void drawPath(int zoom, const QPainterPath &path, Tile &tile) const;
-		void drawSymbol(int zoom, const QPainterPath &path,
+		void setPainter(int zoom, Tile &tile) const;
+		void addSymbol(int zoom, const QPainterPath &path,
 		  const QVariantHash &tags, Tile &tile) const;
 
 	private:

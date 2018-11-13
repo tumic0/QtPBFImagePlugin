@@ -14,8 +14,6 @@ public:
 	Text &text() {return _text;}
 	QPainter &painter() {return _painter;}
 
-	void render() {_text.render(&_painter);}
-
 private:
 	QSize _size;
 	Text _text;

@@ -140,7 +140,7 @@ Text::~Text()
 		delete _items[i];
 }
 
-void Text::render(QPainter *painter)
+void Text::render(QPainter *painter) const
 {
 	for (int i = 0; i < _items.size(); i++) {
 		const TextItem *ti = _items.at(i);
