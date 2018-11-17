@@ -155,21 +155,21 @@ static void drawFeature(const Feature &feature, Style *style, int styleLayer,
 }
 
 static void drawLayer(const Layer &layer, Style *style, int styleLayer,
-  Tile &tile)
+  Tile &tile, const QPointF &scale)
 {
 	if (layer.data()->version() > 2)
 		return;
 
-	QSizeF factor(tile.size().width() / (qreal)layer.data()->extent(),
-	  tile.size().height() / (qreal)layer.data()->extent());
+	QSizeF factor(tile.size().width() / scale.x() / (qreal)layer.data()->extent(),
+	  tile.size().height() / scale.y() / (qreal)layer.data()->extent());
 
 	style->setPainter(styleLayer, tile);
 	for (int i = 0; i < layer.features().size(); i++)
 		drawFeature(layer.features().at(i), style, styleLayer, factor, tile);
 }
 
-bool PBF::render(const QByteArray &data, int zoom, Style *style, qreal scale,
-  QImage *image)
+bool PBF::render(const QByteArray &data, int zoom, Style *style,
+  const QPointF &scale, QImage *image)
 {
 	vector_tile::Tile tile;
 	if (!tile.ParseFromArray(data.constData(), data.size())) {
@@ -200,7 +200,7 @@ bool PBF::render(const QByteArray &data, int zoom, Style *style, qreal scale,
 		if (it == layers.constEnd())
 			continue;
 
-		drawLayer(*it, style, i, t);
+		drawLayer(*it, style, i, t, scale);
 	}
 
 	t.painter().restore();

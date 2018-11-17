@@ -8,8 +8,8 @@ class Style;
 
 namespace PBF
 {
-	bool render(const QByteArray &data, int zoom, Style *style, qreal scale,
-	  QImage *render);
+	bool render(const QByteArray &data, int zoom, Style *style,
+	  const QPointF &scale, QImage *render);
 }
 
 #endif // PBF_H

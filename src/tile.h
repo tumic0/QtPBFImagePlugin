@@ -7,8 +7,10 @@
 
 class Tile {
 public:
-	Tile(QImage *img, qreal scale)
-	  : _size(img->size()), _text(img->size(), scale), _painter(img) {}
+	Tile(QImage *img, const QPointF &scale)
+	  : _size(img->size()), _text(QSize(img->size().width() / scale.x(),
+	  img->size().height() / scale.y())), _painter(img)
+	  {_painter.scale(scale.x(), scale.y());}
 
 	QSize size() const {return _size;}
 	Text &text() {return _text;}

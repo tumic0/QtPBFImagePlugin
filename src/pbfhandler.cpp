@@ -67,9 +67,9 @@ bool PBFHandler::read(QImage *image)
 
 	QSize size = _scaledSize.isValid()
 	  ? _scaledSize : QSize(TILE_SIZE, TILE_SIZE);
-	qreal scale = _scaledSize.isValid()
-	  ? qMax(_scaledSize.width() / TILE_SIZE, _scaledSize.height() / TILE_SIZE)
-	  : 1.0;
+	QPointF scale = _scaledSize.isValid()
+	  ? QPointF(_scaledSize.width() / TILE_SIZE, _scaledSize.height() / TILE_SIZE)
+	  : QPointF(1.0, 1.0);
 	*image = QImage(size, QImage::Format_ARGB32_Premultiplied);
 
 	return PBF::render(ba, ok ? zoom : -1, _style, scale, image);

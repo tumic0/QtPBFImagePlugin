@@ -24,6 +24,8 @@ void TextPathItem::paint(QPainter *painter) const
 	painter->setFont(_font);
 	painter->setPen(_pen);
 
+	QTransform t = painter->transform();
+
 	for (int i = 0; i < _text.size(); i++) {
 		QPointF point = _path.pointAtPercent(percent);
 		qreal angle = _path.angleAtPercent(percent);
@@ -31,7 +33,7 @@ void TextPathItem::paint(QPainter *painter) const
 		painter->translate(point);
 		painter->rotate(-angle);
 		painter->drawText(QPoint(0, fm.descent()), _text.at(i));
-		painter->resetTransform();
+		painter->setTransform(t);
 
 		int width = fm.charWidth(_text, i);
 		percent += ((qreal)width / (qreal)textWidth) * factor;
