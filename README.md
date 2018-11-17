@@ -3,15 +3,15 @@ Qt image plugin for displaying Mapbox vector tiles
 
 ## Description
 QtPBFImagePlugin is a Qt image plugin that enables applications capable of
-displaying raster MBTiles maps to also display PBF vector tiles without
-(almost, see usage) any application modifications.
+displaying raster MBTiles maps or raster XYZ online maps to also display PBF
+vector tiles without (almost, see usage) any application modifications.
 
-Standard Mapbox GL Styles are used for styling the maps. Most style features
-used by [Maputnik](http://editor.openmaptiles.org) are supported. The style
-is loaded from the
+Standard Mapbox GL Styles are used for styling the maps. Most relevant style
+features used by [Maputnik](http://editor.openmaptiles.org) are supported.
+The style is loaded from the
 [$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style/style.json
-file on plugin load. A default fallback style (OSM-Liberty) for
-OpenMapTiles is part of the plugin.
+file on plugin load. A default fallback style (OSM-Liberty) for OpenMapTiles
+is part of the plugin.
 
 ## Usage
 Due to a major design flaw in the Mapbox vector tiles specification - the zoom
@@ -24,6 +24,14 @@ to the functions:
 QPixmap pm;
 pm.loadFromData(tileData, QString::number(zoom).toLatin1());
 ```
+The plugin supports vector scaling using QImageReader's setScaledSize() method,
+so when used like in the following example:
+```cpp
+QImageReader reader(file, QString::number(zoom).toLatin1());
+reader.setScaledSize(QSize(512, 512));
+reader.read(&image);
+```
+you will get 512x512px tiles with a pixel ratio of 2 (= HiDPI tiles).
 
 ## Build
 ### Requirements
@@ -41,6 +49,11 @@ make
 ```shell
 qmake PROTOBUF=path/to/protobuf ZLIB=path/to/zlib pbfplugin.pro
 nmake
+```
+#### OS X
+```shell
+qmake PROTOBUF=path/to/protobuf pbfplugin.pro
+make
 ```
 
 ## Install
