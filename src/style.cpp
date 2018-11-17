@@ -490,6 +490,7 @@ void Style::drawBackground(Tile &tile)
 		_styles.first().setPathPainter(_zoom, tile);
 		tile.painter().drawPath(path);
 	}
-tile.painter().setPen(Qt::red);
-tile.painter().drawRect(rect);
+
+	//tile.painter().setPen(Qt::red);
+	//tile.painter().drawRect(rect);
 }
