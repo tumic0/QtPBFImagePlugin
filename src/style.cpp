@@ -274,7 +274,8 @@ bool Style::Layer::Paint::antialias(Layer::Type type, int zoom) const
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
   : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _lineCap(Qt::FlatCap),
-  _lineJoin(Qt::MiterJoin), _font("Open Sans"), _capitalize(false)
+  _lineJoin(Qt::MiterJoin), _font("Open Sans"), _capitalize(false),
+  _viewportAlignment(false)
 {
 	// line
 	if (json.contains("line-cap") && json["line-cap"].isString()) {
@@ -310,6 +311,11 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 		_font = Font::fromJsonArray(json["text-font"].toArray());
 	if (json.contains("text-transform") && json["text-transform"].isString())
 		_capitalize = json["text-transform"].toString() == "uppercase";
+
+	if (json.contains("text-rotation-alignment")
+	  && json["text-rotation-alignment"].isString())
+		if (json["text-rotation-alignment"].toString() == "viewport")
+			_viewportAlignment = true;
 }
 
 QFont Style::Layer::Layout::font(int zoom) const
@@ -411,9 +417,12 @@ void Style::Layer::addSymbol(int zoom, const QPainterPath &path,
 	if (tt.isEmpty())
 		return;
 
-	if (path.elementCount() == 1 && path.elementAt(0).isMoveTo())
+	if (_layout.viewportAlignment())
 		tile.text().addLabel(tt, path.elementAt(0), tile.painter(),
-		  _layout.maxTextWidth(zoom));
+		  _layout.maxTextWidth(zoom), false);
+	else if (path.elementCount() == 1 && path.elementAt(0).isMoveTo())
+		tile.text().addLabel(tt, path.elementAt(0), tile.painter(),
+		  _layout.maxTextWidth(zoom), true);
 	else
 		tile.text().addLabel(tt, path, tile.painter(),
 		  _layout.maxTextAngle(zoom));

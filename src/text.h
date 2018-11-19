@@ -12,7 +12,7 @@ public:
 	void render(QPainter *painter) const;
 
 	void addLabel(const QString &text, const QPointF &pos,
-	  const QPainter &painter, qreal maxTextWidth);
+	  const QPainter &painter, qreal maxTextWidth, bool overlap);
 	void addLabel(const QString &text, const QPainterPath &path,
 	  const QPainter &painter, qreal maxAngle);
 

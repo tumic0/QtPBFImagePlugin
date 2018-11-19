@@ -18,7 +18,6 @@ public:
 	void setPen(const QPen &pen) {_pen = pen;}
 
 private:
-	QString _text;
 	QPainterPath _path;
 	QPainterPath _shape;
 	QRectF _boundingRect;

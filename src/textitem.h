@@ -6,8 +6,10 @@
 class TextItem
 {
 public:
-	TextItem() : _visible(true) {}
+	TextItem(const QString &text) : _text(text), _visible(true) {}
 	virtual ~TextItem() {}
+
+	const QString &text() const {return _text;}
 
 	virtual QPainterPath shape() const = 0;
 	virtual QRectF boundingRect() const = 0;
@@ -28,6 +30,7 @@ public:
 	}
 
 private:
+	QString _text;
 	bool _visible;
 };
 

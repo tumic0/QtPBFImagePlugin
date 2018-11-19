@@ -84,7 +84,8 @@ private:
 		public:
 			Layout() : _textSize(16), _textMaxWidth(10), _textMaxAngle(45),
 			  _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin),
-			  _font("Open Sans"), _capitalize(false) {}
+			  _font("Open Sans"), _capitalize(false), _viewportAlignment(false)
+			{}
 			Layout(const QJsonObject &json);
 
 			bool capitalize() const {return _capitalize;}
@@ -97,6 +98,7 @@ private:
 			QFont font(int zoom) const;
 			Qt::PenCapStyle lineCap() const {return _lineCap;}
 			Qt::PenJoinStyle lineJoin() const {return _lineJoin;}
+			bool viewportAlignment() const {return _viewportAlignment;}
 
 		private:
 			QStringList _keys;
@@ -108,6 +110,7 @@ private:
 			Qt::PenJoinStyle _lineJoin;
 			QFont _font;
 			bool _capitalize;
+			bool _viewportAlignment;
 		};
 
 		class Paint {

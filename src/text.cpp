@@ -150,7 +150,7 @@ void Text::render(QPainter *painter) const
 }
 
 void Text::addLabel(const QString &text, const QPointF &pos,
-  const QPainter &painter, qreal maxTextWidth)
+  const QPainter &painter, qreal maxTextWidth, bool overlap)
 {
 	if (text.isEmpty())
 		return;
@@ -158,6 +158,10 @@ void Text::addLabel(const QString &text, const QPointF &pos,
 	TextPointItem *ti;
 
 	ti = new TextPointItem(text, pos, painter.font(), maxTextWidth);
+	if (!overlap && !_sceneRect.contains(ti->boundingRect())) {
+		delete ti;
+		return;
+	}
 
 	ti->setPen(painter.pen());
 	addItem(ti);
