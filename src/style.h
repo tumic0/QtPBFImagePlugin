@@ -9,7 +9,9 @@
 #include <QPen>
 #include <QBrush>
 #include <QFont>
+#include "text.h"
 #include "function.h"
+#include "sprites.h"
 
 
 class QPainter;
@@ -23,15 +25,15 @@ public:
 
 	bool load(const QString &fileName);
 
-	void setZoom(int zoom) {_zoom = zoom;}
-
 	const QStringList &sourceLayers() const {return _sourceLayers;}
-	bool match(int layer, const QVariantHash &tags);
 
-	void drawBackground(Tile &tile);
-	void setPainter(int layer, Tile &tile);
-	void drawFeature(int layer, const QPainterPath &path,
-	  const QVariantHash &tags, Tile &tile);
+	bool match(int zoom, int layer, const QVariantHash &tags) const;
+
+	void drawBackground(Tile &tile) const;
+	void setPainter(Tile &tile, int layer) const;
+	void setTextProperties(Tile &tile, int layer) const;
+	void drawFeature(Tile &tile, int layer, const QPainterPath &path,
+	  const QVariantHash &tags) const;
 
 private:
 	class Layer {
@@ -45,10 +47,11 @@ private:
 		bool isSymbol() const {return (_type == Symbol);}
 
 		bool match(int zoom, const QVariantHash &tags) const;
-		void setPathPainter(int zoom, Tile &tile) const;
-		void setSymbolPainter(int zoom, Tile &tile) const;
-		void addSymbol(int zoom, const QPainterPath &path,
-		  const QVariantHash &tags, Tile &tile) const;
+		void setPathPainter(Tile &tile) const;
+		void setSymbolPainter(Tile &tile) const;
+		void setTextProperties(Tile &tile) const;
+		void addSymbol(Tile &tile, const QPainterPath &path,
+		  const QVariantHash &tags, const Sprites &sprites) const;
 
 	private:
 		enum Type {
@@ -80,12 +83,25 @@ private:
 			QVector<Filter> _filters;
 		};
 
+		class Template {
+		public:
+			Template() {}
+			Template(const QString &str);
+
+			QString value(const QVariantHash &tags) const;
+
+		private:
+			static QRegExp _rx;
+			QStringList _keys;
+			QString _field;
+		};
+
 		class Layout {
 		public:
 			Layout() : _textSize(16), _textMaxWidth(10), _textMaxAngle(45),
 			  _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin),
-			  _font("Open Sans"), _capitalize(false), _viewportAlignment(false)
-			{}
+			  _font("Open Sans"), _capitalize(false), _viewportAlignment(false),
+			  _textAnchor(Text::Center) {}
 			Layout(const QJsonObject &json);
 
 			bool capitalize() const {return _capitalize;}
@@ -93,16 +109,17 @@ private:
 			  {return _textMaxWidth.value(zoom);}
 			qreal maxTextAngle(int zoom) const
 			  {return _textMaxAngle.value(zoom);}
-			const QString &field() const {return _textField;}
-			const QStringList &keys() const {return _keys;}
+			const Template &text() const {return _text;}
+			const Template &icon() const {return _icon;}
 			QFont font(int zoom) const;
 			Qt::PenCapStyle lineCap() const {return _lineCap;}
 			Qt::PenJoinStyle lineJoin() const {return _lineJoin;}
 			bool viewportAlignment() const {return _viewportAlignment;}
+			Text::Anchor textAnchor() const {return _textAnchor;}
 
 		private:
-			QStringList _keys;
-			QString _textField;
+			Template _text;
+			Template _icon;
 			FunctionF _textSize;
 			FunctionF _textMaxWidth;
 			FunctionF _textMaxAngle;
@@ -111,6 +128,7 @@ private:
 			QFont _font;
 			bool _capitalize;
 			bool _viewportAlignment;
+			Text::Anchor _textAnchor;
 		};
 
 		class Paint {
@@ -144,9 +162,9 @@ private:
 		Paint _paint;
 	};
 
-	int _zoom;
-	QVector<Layer> _styles;
+	QVector<Layer> _layers;
 	QStringList _sourceLayers;
+	Sprites _sprites;
 };
 
 #endif // STYLE_H

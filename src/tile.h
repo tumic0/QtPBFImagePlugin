@@ -7,16 +7,18 @@
 
 class Tile {
 public:
-	Tile(QImage *img, const QPointF &scale)
-	  : _size(img->size()), _text(QSize(img->size().width() / scale.x(),
-	  img->size().height() / scale.y())), _painter(img)
+	Tile(QImage *img, int zoom, const QPointF &scale)
+	  : _zoom(zoom), _size(img->size()), _text(QSize(img->size().width()
+	  / scale.x(), img->size().height() / scale.y())), _painter(img)
 	  {_painter.scale(scale.x(), scale.y());}
 
+	int zoom() const {return _zoom;}
 	QSize size() const {return _size;}
 	Text &text() {return _text;}
 	QPainter &painter() {return _painter;}
 
 private:
+	int _zoom;
 	QSize _size;
 	Text _text;
 	QPainter _painter;

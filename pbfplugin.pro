@@ -19,7 +19,8 @@ HEADERS += src/pbfhandler.h \
     src/textpathitem.h \
     src/textpointitem.h \
     src/font.h \
-    src/textitem.h
+    src/textitem.h \
+    src/sprites.h
 SOURCES += src/pbfplugin.cpp \
     src/pbfhandler.cpp \
     src/gzip.cpp \
@@ -30,7 +31,8 @@ SOURCES += src/pbfplugin.cpp \
     src/function.cpp \
     src/textpathitem.cpp \
     src/textpointitem.cpp \
-    src/font.cpp
+    src/font.cpp \
+    src/sprites.cpp
 RESOURCES += pbfplugin.qrc
 
 unix:!macx{

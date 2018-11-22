@@ -1,13 +1,11 @@
-﻿#include <QPainter>
+#include <QPainter>
 #include <QtMath>
 #include "textpointitem.h"
 
 
 #define FLAGS (Qt::AlignCenter | Qt::TextWordWrap | Qt::TextDontClip)
 
-#ifdef USE_EXACT_TEXT_RECT
-
-static QRectF textBoundingRect(const QString &str, const QFont &font,
+static QRectF exactBoundingRect(const QString &str, const QFont &font,
   int maxTextWidth)
 {
 	QFontMetrics fm(font);
@@ -26,8 +24,7 @@ static QRectF textBoundingRect(const QString &str, const QFont &font,
 	return br;
 }
 
-#else // USE_EXACT_TEXT_RECT
-static QRectF textBoundingRect(const QString &str, const QFont &font,
+static QRectF fuzzyBoundingRect(const QString &str, const QFont &font,
   int maxTextWidth)
 {
 	int limit = font.pixelSize() * maxTextWidth;
@@ -67,23 +64,68 @@ static QRectF textBoundingRect(const QString &str, const QFont &font,
 
 	return QRectF(0, 0, width, lines * lh);
 }
-#endif // USE_EXACT_TEXT_RECT
+
+
+QRectF TextPointItem::computeTextRect(BoundingRectFunction brf) const
+{
+	QRectF iconRect = _icon.isNull() ? QRectF() : _icon.rect();
+	QRectF textRect = brf(text(), _font, _properties.maxWidth);
+
+	switch (_properties.anchor) {
+		case Text::Center:
+			textRect.moveCenter(_pos);
+			break;
+		case Text::Left:
+			textRect.moveTopLeft(_pos - QPointF(-iconRect.width() / 2,
+			  textRect.height() / 2));
+			break;
+		case Text::Right:
+			textRect.moveTopRight(_pos - QPointF(iconRect.width() / 2,
+			  textRect.height() / 2));
+			break;
+		case Text::Bottom:
+			textRect.moveTopLeft(_pos - QPointF(textRect.width() / 2,
+			  iconRect.height() / 2));
+			break;
+		case Text::Top:
+			textRect.moveTopLeft(_pos - QPointF(textRect.width() / 2,
+			  -iconRect.height() / 2));
+			break;
+	}
+
+	return textRect;
+}
 
 TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
-  const QFont &font, int maxTextWidth) : TextItem(text), _font(font)
+  const QFont &font, const Text::Properties &prop, const QImage &icon)
+  : TextItem(text), _pos(pos), _font(font), _icon(icon), _properties(prop)
 {
-	_boundingRect = textBoundingRect(text, font, maxTextWidth);
+	_boundingRect = computeTextRect(fuzzyBoundingRect);
 
-	_boundingRect.moveCenter(pos);
+	if (!_icon.isNull()) {
+		QRectF iconRect(_icon.rect());
+		iconRect.moveCenter(pos);
+		_boundingRect |= iconRect;
+	}
+
 	_shape.addRect(_boundingRect);
 }
 
 void TextPointItem::paint(QPainter *painter) const
 {
-	painter->setFont(_font);
-	painter->setPen(_pen);
-	painter->drawText(_boundingRect, FLAGS, text());
-
 	//painter->setPen(Qt::red);
 	//painter->drawRect(_boundingRect);
+
+	QRectF textRect;
+
+	if (!_icon.isNull()) {
+		textRect = computeTextRect(exactBoundingRect);
+		painter->drawImage(_pos - QPointF(_icon.width() / 2,
+		  _icon.height() / 2), _icon);
+	} else
+		textRect = computeTextRect(fuzzyBoundingRect);
+
+	painter->setFont(_font);
+	painter->setPen(_pen);
+	painter->drawText(textRect, FLAGS, text());
 }

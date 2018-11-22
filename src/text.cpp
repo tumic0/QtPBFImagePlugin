@@ -150,28 +150,27 @@ void Text::render(QPainter *painter) const
 }
 
 void Text::addLabel(const QString &text, const QPointF &pos,
-  const QPainter &painter, qreal maxTextWidth, bool overlap)
+  const QPainter &painter, bool overlap, const QImage &icon)
 {
 	if (text.isEmpty())
 		return;
 
-	TextPointItem *ti;
-
-	ti = new TextPointItem(text, pos, painter.font(), maxTextWidth);
+	TextPointItem *ti = new TextPointItem(text, pos, painter.font(),
+	  _properties, icon);
 	if (!overlap && !_sceneRect.contains(ti->boundingRect())) {
 		delete ti;
 		return;
 	}
-
 	ti->setPen(painter.pen());
 	addItem(ti);
+
 	QList<TextItem*> ci = collidingItems(ti);
 	for (int i = 0; i < ci.size(); i++)
 		ci[i]->setVisible(false);
 }
 
 void Text::addLabel(const QString &text, const QPainterPath &path,
-  const QPainter &painter, qreal maxAngle)
+  const QPainter &painter)
 {
 	if (path.isEmpty())
 		return;
@@ -182,7 +181,7 @@ void Text::addLabel(const QString &text, const QPainterPath &path,
 	if (textWidth > path.length())
 		return;
 
-	QPainterPath tp(textPath(path, textWidth, maxAngle,
+	QPainterPath tp(textPath(path, textWidth, _properties.maxAngle,
 	  painter.font().pixelSize() / 2, _sceneRect));
 	if (tp.isEmpty())
 		return;

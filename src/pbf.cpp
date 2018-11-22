@@ -116,7 +116,7 @@ static inline QPoint parameters(quint32 v1, quint32 v2)
 static void drawFeature(const Feature &feature, Style *style, int styleLayer,
   const QSizeF &factor, Tile &tile)
 {
-	if (!style->match(styleLayer, feature.tags()))
+	if (!style->match(tile.zoom(), styleLayer, feature.tags()))
 		return;
 
 	QPoint cursor;
@@ -151,7 +151,7 @@ static void drawFeature(const Feature &feature, Style *style, int styleLayer,
 		}
 	}
 
-	style->drawFeature(styleLayer, path, feature.tags(), tile);
+	style->drawFeature(tile, styleLayer, path, feature.tags());
 }
 
 static void drawLayer(const Layer &layer, Style *style, int styleLayer,
@@ -163,7 +163,9 @@ static void drawLayer(const Layer &layer, Style *style, int styleLayer,
 	QSizeF factor(tile.size().width() / scale.x() / (qreal)layer.data()->extent(),
 	  tile.size().height() / scale.y() / (qreal)layer.data()->extent());
 
-	style->setPainter(styleLayer, tile);
+	style->setPainter(tile, styleLayer);
+	style->setTextProperties(tile, styleLayer);
+
 	for (int i = 0; i < layer.features().size(); i++)
 		drawFeature(layer.features().at(i), style, styleLayer, factor, tile);
 }
@@ -177,9 +179,8 @@ bool PBF::render(const QByteArray &data, int zoom, Style *style,
 		return false;
 	}
 
-	Tile t(image, scale);
+	Tile t(image, zoom, scale);
 
-	style->setZoom(zoom);
 	style->drawBackground(t);
 
 	// Prepare source layers

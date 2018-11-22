@@ -1,5 +1,7 @@
 <RCC>
 	<qresource prefix="/">
 		<file>style/style.json</file>
+		<file>style/sprite.json</file>
+		<file>style/sprite.png</file>
 	</qresource>
 </RCC>
