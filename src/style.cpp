@@ -46,6 +46,16 @@ static void jsonBool(const QJsonObject &json, const char *name, FunctionB &var)
 	}
 }
 
+static void jsonString(const QJsonObject &json, const char *name, FunctionS &var)
+{
+	if (json.contains(name)) {
+		QJsonValue value = json[name];
+		if (value.isString())
+			var = FunctionS(value.toString());
+		else if (value.isObject())
+			var = FunctionS(value.toObject());
+	}
+}
 
 Style::Layer::Filter::Filter(const QJsonArray &json)
   : _type(Unknown), _not(false)
@@ -170,31 +180,26 @@ bool Style::Layer::Filter::match(const QVariantHash &tags) const
 	}
 }
 
-Style::Layer::Template::Template(const QString &str) : _field(str)
+QString Style::Layer::Template::value(int zoom, const QVariantHash &tags) const
 {
+	QRegExp rx = QRegExp("\\{[^\\}]*\\}");
+	QString text(_field.value(zoom));
+	QStringList keys;
 	int pos = 0;
 
-	while ((pos = _rx.indexIn(_field, pos)) != -1) {
-		QString match = _rx.capturedTexts().first();
-		_keys.append(match.mid(1, match.size() - 2));
-		pos += _rx.matchedLength();
+	while ((pos = rx.indexIn(text, pos)) != -1) {
+		QString match = rx.capturedTexts().first();
+		keys.append(match.mid(1, match.size() - 2));
+		pos += rx.matchedLength();
 	}
-}
-
-QString Style::Layer::Template::value(const QVariantHash &tags) const
-{
-	QString text(_field);
-
-	for (int i = 0; i < _keys.size(); i++) {
-		const QString &key = _keys.at(i);
+	for (int i = 0; i < keys.size(); i++) {
+		const QString &key = keys.at(i);
 		const QVariant val = tags.value(key);
 		text.replace(QString("{%1}").arg(key), val.toString());
 	}
 
 	return text;
 }
-
-QRegExp Style::Layer::Template::_rx = QRegExp("\\{[^\\}]*\\}");
 
 Style::Layer::Paint::Paint(const QJsonObject &json)
   : _fillOpacity(1.0), _lineOpacity(1.0), _lineWidth(1.0)
@@ -205,6 +210,7 @@ Style::Layer::Paint::Paint(const QJsonObject &json)
 	_fillOutlineColor = _fillColor;
 	jsonColor(json, "fill-outline-color", _fillOutlineColor);
 	jsonBool(json, "fill-antialias",_fillAntialias);
+	jsonString(json, "fill-pattern", _fillPattern);
 	if (json.contains("fill-pattern")) {
 		_fillColor = FunctionC(QColor());
 		_fillOutlineColor = FunctionC(QColor());
@@ -260,20 +266,34 @@ QPen Style::Layer::Paint::pen(Type type, int zoom) const
 	return pen;
 }
 
-QBrush Style::Layer::Paint::brush(Type type, int zoom) const
+QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites) const
 {
 	QColor color;
+	QBrush brush(Qt::NoBrush);
+	QString pattern;
 
 	switch (type) {
 		case Fill:
 			color = _fillColor.value(zoom);
-			return color.isValid() ? QBrush(color) : QBrush(Qt::NoBrush);
+			if (color.isValid())
+				brush = QBrush(color);
+			pattern = _fillPattern.value(zoom);
+			if (!pattern.isNull())
+				brush.setTextureImage(sprites.icon(pattern));
+			break;
 		case Background:
 			color = _backgroundColor.value(zoom);
-			return color.isValid() ? QBrush(color) : QBrush(Qt::NoBrush);
+			if (color.isValid())
+				brush = QBrush(color);
+			pattern = _fillPattern.value(zoom);
+			if (!pattern.isNull())
+				brush.setTextureImage(sprites.icon(pattern));
+			break;
 		default:
-			return QBrush(Qt::NoBrush);
+			break;
 	}
+
+	return brush;
 }
 
 qreal Style::Layer::Paint::opacity(Type type, int zoom) const
@@ -409,10 +429,10 @@ bool Style::Layer::match(int zoom, const QVariantHash &tags) const
 	return _filter.match(tags);
 }
 
-void Style::Layer::setPathPainter(Tile &tile) const
+void Style::Layer::setPathPainter(Tile &tile, const Sprites &sprites) const
 {
 	QPen pen(_paint.pen(_type, tile.zoom()));
-	QBrush brush(_paint.brush(_type, tile.zoom()));
+	QBrush brush(_paint.brush(_type, tile.zoom(), sprites));
 
 	pen.setJoinStyle(_layout.lineJoin());
 	pen.setCapStyle(_layout.lineCap());
@@ -447,14 +467,14 @@ void Style::Layer::setTextProperties(Tile &tile) const
 void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
   const QVariantHash &tags, const Sprites &sprites) const
 {
-	QString text = _layout.text().value(tags);
+	QString text = _layout.text(tile.zoom(), tags);
 	QString tt(text.trimmed());
 	if (tt.isEmpty())
 		return;
 	if (_layout.capitalize())
 		tt = tt.toUpper();
 
-	QString icon = _layout.icon().value(tags);
+	QString icon = _layout.icon(tile.zoom(), tags);
 
 	if (_layout.viewportAlignment())
 		tile.text().addLabel(tt, path.elementAt(0), tile.painter(), false,
@@ -523,7 +543,7 @@ void Style::setPainter(Tile &tile, int layer) const
 	const Layer &sl = _layers.at(layer);
 
 	if (sl.isPath())
-		sl.setPathPainter(tile);
+		sl.setPathPainter(tile, _sprites);
 	else if (sl.isSymbol())
 		sl.setSymbolPainter(tile);
 }
@@ -550,7 +570,7 @@ void Style::drawBackground(Tile &tile) const
 		tile.painter().setPen(Qt::NoPen);
 		tile.painter().drawRect(rect);
 	} else if (_layers.first().isBackground()) {
-		_layers.first().setPathPainter(tile);
+		_layers.first().setPathPainter(tile, _sprites);
 		tile.painter().drawPath(path);
 	}
 

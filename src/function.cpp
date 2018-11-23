@@ -150,3 +150,37 @@ bool FunctionB::value(qreal x) const
 
 	return _stops.last().second;
 }
+
+FunctionS::FunctionS(const QJsonObject &json, const QString &dflt)
+  : _default(dflt)
+{
+	if (!(json.contains("stops") && json["stops"].isArray()))
+		return;
+
+	QJsonArray stops = json["stops"].toArray();
+	for (int i = 0; i < stops.size(); i++) {
+		if (!stops.at(i).isArray())
+			return;
+		QJsonArray stop = stops.at(i).toArray();
+		if (stop.size() != 2)
+			return;
+		_stops.append(QPair<qreal, QString>(stop.at(0).toDouble(),
+		  stop.at(1).toString()));
+	}
+}
+
+const QString FunctionS::value(qreal x) const
+{
+	if (_stops.isEmpty())
+		return _default;
+
+	QPair<qreal, QString> v0(_stops.first());
+	for (int i = 0; i < _stops.size(); i++) {
+		if (x < _stops.at(i).first)
+			return v0.second;
+		else
+			v0 = _stops.at(i);
+	}
+
+	return _stops.last().second;
+}

@@ -47,7 +47,7 @@ private:
 		bool isSymbol() const {return (_type == Symbol);}
 
 		bool match(int zoom, const QVariantHash &tags) const;
-		void setPathPainter(Tile &tile) const;
+		void setPathPainter(Tile &tile, const Sprites &sprites) const;
 		void setSymbolPainter(Tile &tile) const;
 		void setTextProperties(Tile &tile) const;
 		void addSymbol(Tile &tile, const QPainterPath &path,
@@ -86,14 +86,11 @@ private:
 		class Template {
 		public:
 			Template() {}
-			Template(const QString &str);
-
-			QString value(const QVariantHash &tags) const;
+			Template(const FunctionS &str) : _field(str) {}
+			QString value(int zoom, const QVariantHash &tags) const;
 
 		private:
-			static QRegExp _rx;
-			QStringList _keys;
-			QString _field;
+			FunctionS _field;
 		};
 
 		class Layout {
@@ -109,8 +106,10 @@ private:
 			  {return _textMaxWidth.value(zoom);}
 			qreal maxTextAngle(int zoom) const
 			  {return _textMaxAngle.value(zoom);}
-			const Template &text() const {return _text;}
-			const Template &icon() const {return _icon;}
+			QString text(int zoom, const QVariantHash &tags) const
+			  {return _text.value(zoom, tags);}
+			QString icon(int zoom, const QVariantHash &tags) const
+			  {return _icon.value(zoom, tags);}
 			QFont font(int zoom) const;
 			Qt::PenCapStyle lineCap() const {return _lineCap;}
 			Qt::PenJoinStyle lineJoin() const {return _lineJoin;}
@@ -137,9 +136,11 @@ private:
 			Paint(const QJsonObject &json);
 
 			QPen pen(Layer::Type type, int zoom) const;
-			QBrush brush(Layer::Type type, int zoom) const;
+			QBrush brush(Layer::Type type, int zoom, const Sprites &sprites) const;
 			qreal opacity(Layer::Type type, int zoom) const;
 			bool antialias(Layer::Type type, int zoom) const;
+			QString fillPattern(int zoom) const
+			  {return _fillPattern.value(zoom);}
 
 		private:
 			FunctionC _textColor;
@@ -152,6 +153,7 @@ private:
 			FunctionF _lineWidth;
 			FunctionB _fillAntialias;
 			QVector<qreal> _lineDasharray;
+			FunctionS _fillPattern;
 		};
 
 		Type _type;

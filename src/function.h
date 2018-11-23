@@ -19,6 +19,18 @@ private:
 	bool _default;
 };
 
+class FunctionS {
+public:
+	FunctionS(const QString &deflt = QString()) : _default(deflt) {}
+	FunctionS(const QJsonObject &json, const QString &dflt = QString());
+
+	const QString value(qreal x) const;
+
+private:
+	QList<QPair<qreal, QString> > _stops;
+	QString _default;
+};
+
 class FunctionF {
 public:
 	FunctionF(qreal deflt = 0) : _default(deflt), _base(1.0) {}
