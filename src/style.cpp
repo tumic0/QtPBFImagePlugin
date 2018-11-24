@@ -279,7 +279,7 @@ bool Style::Layer::Paint::antialias(Layer::Type type, int zoom) const
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
   : _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin), _font("Open Sans"),
-  _capitalize(false), _viewportAlignment(false)
+  _viewportAlignment(false)
 {
 	// line
 	_lineCap = FunctionS(json["line-cap"], "butt");
@@ -291,10 +291,10 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 	_textSize = FunctionF(json["text-size"], 16);
 	_textMaxWidth = FunctionF(json["text-max-width"], 10);
 	_textMaxAngle = FunctionF(json["text-max-angle"], 45);
+	_textTransform = FunctionS(json["text-transform"], "none");
+
 	if (json.contains("text-font") && json["text-font"].isArray())
 		_font = Font::fromJsonArray(json["text-font"].toArray());
-	if (json.contains("text-transform") && json["text-transform"].isString())
-		_capitalize = json["text-transform"].toString() == "uppercase";
 	if (json.contains("text-rotation-alignment")
 	  && json["text-rotation-alignment"].isString())
 		if (json["text-rotation-alignment"].toString() == "viewport")
@@ -328,6 +328,18 @@ Text::Anchor Style::Layer::Layout::textAnchor(int zoom) const
 		return Text::Bottom;
 	else
 		return Text::Center;
+}
+
+Text::Transform Style::Layer::Layout::textTransform(int zoom) const
+{
+	QString transform(_textTransform.value(zoom));
+
+	if (transform == "uppercase")
+		return Text::Uppercase;
+	else if (transform == "lowercase")
+		return Text::Lowercase;
+	else
+		return Text::None;
 }
 
 Qt::PenCapStyle Style::Layer::Layout::lineCap(int zoom) const
@@ -433,6 +445,7 @@ void Style::Layer::setTextProperties(Tile &tile) const
 	prop.maxWidth = _layout.maxTextWidth(tile.zoom());
 	prop.maxAngle = _layout.maxTextAngle(tile.zoom());
 	prop.anchor = _layout.textAnchor(tile.zoom());
+	prop.transform = _layout.textTransform(tile.zoom());
 
 	tile.text().setProperties(prop);
 }
@@ -444,8 +457,6 @@ void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
 	QString tt(text.trimmed());
 	if (tt.isEmpty())
 		return;
-	if (_layout.capitalize())
-		tt = tt.toUpper();
 
 	QString icon = _layout.icon(tile.zoom(), tags);
 

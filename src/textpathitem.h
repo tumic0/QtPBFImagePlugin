@@ -4,12 +4,13 @@
 #include <QFont>
 #include <QString>
 #include "textitem.h"
+#include "text.h"
 
 class TextPathItem : public TextItem
 {
 public:
 	TextPathItem(const QString &text, const QPainterPath &path,
-	  const QFont &font);
+	  const QFont &font, const Text::Properties &prop);
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _boundingRect;}

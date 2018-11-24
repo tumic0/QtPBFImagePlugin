@@ -4,7 +4,9 @@
 
 
 TextPathItem::TextPathItem(const QString &text, const QPainterPath &path,
-  const QFont &font) : TextItem(text), _path(path), _font(font)
+  const QFont &font, const Text::Properties &prop)
+  : TextItem(prop.transform == Text::Uppercase ? text.toUpper() : text),
+  _path(path), _font(font)
 {
 	QPainterPathStroker s;
 	s.setWidth(font.pixelSize());

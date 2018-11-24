@@ -187,7 +187,7 @@ void Text::addLabel(const QString &text, const QPainterPath &path,
 		return;
 
 	TextPathItem *pi = new TextPathItem(text, reverse(tp) ? tp.toReversed()
-	  : tp, painter.font());
+	  : tp, painter.font(), _properties);
 	if (!_sceneRect.contains(pi->boundingRect())) {
 		delete pi;
 		return;

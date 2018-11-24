@@ -98,7 +98,8 @@ QRectF TextPointItem::computeTextRect(BoundingRectFunction brf) const
 
 TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
   const QFont &font, const Text::Properties &prop, const QImage &icon)
-  : TextItem(text), _pos(pos), _font(font), _icon(icon), _properties(prop)
+  : TextItem(prop.transform == Text::Uppercase ? text.toUpper() : text),
+  _pos(pos), _font(font), _icon(icon), _properties(prop)
 {
 	_boundingRect = computeTextRect(fuzzyBoundingRect);
 

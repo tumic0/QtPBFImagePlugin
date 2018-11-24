@@ -96,8 +96,7 @@ private:
 		class Layout {
 		public:
 			Layout() : _textSize(16), _textMaxWidth(10), _textMaxAngle(45),
-			  _font("Open Sans"), _capitalize(false),
-			  _viewportAlignment(false) {}
+			  _font("Open Sans"), _viewportAlignment(false) {}
 			Layout(const QJsonObject &json);
 
 			qreal maxTextWidth(int zoom) const
@@ -112,9 +111,9 @@ private:
 			Qt::PenCapStyle lineCap(int zoom) const;
 			Qt::PenJoinStyle lineJoin(int zoom) const;
 			Text::Anchor textAnchor(int zoom) const;
+			Text::Transform textTransform(int zoom) const;
 
 			bool viewportAlignment() const {return _viewportAlignment;}
-			bool capitalize() const {return _capitalize;}
 
 		private:
 			Template _text;
@@ -125,8 +124,8 @@ private:
 			FunctionS _lineCap;
 			FunctionS _lineJoin;
 			FunctionS _textAnchor;
+			FunctionS _textTransform;
 			QFont _font;
-			bool _capitalize;
 			bool _viewportAlignment;
 		};
 
