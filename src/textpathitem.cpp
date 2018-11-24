@@ -17,6 +17,9 @@ TextPathItem::TextPathItem(const QString &text, const QPainterPath &path,
 
 void TextPathItem::paint(QPainter *painter) const
 {
+	//painter->setPen(Qt::red);
+	//painter->drawPath(_shape);
+
 	QFontMetrics fm(_font);
 	int textWidth = fm.width(text());
 
@@ -40,7 +43,4 @@ void TextPathItem::paint(QPainter *painter) const
 		int width = fm.charWidth(text(), i);
 		percent += ((qreal)width / (qreal)textWidth) * factor;
 	}
-
-	//painter->setPen(Qt::red);
-	//painter->drawPath(_shape);
 }

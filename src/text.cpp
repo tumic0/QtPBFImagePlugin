@@ -152,9 +152,6 @@ void Text::render(QPainter *painter) const
 void Text::addLabel(const QString &text, const QPointF &pos,
   const QPainter &painter, bool overlap, const QImage &icon)
 {
-	if (text.isEmpty())
-		return;
-
 	TextPointItem *ti = new TextPointItem(text, pos, painter.font(),
 	  _properties, icon);
 	if (!overlap && !_sceneRect.contains(ti->boundingRect())) {
@@ -172,11 +169,6 @@ void Text::addLabel(const QString &text, const QPointF &pos,
 void Text::addLabel(const QString &text, const QPainterPath &path,
   const QPainter &painter)
 {
-	if (path.isEmpty())
-		return;
-	if (text.isEmpty())
-		return;
-
 	int textWidth = text.size() * painter.font().pixelSize() * 0.6;
 	if (textWidth > path.length())
 		return;

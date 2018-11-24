@@ -151,7 +151,8 @@ static void drawFeature(const Feature &feature, Style *style, int styleLayer,
 		}
 	}
 
-	style->drawFeature(tile, styleLayer, path, feature.tags());
+	if (path.elementCount())
+		style->drawFeature(tile, styleLayer, path, feature.tags());
 }
 
 static void drawLayer(const Layer &layer, Style *style, int styleLayer,

@@ -30,7 +30,8 @@ public:
 	};
 
 
-	Text(const QSize &size) : _sceneRect(QRectF(QPointF(0, 0), size)) {}
+	Text(const QSize &size)
+	  : _sceneRect(QRectF(QPointF(0, 0), size)), _textPathPresent(false) {}
 	~Text();
 
 	void setProperties(const Properties &prop)
