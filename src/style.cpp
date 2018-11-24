@@ -13,50 +13,6 @@
 #include "style.h"
 
 
-static void jsonColor(const QJsonObject &json, const char *name, FunctionC &var)
-{
-	if (json.contains(name)) {
-		const QJsonValue value = json[name];
-		if (value.isString())
-			var = FunctionC(Color::fromJsonString(value.toString()));
-		else if (value.isObject())
-			var = FunctionC(value.toObject());
-	}
-}
-
-static void jsonFloat(const QJsonObject &json, const char *name, FunctionF &var)
-{
-	if (json.contains(name)) {
-		const QJsonValue value = json[name];
-		if (value.isDouble())
-			var = FunctionF(value.toDouble());
-		else if (value.isObject())
-			var = FunctionF(value.toObject());
-	}
-}
-
-static void jsonBool(const QJsonObject &json, const char *name, FunctionB &var)
-{
-	if (json.contains(name)) {
-		QJsonValue value = json[name];
-		if (value.isBool())
-			var = FunctionB(value.toBool());
-		else if (value.isObject())
-			var = FunctionB(value.toObject());
-	}
-}
-
-static void jsonString(const QJsonObject &json, const char *name, FunctionS &var)
-{
-	if (json.contains(name)) {
-		QJsonValue value = json[name];
-		if (value.isString())
-			var = FunctionS(value.toString());
-		else if (value.isObject())
-			var = FunctionS(value.toObject());
-	}
-}
-
 Style::Layer::Filter::Filter(const QJsonArray &json)
   : _type(Unknown), _not(false)
 {
@@ -202,24 +158,25 @@ QString Style::Layer::Template::value(int zoom, const QVariantHash &tags) const
 }
 
 Style::Layer::Paint::Paint(const QJsonObject &json)
-  : _fillOpacity(1.0), _lineOpacity(1.0), _lineWidth(1.0)
 {
 	// fill
-	jsonFloat(json, "fill-opacity", _fillOpacity);
-	jsonColor(json, "fill-color", _fillColor);
-	_fillOutlineColor = _fillColor;
-	jsonColor(json, "fill-outline-color", _fillOutlineColor);
-	jsonBool(json, "fill-antialias",_fillAntialias);
-	jsonString(json, "fill-pattern", _fillPattern);
+	_fillOpacity = FunctionF(json["fill-opacity"], 1.0);
+	_fillColor = FunctionC(json["fill-color"]);
+	if (json.contains("fill-outline-color"))
+		_fillOutlineColor = FunctionC(json["fill-outline-color"]);
+	else
+		_fillOutlineColor = _fillColor;
+	_fillAntialias = FunctionB(json["fill-antialias"]);
 	if (json.contains("fill-pattern")) {
+		_fillPattern = FunctionS(json["fill-pattern"]);
 		_fillColor = FunctionC(QColor());
 		_fillOutlineColor = FunctionC(QColor());
 	}
 
 	// line
-	jsonColor(json, "line-color", _lineColor);
-	jsonFloat(json, "line-width", _lineWidth);
-	jsonFloat(json, "line-opacity", _lineOpacity);
+	_lineColor = FunctionC(json["line-color"]);
+	_lineWidth = FunctionF(json["line-width"], 1.0);
+	_lineOpacity = FunctionF(json["line-opacity"], 1.0);
 	if (json.contains("line-dasharray") && json["line-dasharray"].isArray()) {
 		QJsonArray array = json["line-dasharray"].toArray();
 		for (int i = 0; i < array.size(); i++)
@@ -227,10 +184,10 @@ Style::Layer::Paint::Paint(const QJsonObject &json)
 	}
 
 	// background
-	jsonColor(json, "background-color", _backgroundColor);
+	_backgroundColor = FunctionC(json["background-color"]);
 
 	// text
-	jsonColor(json, "text-color", _textColor);
+	_textColor = FunctionC(json["text-color"]);
 }
 
 QPen Style::Layer::Paint::pen(Type type, int zoom) const
@@ -321,31 +278,19 @@ bool Style::Layer::Paint::antialias(Layer::Type type, int zoom) const
 }
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
-  : _textSize(16), _textMaxWidth(10), _textMaxAngle(45), _lineCap(Qt::FlatCap),
-  _lineJoin(Qt::MiterJoin), _font("Open Sans"), _capitalize(false),
-  _viewportAlignment(false), _textAnchor(Text::Center)
+  : _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin), _font("Open Sans"),
+  _capitalize(false), _viewportAlignment(false)
 {
 	// line
-	if (json.contains("line-cap") && json["line-cap"].isString()) {
-		if (json["line-cap"].toString() == "round")
-			_lineCap = Qt::RoundCap;
-		else if (json["line-cap"].toString() == "square")
-			_lineCap = Qt::SquareCap;
-	}
-	if (json.contains("line-join") && json["line-join"].isString()) {
-		if (json["line-join"].toString() == "bevel")
-			_lineJoin = Qt::BevelJoin;
-		else if (json["line-join"].toString() == "round")
-			_lineJoin = Qt::RoundJoin;
-	}
+	_lineCap = FunctionS(json["line-cap"], "butt");
+	_lineJoin = FunctionS(json["line-join"], "miter");
 
 	// text
-	if (json.contains("text-field") && json["text-field"].isString())
-		_text = Template(json["text-field"].toString());
+	_text = Template(FunctionS(json["text-field"]));
 
-	jsonFloat(json, "text-size", _textSize);
-	jsonFloat(json, "text-max-width", _textMaxWidth);
-	jsonFloat(json, "text-max-angle", _textMaxAngle);
+	_textSize = FunctionF(json["text-size"], 16);
+	_textMaxWidth = FunctionF(json["text-max-width"], 10);
+	_textMaxAngle = FunctionF(json["text-max-angle"], 45);
 	if (json.contains("text-font") && json["text-font"].isArray())
 		_font = Font::fromJsonArray(json["text-font"].toArray());
 	if (json.contains("text-transform") && json["text-transform"].isString())
@@ -354,23 +299,11 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 	  && json["text-rotation-alignment"].isString())
 		if (json["text-rotation-alignment"].toString() == "viewport")
 			_viewportAlignment = true;
-	if (json.contains("text-anchor") && json["text-anchor"].isString()) {
-		QString anchor(json["text-anchor"].toString());
-		if (anchor == "center")
-			_textAnchor = Text::Center;
-		else if (anchor == "left")
-			_textAnchor = Text::Left;
-		else if (anchor == "right")
-			_textAnchor = Text::Right;
-		else if (anchor == "top")
-			_textAnchor = Text::Top;
-		else if (anchor == "bottom")
-			_textAnchor = Text::Bottom;
-	}
+
+	_textAnchor = FunctionS(json["text-anchor"]);
 
 	// icon
-	if (json.contains("icon-image") && json["icon-image"].isString())
-		_icon = Template(json["icon-image"].toString());
+	_icon = Template(FunctionS(json["icon-image"]));
 }
 
 QFont Style::Layer::Layout::font(int zoom) const
@@ -379,6 +312,46 @@ QFont Style::Layer::Layout::font(int zoom) const
 	font.setPixelSize(_textSize.value(zoom));
 
 	return font;
+}
+
+Text::Anchor Style::Layer::Layout::textAnchor(int zoom) const
+{
+	QString anchor(_textAnchor.value(zoom));
+
+	if (anchor == "left")
+		return Text::Left;
+	else if (anchor == "right")
+		return Text::Right;
+	else if (anchor == "top")
+		return Text::Top;
+	else if (anchor == "bottom")
+		return Text::Bottom;
+	else
+		return Text::Center;
+}
+
+Qt::PenCapStyle Style::Layer::Layout::lineCap(int zoom) const
+{
+	QString cap(_lineCap.value(zoom));
+
+	if (cap == "round")
+		return Qt::RoundCap;
+	else if (cap == "square")
+		return Qt::SquareCap;
+	else
+		return Qt::FlatCap;
+}
+
+Qt::PenJoinStyle Style::Layer::Layout::lineJoin(int zoom) const
+{
+	QString join(_lineJoin.value(zoom));
+
+	if (join == "bevel")
+		return Qt::BevelJoin;
+	else if (join == "round")
+		return Qt::RoundJoin;
+	else
+		return Qt::MiterJoin;
 }
 
 Style::Layer::Layer(const QJsonObject &json)
@@ -434,8 +407,8 @@ void Style::Layer::setPathPainter(Tile &tile, const Sprites &sprites) const
 	QPen pen(_paint.pen(_type, tile.zoom()));
 	QBrush brush(_paint.brush(_type, tile.zoom(), sprites));
 
-	pen.setJoinStyle(_layout.lineJoin());
-	pen.setCapStyle(_layout.lineCap());
+	pen.setJoinStyle(_layout.lineJoin(tile.zoom()));
+	pen.setCapStyle(_layout.lineCap(tile.zoom()));
 
 	QPainter &p = tile.painter();
 	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type, tile.zoom()));
@@ -459,7 +432,7 @@ void Style::Layer::setTextProperties(Tile &tile) const
 	Text::Properties prop;
 	prop.maxWidth = _layout.maxTextWidth(tile.zoom());
 	prop.maxAngle = _layout.maxTextAngle(tile.zoom());
-	prop.anchor = _layout.textAnchor();
+	prop.anchor = _layout.textAnchor(tile.zoom());
 
 	tile.text().setProperties(prop);
 }

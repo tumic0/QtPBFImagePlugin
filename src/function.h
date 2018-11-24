@@ -10,7 +10,7 @@ class QJsonObject;
 class FunctionB {
 public:
 	FunctionB(bool deflt = true) : _default(deflt) {}
-	FunctionB(const QJsonObject &json, bool dflt = true);
+	FunctionB(const QJsonValue &json, bool dflt = true);
 
 	bool value(qreal x) const;
 
@@ -22,7 +22,7 @@ private:
 class FunctionS {
 public:
 	FunctionS(const QString &deflt = QString()) : _default(deflt) {}
-	FunctionS(const QJsonObject &json, const QString &dflt = QString());
+	FunctionS(const QJsonValue &json, const QString &dflt = QString());
 
 	const QString value(qreal x) const;
 
@@ -34,7 +34,7 @@ private:
 class FunctionF {
 public:
 	FunctionF(qreal deflt = 0) : _default(deflt), _base(1.0) {}
-	FunctionF(const QJsonObject &json, qreal dflt = 0);
+	FunctionF(const QJsonValue &json, qreal dflt = 0);
 
 	qreal value(qreal x) const;
 
@@ -48,7 +48,7 @@ class FunctionC {
 public:
 	FunctionC(const QColor &deflt = QColor(Qt::black))
 	  : _default(deflt), _base(1.0) {}
-	FunctionC(const QJsonObject &json, const QColor &dflt = QColor(Qt::black));
+	FunctionC(const QJsonValue &json, const QColor &dflt = QColor(Qt::black));
 
 	QColor value(qreal x) const;
 

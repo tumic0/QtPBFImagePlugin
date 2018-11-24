@@ -96,12 +96,10 @@ private:
 		class Layout {
 		public:
 			Layout() : _textSize(16), _textMaxWidth(10), _textMaxAngle(45),
-			  _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin),
-			  _font("Open Sans"), _capitalize(false), _viewportAlignment(false),
-			  _textAnchor(Text::Center) {}
+			  _font("Open Sans"), _capitalize(false),
+			  _viewportAlignment(false) {}
 			Layout(const QJsonObject &json);
 
-			bool capitalize() const {return _capitalize;}
 			qreal maxTextWidth(int zoom) const
 			  {return _textMaxWidth.value(zoom);}
 			qreal maxTextAngle(int zoom) const
@@ -111,10 +109,12 @@ private:
 			QString icon(int zoom, const QVariantHash &tags) const
 			  {return _icon.value(zoom, tags);}
 			QFont font(int zoom) const;
-			Qt::PenCapStyle lineCap() const {return _lineCap;}
-			Qt::PenJoinStyle lineJoin() const {return _lineJoin;}
+			Qt::PenCapStyle lineCap(int zoom) const;
+			Qt::PenJoinStyle lineJoin(int zoom) const;
+			Text::Anchor textAnchor(int zoom) const;
+
 			bool viewportAlignment() const {return _viewportAlignment;}
-			Text::Anchor textAnchor() const {return _textAnchor;}
+			bool capitalize() const {return _capitalize;}
 
 		private:
 			Template _text;
@@ -122,12 +122,12 @@ private:
 			FunctionF _textSize;
 			FunctionF _textMaxWidth;
 			FunctionF _textMaxAngle;
-			Qt::PenCapStyle _lineCap;
-			Qt::PenJoinStyle _lineJoin;
+			FunctionS _lineCap;
+			FunctionS _lineJoin;
+			FunctionS _textAnchor;
 			QFont _font;
 			bool _capitalize;
 			bool _viewportAlignment;
-			Text::Anchor _textAnchor;
 		};
 
 		class Paint {

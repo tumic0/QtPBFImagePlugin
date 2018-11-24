@@ -44,24 +44,30 @@ static QColor interpolate(const QPair<qreal, QColor> &p0,
 	  f(p0l, p1l, ratio), f(p0a, p1a, ratio));
 }
 
-FunctionF::FunctionF(const QJsonObject &json, qreal dflt)
+FunctionF::FunctionF(const QJsonValue &json, qreal dflt)
   : _default(dflt), _base(1.0)
 {
-	if (!(json.contains("stops") && json["stops"].isArray()))
-		return;
+	if (json.isDouble())
+		_default = json.toDouble();
+	else if (json.isObject()) {
+		QJsonObject obj(json.toObject());
 
-	QJsonArray stops = json["stops"].toArray();
-	for (int i = 0; i < stops.size(); i++) {
-		if (!stops.at(i).isArray())
+		if (!(obj.contains("stops") && obj["stops"].isArray()))
 			return;
-		QJsonArray stop = stops.at(i).toArray();
-		if (stop.size() != 2)
-			return;
-		_stops.append(QPointF(stop.at(0).toDouble(), stop.at(1).toDouble()));
+
+		QJsonArray stops = obj["stops"].toArray();
+		for (int i = 0; i < stops.size(); i++) {
+			if (!stops.at(i).isArray())
+				return;
+			QJsonArray stop = stops.at(i).toArray();
+			if (stop.size() != 2)
+				return;
+			_stops.append(QPointF(stop.at(0).toDouble(), stop.at(1).toDouble()));
+		}
+
+		if (obj.contains("base") && obj["base"].isDouble())
+			_base = obj["base"].toDouble();
 	}
-
-	if (json.contains("base") && json["base"].isDouble())
-		_base = json["base"].toDouble();
 }
 
 qreal FunctionF::value(qreal x) const
@@ -80,26 +86,31 @@ qreal FunctionF::value(qreal x) const
 	return _stops.last().y();
 }
 
-
-FunctionC::FunctionC(const QJsonObject &json, const QColor &dflt)
+FunctionC::FunctionC(const QJsonValue &json, const QColor &dflt)
   : _default(dflt), _base(1.0)
 {
-	if (!(json.contains("stops") && json["stops"].isArray()))
-		return;
+	if (json.isString())
+		_default = Color::fromJsonString(json.toString());
+	else if (json.isObject()) {
+		QJsonObject obj(json.toObject());
 
-	QJsonArray stops = json["stops"].toArray();
-	for (int i = 0; i < stops.size(); i++) {
-		if (!stops.at(i).isArray())
+		if (!(obj.contains("stops") && obj["stops"].isArray()))
 			return;
-		QJsonArray stop = stops.at(i).toArray();
-		if (stop.size() != 2)
-			return;
-		_stops.append(QPair<qreal, QColor>(stop.at(0).toDouble(),
-		  Color::fromJsonString(stop.at(1).toString())));
+
+		QJsonArray stops = obj["stops"].toArray();
+		for (int i = 0; i < stops.size(); i++) {
+			if (!stops.at(i).isArray())
+				return;
+			QJsonArray stop = stops.at(i).toArray();
+			if (stop.size() != 2)
+				return;
+			_stops.append(QPair<qreal, QColor>(stop.at(0).toDouble(),
+			  Color::fromJsonString(stop.at(1).toString())));
+		}
+
+		if (obj.contains("base") && obj["base"].isDouble())
+			_base = obj["base"].toDouble();
 	}
-
-	if (json.contains("base") && json["base"].isDouble())
-		_base = json["base"].toDouble();
 }
 
 QColor FunctionC::value(qreal x) const
@@ -118,20 +129,26 @@ QColor FunctionC::value(qreal x) const
 	return _stops.last().second;
 }
 
-FunctionB::FunctionB(const QJsonObject &json, bool dflt) : _default(dflt)
+FunctionB::FunctionB(const QJsonValue &json, bool dflt) : _default(dflt)
 {
-	if (!(json.contains("stops") && json["stops"].isArray()))
-		return;
+	if (json.isBool())
+		_default = json.toBool();
+	else if (json.isObject()) {
+		QJsonObject obj(json.toObject());
 
-	QJsonArray stops = json["stops"].toArray();
-	for (int i = 0; i < stops.size(); i++) {
-		if (!stops.at(i).isArray())
+		if (!(obj.contains("stops") && obj["stops"].isArray()))
 			return;
-		QJsonArray stop = stops.at(i).toArray();
-		if (stop.size() != 2)
-			return;
-		_stops.append(QPair<qreal, bool>(stop.at(0).toDouble(),
-		  stop.at(1).toBool()));
+
+		QJsonArray stops = obj["stops"].toArray();
+		for (int i = 0; i < stops.size(); i++) {
+			if (!stops.at(i).isArray())
+				return;
+			QJsonArray stop = stops.at(i).toArray();
+			if (stop.size() != 2)
+				return;
+			_stops.append(QPair<qreal, bool>(stop.at(0).toDouble(),
+			  stop.at(1).toBool()));
+		}
 	}
 }
 
@@ -151,21 +168,27 @@ bool FunctionB::value(qreal x) const
 	return _stops.last().second;
 }
 
-FunctionS::FunctionS(const QJsonObject &json, const QString &dflt)
+FunctionS::FunctionS(const QJsonValue &json, const QString &dflt)
   : _default(dflt)
 {
-	if (!(json.contains("stops") && json["stops"].isArray()))
-		return;
+	if (json.isString())
+		_default = json.toString();
+	else if (json.isObject()) {
+		QJsonObject obj(json.toObject());
 
-	QJsonArray stops = json["stops"].toArray();
-	for (int i = 0; i < stops.size(); i++) {
-		if (!stops.at(i).isArray())
+		if (!(obj.contains("stops") && obj["stops"].isArray()))
 			return;
-		QJsonArray stop = stops.at(i).toArray();
-		if (stop.size() != 2)
-			return;
-		_stops.append(QPair<qreal, QString>(stop.at(0).toDouble(),
-		  stop.at(1).toString()));
+
+		QJsonArray stops = obj["stops"].toArray();
+		for (int i = 0; i < stops.size(); i++) {
+			if (!stops.at(i).isArray())
+				return;
+			QJsonArray stop = stops.at(i).toArray();
+			if (stop.size() != 2)
+				return;
+			_stops.append(QPair<qreal, QString>(stop.at(0).toDouble(),
+			  stop.at(1).toString()));
+		}
 	}
 }
 
