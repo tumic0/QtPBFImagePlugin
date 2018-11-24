@@ -20,7 +20,8 @@ public:
 	void setPen(const QPen &pen) {_pen = pen;}
 
 private:
-	typedef QRectF (*BoundingRectFunction)(const QString &, const QFont &, int);
+	typedef QRectF (*BoundingRectFunction)(const QString &, const QFont &,
+	  const Text::Properties &);
 	QRectF computeTextRect(BoundingRectFunction brf) const;
 
 	QPointF _pos;
