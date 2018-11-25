@@ -430,44 +430,30 @@ void Style::Layer::setPathPainter(Tile &tile, const Sprites &sprites) const
 	p.setOpacity(_paint.opacity(_type, tile.zoom()));
 }
 
-void Style::Layer::setSymbolPainter(Tile &tile) const
-{
-	QPen pen(_paint.pen(_type, tile.zoom()));
-	QFont font(_layout.font(tile.zoom()));
-
-	QPainter &p = tile.painter();
-	p.setPen(pen);
-	p.setFont(font);
-}
-
 void Style::Layer::setTextProperties(Tile &tile) const
 {
-	Text::Properties prop;
-	prop.maxWidth = _layout.maxTextWidth(tile.zoom());
-	prop.maxAngle = _layout.maxTextAngle(tile.zoom());
-	prop.anchor = _layout.textAnchor(tile.zoom());
-
-	tile.text().setProperties(prop);
+	tile.text().setMaxWidth(_layout.maxTextWidth(tile.zoom()));
+	tile.text().setMaxAngle(_layout.maxTextAngle(tile.zoom()));
+	tile.text().setAnchor(_layout.textAnchor(tile.zoom()));
+	tile.text().setPen(_paint.pen(_type, tile.zoom()));
+	tile.text().setFont(_layout.font(tile.zoom()));
 }
 
 void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
   const QVariantHash &tags, const Sprites &sprites) const
 {
 	QString text = _layout.text(tile.zoom(), tags);
-	QString tt(text.trimmed());
-	if (tt.isEmpty())
+	if (text.isEmpty())
 		return;
 
 	QString icon = _layout.icon(tile.zoom(), tags);
 
 	if (_layout.viewportAlignment())
-		tile.text().addLabel(tt, path.elementAt(0), tile.painter(), false,
-		  sprites.icon(icon));
+		tile.text().addLabel(text, path.elementAt(0), false, sprites.icon(icon));
 	else if (path.elementCount() == 1 && path.elementAt(0).isMoveTo())
-		tile.text().addLabel(tt, path.elementAt(0), tile.painter(), true,
-		  sprites.icon(icon));
+		tile.text().addLabel(text, path.elementAt(0), true, sprites.icon(icon));
 	else
-		tile.text().addLabel(tt, path, tile.painter());
+		tile.text().addLabel(text, path);
 }
 
 bool Style::load(const QString &fileName)
@@ -516,20 +502,14 @@ bool Style::match(int zoom, int layer, const QVariantHash &tags) const
 	return _layers.at(layer).match(zoom, tags);
 }
 
-void Style::setTextProperties(Tile &tile, int layer) const
-{
-	const Layer &sl = _layers.at(layer);
-	sl.setTextProperties(tile);
-}
-
-void Style::setPainter(Tile &tile, int layer) const
+void Style::setupLayer(Tile &tile, int layer) const
 {
 	const Layer &sl = _layers.at(layer);
 
-	if (sl.isPath())
+	if (sl.isSymbol())
+		sl.setTextProperties(tile);
+	else if (sl.isPath())
 		sl.setPathPainter(tile, _sprites);
-	else if (sl.isSymbol())
-		sl.setSymbolPainter(tile);
 }
 
 void Style::drawFeature(Tile &tile, int layer, const QPainterPath &path,

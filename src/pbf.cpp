@@ -164,8 +164,7 @@ static void drawLayer(const Layer &layer, Style *style, int styleLayer,
 	QSizeF factor(tile.size().width() / scale.x() / (qreal)layer.data()->extent(),
 	  tile.size().height() / scale.y() / (qreal)layer.data()->extent());
 
-	style->setPainter(tile, styleLayer);
-	style->setTextProperties(tile, styleLayer);
+	style->setupLayer(tile, styleLayer);
 
 	for (int i = 0; i < layer.features().size(); i++)
 		drawFeature(layer.features().at(i), style, styleLayer, factor, tile);

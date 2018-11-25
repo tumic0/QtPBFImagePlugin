@@ -30,8 +30,7 @@ public:
 	bool match(int zoom, int layer, const QVariantHash &tags) const;
 
 	void drawBackground(Tile &tile) const;
-	void setPainter(Tile &tile, int layer) const;
-	void setTextProperties(Tile &tile, int layer) const;
+	void setupLayer(Tile &tile, int layer) const;
 	void drawFeature(Tile &tile, int layer, const QPainterPath &path,
 	  const QVariantHash &tags) const;
 
@@ -48,7 +47,6 @@ private:
 
 		bool match(int zoom, const QVariantHash &tags) const;
 		void setPathPainter(Tile &tile, const Sprites &sprites) const;
-		void setSymbolPainter(Tile &tile) const;
 		void setTextProperties(Tile &tile) const;
 		void addSymbol(Tile &tile, const QPainterPath &path,
 		  const QVariantHash &tags, const Sprites &sprites) const;
@@ -104,7 +102,7 @@ private:
 			qreal maxTextAngle(int zoom) const
 			  {return _textMaxAngle.value(zoom);}
 			QString text(int zoom, const QVariantHash &tags) const
-			  {return _text.value(zoom, tags);}
+			  {return _text.value(zoom, tags).trimmed();}
 			QString icon(int zoom, const QVariantHash &tags) const
 			  {return _icon.value(zoom, tags);}
 			QFont font(int zoom) const;

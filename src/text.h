@@ -1,8 +1,14 @@
 #ifndef TEXT_H
 #define TEXT_H
 
-#include <QImage>
+#include <QList>
+#include <QRectF>
+#include <QFont>
+#include <QPen>
 
+class QImage;
+class QPainterPath;
+class QPainter;
 class TextItem;
 
 class Text
@@ -16,24 +22,19 @@ public:
 		Bottom
 	};
 
-	struct Properties {
-		int maxWidth;
-		int maxAngle;
-		Anchor anchor;
-	};
-
-
 	Text(const QSize &size)
 	  : _sceneRect(QRectF(QPointF(0, 0), size)) {}
 	~Text();
 
-	void setProperties(const Properties &prop)
-	  {_properties = prop;}
+	void setFont(const QFont &font) {_font = font;}
+	void setPen(const QPen &pen) {_pen = pen;}
+	void setAnchor(Anchor anchor) {_anchor = anchor;}
+	void setMaxWidth(int width) {_maxWidth = width;}
+	void setMaxAngle(int angle) {_maxAngle = angle;}
 
-	void addLabel(const QString &text, const QPointF &pos,
-	  const QPainter &painter, bool overlap, const QImage &icon);
-	void addLabel(const QString &text, const QPainterPath &path,
-	  const QPainter &painter);
+	void addLabel(const QString &text, const QPointF &pos, bool overlap,
+	  const QImage &icon);
+	void addLabel(const QString &text, const QPainterPath &path);
 
 	void render(QPainter *painter) const;
 
@@ -43,7 +44,12 @@ private:
 
 	QRectF _sceneRect;
 	QList<TextItem *> _items;
-	Properties _properties;
+
+	int _maxWidth;
+	int _maxAngle;
+	Anchor _anchor;
+	QFont _font;
+	QPen _pen;
 };
 
 #endif // TEXT_H

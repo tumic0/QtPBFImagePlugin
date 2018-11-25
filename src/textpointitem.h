@@ -11,7 +11,7 @@ class TextPointItem : public TextItem
 {
 public:
 	TextPointItem(const QString &text, const QPointF &pos, const QFont &font,
-	  const Text::Properties &prop, const QImage &icon);
+	  int maxWidth, Text::Anchor anchor, const QImage &icon);
 
 	QRectF boundingRect() const {return _boundingRect;}
 	QPainterPath shape() const {return _shape;}
@@ -20,8 +20,7 @@ public:
 	void setPen(const QPen &pen) {_pen = pen;}
 
 private:
-	typedef QRectF (*BoundingRectFunction)(const QString &, const QFont &,
-	  const Text::Properties &);
+	typedef QRectF (*BoundingRectFunction)(const QString &, const QFont &, int);
 	QRectF computeTextRect(BoundingRectFunction brf) const;
 
 	QPointF _pos;
@@ -30,7 +29,8 @@ private:
 	QFont _font;
 	QPen _pen;
 	QImage _icon;
-	Text::Properties _properties;
+	int _maxWidth;
+	Text::Anchor _anchor;
 };
 
 #endif // TEXTPOINTITEM_H

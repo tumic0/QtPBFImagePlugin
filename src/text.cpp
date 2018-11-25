@@ -149,16 +149,16 @@ void Text::render(QPainter *painter) const
 	}
 }
 
-void Text::addLabel(const QString &text, const QPointF &pos,
-  const QPainter &painter, bool overlap, const QImage &icon)
+void Text::addLabel(const QString &text, const QPointF &pos, bool overlap,
+  const QImage &icon)
 {
-	TextPointItem *ti = new TextPointItem(text, pos, painter.font(),
-	  _properties, icon);
+	TextPointItem *ti = new TextPointItem(text, pos, _font, _maxWidth, _anchor,
+	  icon);
 	if (!overlap && !_sceneRect.contains(ti->boundingRect())) {
 		delete ti;
 		return;
 	}
-	ti->setPen(painter.pen());
+	ti->setPen(_pen);
 	addItem(ti);
 
 	QList<TextItem*> ci = collidingItems(ti);
@@ -166,25 +166,24 @@ void Text::addLabel(const QString &text, const QPointF &pos,
 		ci[i]->setVisible(false);
 }
 
-void Text::addLabel(const QString &text, const QPainterPath &path,
-  const QPainter &painter)
+void Text::addLabel(const QString &text, const QPainterPath &path)
 {
-	int textWidth = text.size() * painter.font().pixelSize() * 0.6;
+	int textWidth = text.size() * _font.pixelSize() * 0.6;
 	if (textWidth > path.length())
 		return;
 
-	QPainterPath tp(textPath(path, textWidth, _properties.maxAngle,
-	  painter.font().pixelSize() / 2, _sceneRect));
+	QPainterPath tp(textPath(path, textWidth, _maxAngle, _font.pixelSize() / 2,
+	  _sceneRect));
 	if (tp.isEmpty())
 		return;
 
 	TextPathItem *ti = new TextPathItem(text, reverse(tp) ? tp.toReversed()
-	  : tp, painter.font());
+	  : tp, _font);
 	if (!_sceneRect.contains(ti->boundingRect())) {
 		delete ti;
 		return;
 	}
-	ti->setPen(painter.pen());
+	ti->setPen(_pen);
 
 	addItem(ti);
 
