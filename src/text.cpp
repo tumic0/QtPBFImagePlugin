@@ -178,19 +178,19 @@ void Text::addLabel(const QString &text, const QPainterPath &path,
 	if (tp.isEmpty())
 		return;
 
-	TextPathItem *pi = new TextPathItem(text, reverse(tp) ? tp.toReversed()
-	  : tp, painter.font(), _properties);
-	if (!_sceneRect.contains(pi->boundingRect())) {
-		delete pi;
+	TextPathItem *ti = new TextPathItem(text, reverse(tp) ? tp.toReversed()
+	  : tp, painter.font());
+	if (!_sceneRect.contains(ti->boundingRect())) {
+		delete ti;
 		return;
 	}
-	pi->setPen(painter.pen());
+	ti->setPen(painter.pen());
 
-	addItem(pi);
+	addItem(ti);
 
-	QList<TextItem*> ci = collidingItems(pi);
-	for (int j = 0; j < ci.size(); j++)
-		ci[j]->setVisible(false);
+	QList<TextItem*> ci = collidingItems(ti);
+	for (int i = 0; i < ci.size(); i++)
+		ci[i]->setVisible(false);
 }
 
 QList<TextItem*> Text::collidingItems(const TextItem *item) const

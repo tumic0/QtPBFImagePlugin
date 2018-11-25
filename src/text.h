@@ -16,17 +16,10 @@ public:
 		Bottom
 	};
 
-	enum Transform {
-		None,
-		Uppercase,
-		Lowercase
-	};
-
 	struct Properties {
 		int maxWidth;
 		int maxAngle;
 		Anchor anchor;
-		Transform transform;
 	};
 
 

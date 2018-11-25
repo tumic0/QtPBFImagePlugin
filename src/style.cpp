@@ -310,6 +310,7 @@ QFont Style::Layer::Layout::font(int zoom) const
 {
 	QFont font(_font);
 	font.setPixelSize(_textSize.value(zoom));
+	font.setCapitalization(textTransform(zoom));
 
 	return font;
 }
@@ -330,16 +331,16 @@ Text::Anchor Style::Layer::Layout::textAnchor(int zoom) const
 		return Text::Center;
 }
 
-Text::Transform Style::Layer::Layout::textTransform(int zoom) const
+QFont::Capitalization Style::Layer::Layout::textTransform(int zoom) const
 {
 	QString transform(_textTransform.value(zoom));
 
 	if (transform == "uppercase")
-		return Text::Uppercase;
+		return QFont::AllUppercase;
 	else if (transform == "lowercase")
-		return Text::Lowercase;
+		return QFont::AllLowercase;
 	else
-		return Text::None;
+		return QFont::MixedCase;
 }
 
 Qt::PenCapStyle Style::Layer::Layout::lineCap(int zoom) const
@@ -445,7 +446,6 @@ void Style::Layer::setTextProperties(Tile &tile) const
 	prop.maxWidth = _layout.maxTextWidth(tile.zoom());
 	prop.maxAngle = _layout.maxTextAngle(tile.zoom());
 	prop.anchor = _layout.textAnchor(tile.zoom());
-	prop.transform = _layout.textTransform(tile.zoom());
 
 	tile.text().setProperties(prop);
 }

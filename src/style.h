@@ -111,11 +111,11 @@ private:
 			Qt::PenCapStyle lineCap(int zoom) const;
 			Qt::PenJoinStyle lineJoin(int zoom) const;
 			Text::Anchor textAnchor(int zoom) const;
-			Text::Transform textTransform(int zoom) const;
-
 			bool viewportAlignment() const {return _viewportAlignment;}
 
 		private:
+			QFont::Capitalization textTransform(int zoom) const;
+
 			Template _text;
 			Template _icon;
 			FunctionF _textSize;

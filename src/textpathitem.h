@@ -10,7 +10,7 @@ class TextPathItem : public TextItem
 {
 public:
 	TextPathItem(const QString &text, const QPainterPath &path,
-	  const QFont &font, const Text::Properties &prop);
+	  const QFont &font);
 
 	QPainterPath shape() const {return _shape;}
 	QRectF boundingRect() const {return _boundingRect;}

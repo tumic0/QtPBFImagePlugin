@@ -28,7 +28,7 @@ static QRectF fuzzyBoundingRect(const QString &str, const QFont &font,
   const Text::Properties &prop)
 {
 	int limit = font.pixelSize() * prop.maxWidth;
-	qreal acw = (prop.transform == Text::Uppercase) ? 0.66 : 0.55;
+	qreal acw = (font.capitalization() == QFont::AllUppercase) ? 0.66 : 0.55;
 	qreal cw = font.pixelSize() * acw;
 	if (font.bold())
 		acw *= 1.1;
@@ -101,8 +101,7 @@ QRectF TextPointItem::computeTextRect(BoundingRectFunction brf) const
 
 TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
   const QFont &font, const Text::Properties &prop, const QImage &icon)
-  : TextItem(prop.transform == Text::Uppercase ? text.toUpper() : text),
-  _pos(pos), _font(font), _icon(icon), _properties(prop)
+  : TextItem(text), _pos(pos), _font(font), _icon(icon), _properties(prop)
 {
 	_boundingRect = computeTextRect(fuzzyBoundingRect);
 
