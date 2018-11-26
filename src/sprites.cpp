@@ -61,9 +61,13 @@ bool Sprites::load(const QString &jsonFile, const QString &imageFile)
 	for (QJsonObject::const_iterator it = json.constBegin();
 	  it != json.constEnd(); it++) {
 		QJsonValue val(*it);
-		if (val.isObject())
-			_sprites.insert(it.key(), Sprite(val.toObject()));
-		else
+		if (val.isObject()) {
+			Sprite s(val.toObject());
+			if (s.rect().isValid())
+				_sprites.insert(it.key(), s);
+			else
+				qWarning() << it.key() << ": invalid sprite definition";
+		} else
 			qWarning() << it.key() << ": invalid sprite definition";
 	}
 
@@ -82,10 +86,8 @@ QImage Sprites::icon(const QString &name) const
 	if (it == _sprites.constEnd())
 		return QImage();
 
-	if (!img.rect().contains(it->rect())) {
-		qWarning() << it->rect() << ": invalid sprite rect";
+	if (!img.rect().contains(it->rect()))
 		return QImage();
-	}
 
 	return img.copy(it->rect());
 }
