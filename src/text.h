@@ -38,6 +38,8 @@ public:
 
 	void render(QPainter *painter) const;
 
+	static qreal avgCharRatio(const QString &str, const QFont &font);
+
 private:
 	void addItem(TextItem *item) {_items.append(item);}
 	QList<TextItem *> collidingItems(const TextItem *item) const;

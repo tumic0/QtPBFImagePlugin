@@ -28,12 +28,12 @@ static QRectF fuzzyBoundingRect(const QString &str, const QFont &font,
   int maxWidth)
 {
 	int limit = font.pixelSize() * maxWidth;
-	qreal acw = (font.capitalization() == QFont::AllUppercase) ? 0.66 : 0.55;
-	qreal cw = font.pixelSize() * acw;
-	if (font.bold())
-		acw *= 1.1;
+	qreal cw = font.pixelSize() * Text::avgCharRatio(str, font);
 	qreal lh = font.pixelSize() * 1.25;
 	int width = 0, lines = 0;
+
+	if (font.italic())
+		limit -= font.pixelSize() / 2.0;
 
 	QStringList l(str.split('\n'));
 	for (int i = 0; i < l.size(); i++) {
