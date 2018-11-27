@@ -2,6 +2,7 @@
 #define TEXTITEM_H
 
 #include <QPainterPath>
+#include <QFont>
 
 class TextItem
 {
@@ -27,6 +28,23 @@ public:
 			return false;
 
 		return other->shape().intersects(shape());
+	}
+
+protected:
+	static int avgCharWidth(const QString &str, const QFont &font)
+	{
+		qreal ratio;
+
+		if (str.at(0).unicode() >= 0x2E80)
+			ratio = 1.0;
+		else {
+			ratio = (font.capitalization() == QFont::AllUppercase)
+			  ? 0.66 : 0.55;
+			if (font.bold())
+				ratio *= 1.1;
+		}
+
+		return ratio * font.pixelSize();
 	}
 
 private:

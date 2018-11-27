@@ -21,6 +21,12 @@ public:
 
 private:
 	typedef QRectF (*BoundingRectFunction)(const QString &, const QFont &, int);
+
+	static QRectF exactBoundingRect(const QString &str, const QFont &font,
+	  int maxWidth);
+	static QRectF fuzzyBoundingRect(const QString &str, const QFont &font,
+	  int maxWidth);
+
 	QRectF computeTextRect(BoundingRectFunction brf) const;
 
 	QPointF _pos;

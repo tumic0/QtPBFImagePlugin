@@ -136,13 +136,12 @@ TextPathItem::TextPathItem(const QString &text, const QPainterPath &path,
   const QFont &font, int maxAngle, const QRectF &tileRect)
   : TextItem(text), _font(font)
 {
-	qreal acr = Text::avgCharRatio(text, _font);
-	int textWidth = text.size() * _font.pixelSize() * acr;
+	int cw = avgCharWidth(text, font);
+	int textWidth = text.size() * cw;
 	if (textWidth > path.length())
 		return;
 
-	QPainterPath tp(textPath(path, textWidth, maxAngle, _font.pixelSize() * acr,
-	  tileRect));
+	QPainterPath tp(textPath(path, textWidth, maxAngle, cw, tileRect));
 	if (tp.isEmpty())
 		return;
 

@@ -69,18 +69,3 @@ QList<TextItem*> Text::collidingItems(const TextItem *item) const
 
 	return list;
 }
-
-qreal Text::avgCharRatio(const QString &str, const QFont &font)
-{
-	qreal ratio;
-
-	if (str.at(0).unicode() > 0x2E80)
-		ratio = 1.0;
-	else {
-		ratio = (font.capitalization() == QFont::AllUppercase) ? 0.66 : 0.55;
-		if (font.bold())
-			ratio *= 1.1;
-	}
-
-	return ratio;
-}

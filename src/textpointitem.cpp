@@ -5,8 +5,8 @@
 
 #define FLAGS (Qt::AlignCenter | Qt::TextWordWrap | Qt::TextDontClip)
 
-static QRectF exactBoundingRect(const QString &str, const QFont &font,
-  int maxWidth)
+QRectF TextPointItem::exactBoundingRect(const QString &str,
+  const QFont &font, int maxWidth)
 {
 	QFontMetrics fm(font);
 	int limit = font.pixelSize() * maxWidth;
@@ -24,11 +24,11 @@ static QRectF exactBoundingRect(const QString &str, const QFont &font,
 	return br;
 }
 
-static QRectF fuzzyBoundingRect(const QString &str, const QFont &font,
-  int maxWidth)
+QRectF TextPointItem::fuzzyBoundingRect(const QString &str,
+  const QFont &font, int maxWidth)
 {
 	int limit = font.pixelSize() * maxWidth;
-	qreal cw = font.pixelSize() * Text::avgCharRatio(str, font);
+	qreal cw = avgCharWidth(str, font);
 	qreal lh = font.pixelSize() * 1.25;
 	int width = 0, lines = 0;
 
