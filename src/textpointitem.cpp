@@ -72,7 +72,7 @@ QRectF TextPointItem::fuzzyBoundingRect(const QString &str,
 QRectF TextPointItem::computeTextRect(BoundingRectFunction brf) const
 {
 	QRectF iconRect = _icon.isNull() ? QRectF() : _icon.rect();
-	QRectF textRect = brf(text(), _font, _maxWidth);
+	QRectF textRect = brf(text(), font(), _maxWidth);
 
 	switch (_anchor) {
 		case Text::Center:
@@ -101,9 +101,10 @@ QRectF TextPointItem::computeTextRect(BoundingRectFunction brf) const
 
 TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
   const QFont &font, int maxWidth, Text::Anchor anchor, const QImage &icon)
-  : TextItem(text), _pos(pos), _font(font), _icon(icon), _maxWidth(maxWidth),
+  : TextItem(text), _pos(pos), _icon(icon), _maxWidth(maxWidth),
   _anchor(anchor)
 {
+	setFont(font);
 	_boundingRect = computeTextRect(fuzzyBoundingRect);
 
 	if (!_icon.isNull()) {
@@ -129,7 +130,7 @@ void TextPointItem::paint(QPainter *painter) const
 	} else
 		textRect = computeTextRect(fuzzyBoundingRect);
 
-	painter->setFont(_font);
-	painter->setPen(_pen);
+	painter->setFont(font());
+	painter->setPen(pen());
 	painter->drawText(textRect, FLAGS, text());
 }

@@ -11,6 +11,10 @@ public:
 	virtual ~TextItem() {}
 
 	const QString &text() const {return _text;}
+	const QFont &font() const {return _font;}
+	void setFont(const QFont &font) {_font = font;}
+	const QPen &pen() const {return _pen;}
+	void setPen(const QPen &pen) {_pen = pen;}
 
 	virtual QPainterPath shape() const = 0;
 	virtual QRectF boundingRect() const = 0;
@@ -49,6 +53,8 @@ protected:
 
 private:
 	QString _text;
+	QFont _font;
+	QPen _pen;
 	bool _visible;
 };
 

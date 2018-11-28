@@ -17,8 +17,6 @@ public:
 	QPainterPath shape() const {return _shape;}
 	void paint(QPainter *painter) const;
 
-	void setPen(const QPen &pen) {_pen = pen;}
-
 private:
 	typedef QRectF (*BoundingRectFunction)(const QString &, const QFont &, int);
 
@@ -32,8 +30,6 @@ private:
 	QPointF _pos;
 	QPainterPath _shape;
 	QRectF _boundingRect;
-	QFont _font;
-	QPen _pen;
 	QImage _icon;
 	int _maxWidth;
 	Text::Anchor _anchor;

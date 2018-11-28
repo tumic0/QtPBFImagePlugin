@@ -22,6 +22,18 @@ public:
 		Bottom
 	};
 
+	enum SymbolPlacement {
+		Point,
+		Line,
+		LineCenter
+	};
+
+	enum RotationAlignment {
+		Map,
+		Viewport,
+		Auto
+	};
+
 	Text(const QSize &size)
 	  : _sceneRect(QRectF(QPointF(0, 0), size)) {}
 	~Text();
@@ -31,10 +43,12 @@ public:
 	void setAnchor(Anchor anchor) {_anchor = anchor;}
 	void setMaxWidth(int width) {_maxWidth = width;}
 	void setMaxAngle(int angle) {_maxAngle = angle;}
+	void setSymbolPlacement(SymbolPlacement placement);
+	void setRotationAlignment(RotationAlignment alignment)
+	  {_alignment = alignment;}
 
-	void addLabel(const QString &text, const QPointF &pos, bool overlap,
-	  const QImage &icon);
-	void addLabel(const QString &text, const QPainterPath &path);
+	void addLabel(const QString &text, const QImage &icon,
+	  const QPainterPath &path);
 
 	void render(QPainter *painter) const;
 
@@ -48,6 +62,8 @@ private:
 	int _maxWidth;
 	int _maxAngle;
 	Anchor _anchor;
+	SymbolPlacement _placement;
+	RotationAlignment _alignment;
 	QFont _font;
 	QPen _pen;
 };

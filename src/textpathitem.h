@@ -16,14 +16,10 @@ public:
 	QRectF boundingRect() const {return _boundingRect;}
 	void paint(QPainter *painter) const;
 
-	void setPen(const QPen &pen) {_pen = pen;}
-
 private:
 	QPainterPath _path;
 	QPainterPath _shape;
 	QRectF _boundingRect;
-	QFont _font;
-	QPen _pen;
 };
 
 #endif // TEXTPATHITEM_H

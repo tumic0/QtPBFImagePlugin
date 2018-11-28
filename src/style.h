@@ -94,7 +94,7 @@ private:
 		class Layout {
 		public:
 			Layout() : _textSize(16), _textMaxWidth(10), _textMaxAngle(45),
-			  _font("Open Sans"), _viewportAlignment(false) {}
+			  _font("Open Sans") {}
 			Layout(const QJsonObject &json);
 
 			qreal maxTextWidth(int zoom) const
@@ -109,7 +109,8 @@ private:
 			Qt::PenCapStyle lineCap(int zoom) const;
 			Qt::PenJoinStyle lineJoin(int zoom) const;
 			Text::Anchor textAnchor(int zoom) const;
-			bool viewportAlignment() const {return _viewportAlignment;}
+			Text::SymbolPlacement symbolPlacement(int zoom) const;
+			Text::RotationAlignment textRotationAlignment(int zoom) const;
 
 		private:
 			QFont::Capitalization textTransform(int zoom) const;
@@ -123,8 +124,9 @@ private:
 			FunctionS _lineJoin;
 			FunctionS _textAnchor;
 			FunctionS _textTransform;
+			FunctionS _symbolPlacement;
+			FunctionS _textRotationAlignment;
 			QFont _font;
-			bool _viewportAlignment;
 		};
 
 		class Paint {

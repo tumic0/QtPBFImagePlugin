@@ -278,8 +278,7 @@ bool Style::Layer::Paint::antialias(Layer::Type type, int zoom) const
 }
 
 Style::Layer::Layout::Layout(const QJsonObject &json)
-  : _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin), _font("Open Sans"),
-  _viewportAlignment(false)
+  : _lineCap(Qt::FlatCap), _lineJoin(Qt::MiterJoin), _font("Open Sans")
 {
 	// line
 	_lineCap = FunctionS(json["line-cap"], "butt");
@@ -292,18 +291,17 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 	_textMaxWidth = FunctionF(json["text-max-width"], 10);
 	_textMaxAngle = FunctionF(json["text-max-angle"], 45);
 	_textTransform = FunctionS(json["text-transform"], "none");
+	_textRotationAlignment = FunctionS(json["text-rotation-alignment"]);
+	_textAnchor = FunctionS(json["text-anchor"]);
 
 	if (json.contains("text-font") && json["text-font"].isArray())
 		_font = Font::fromJsonArray(json["text-font"].toArray());
-	if (json.contains("text-rotation-alignment")
-	  && json["text-rotation-alignment"].isString())
-		if (json["text-rotation-alignment"].toString() == "viewport")
-			_viewportAlignment = true;
-
-	_textAnchor = FunctionS(json["text-anchor"]);
 
 	// icon
 	_icon = Template(FunctionS(json["icon-image"]));
+
+	// symbol
+	_symbolPlacement = FunctionS(json["symbol-placement"]);
 }
 
 QFont Style::Layer::Layout::font(int zoom) const
@@ -365,6 +363,31 @@ Qt::PenJoinStyle Style::Layer::Layout::lineJoin(int zoom) const
 		return Qt::RoundJoin;
 	else
 		return Qt::MiterJoin;
+}
+
+Text::SymbolPlacement Style::Layer::Layout::symbolPlacement(int zoom) const
+{
+	QString placement(_symbolPlacement.value(zoom));
+
+	if (placement == "line")
+		return Text::Line;
+	else if (placement == "line-center")
+		return Text::LineCenter;
+	else
+		return Text::Point;
+}
+
+Text::RotationAlignment Style::Layer::Layout::textRotationAlignment(int zoom)
+  const
+{
+	QString alignment(_textRotationAlignment.value(zoom));
+
+	if (alignment == "map")
+		return Text::Map;
+	else if (alignment == "viewport")
+		return Text::Viewport;
+	else
+		return Text::Auto;
 }
 
 Style::Layer::Layer(const QJsonObject &json)
@@ -437,6 +460,8 @@ void Style::Layer::setTextProperties(Tile &tile) const
 	tile.text().setAnchor(_layout.textAnchor(tile.zoom()));
 	tile.text().setPen(_paint.pen(_type, tile.zoom()));
 	tile.text().setFont(_layout.font(tile.zoom()));
+	tile.text().setSymbolPlacement(_layout.symbolPlacement(tile.zoom()));
+	tile.text().setRotationAlignment(_layout.textRotationAlignment(tile.zoom()));
 }
 
 void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
@@ -447,13 +472,7 @@ void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
 		return;
 
 	QString icon = _layout.icon(tile.zoom(), tags);
-
-	if (_layout.viewportAlignment())
-		tile.text().addLabel(text, path.elementAt(0), false, sprites.icon(icon));
-	else if (path.elementCount() == 1 && path.elementAt(0).isMoveTo())
-		tile.text().addLabel(text, path.elementAt(0), true, sprites.icon(icon));
-	else
-		tile.text().addLabel(text, path);
+	tile.text().addLabel(text, sprites.icon(icon), path);
 }
 
 bool Style::load(const QString &fileName)
