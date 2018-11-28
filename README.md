@@ -15,6 +15,9 @@ be named sprite.json and the sprite image sprite.png and both files must be
 placed in the same directory as the style itself. A default fallback style
 (OSM-Liberty) for OpenMapTiles is part of the plugin.
 
+"Plain" PBF files as well as gzip compressed files (as used in MBTiles) are
+supported by the plugin.
+
 ## Usage
 Due to a major design flaw in the Mapbox vector tiles specification - the zoom
 is not part of the PBF data - the plugin can not be used "as is", but passing
