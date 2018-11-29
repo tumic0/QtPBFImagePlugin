@@ -32,22 +32,21 @@ void Text::addLabel(const QString &text, const QImage &icon,
 				  _maxWidth, _anchor, icon);
 			else
 				ti = new TextPathItem(text, path, _font, _maxAngle, _sceneRect);
-			if (!_sceneRect.contains(ti->boundingRect()))
-				ti->setVisible(false);
 			break;
 		case LineCenter:
 			ti = new TextPointItem(text, path.pointAtPercent(0.5), _font,
 			  _maxWidth, _anchor, icon);
-			if (!_sceneRect.contains(ti->boundingRect()))
-				ti->setVisible(false);
 			break;
 		default:
 			ti = new TextPointItem(text, path.elementAt(0), _font, _maxWidth,
 			  _anchor, icon);
-			if (_alignment == Viewport
-			  && !_sceneRect.contains(ti->boundingRect()))
-				ti->setVisible(false);
 			break;
+	}
+
+	// Note: empty path == point geometry (single move)
+	if (!path.isEmpty() && !_sceneRect.contains(ti->boundingRect())) {
+		delete ti;
+		return;
 	}
 
 	ti->setPen(_pen);

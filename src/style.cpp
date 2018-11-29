@@ -394,7 +394,8 @@ Style::Layer::Layer(const QJsonObject &json)
   : _type(Unknown), _minZoom(-1), _maxZoom(-1)
 {
 	// type
-	QString type = json["type"].toString();
+	QString type(json["type"].toString());
+
 	if (type == "fill")
 		_type = Fill;
 	else if (type == "line")
@@ -440,28 +441,33 @@ bool Style::Layer::match(int zoom, const QVariantHash &tags) const
 
 void Style::Layer::setPathPainter(Tile &tile, const Sprites &sprites) const
 {
-	QPen pen(_paint.pen(_type, tile.zoom()));
-	QBrush brush(_paint.brush(_type, tile.zoom(), sprites));
-
-	pen.setJoinStyle(_layout.lineJoin(tile.zoom()));
-	pen.setCapStyle(_layout.lineCap(tile.zoom()));
-
 	QPainter &p = tile.painter();
-	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type, tile.zoom()));
+	int zoom = tile.zoom();
+
+	QPen pen(_paint.pen(_type, zoom));
+	pen.setJoinStyle(_layout.lineJoin(zoom));
+	pen.setCapStyle(_layout.lineCap(zoom));
+
+	QBrush brush(_paint.brush(_type, zoom, sprites));
+
+	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type, zoom));
 	p.setPen(pen);
 	p.setBrush(brush);
-	p.setOpacity(_paint.opacity(_type, tile.zoom()));
+	p.setOpacity(_paint.opacity(_type, zoom));
 }
 
 void Style::Layer::setTextProperties(Tile &tile) const
 {
-	tile.text().setMaxWidth(_layout.maxTextWidth(tile.zoom()));
-	tile.text().setMaxAngle(_layout.maxTextAngle(tile.zoom()));
-	tile.text().setAnchor(_layout.textAnchor(tile.zoom()));
-	tile.text().setPen(_paint.pen(_type, tile.zoom()));
-	tile.text().setFont(_layout.font(tile.zoom()));
-	tile.text().setSymbolPlacement(_layout.symbolPlacement(tile.zoom()));
-	tile.text().setRotationAlignment(_layout.textRotationAlignment(tile.zoom()));
+	Text &t = tile.text();
+	int zoom = tile.zoom();
+
+	t.setMaxWidth(_layout.maxTextWidth(zoom));
+	t.setMaxAngle(_layout.maxTextAngle(zoom));
+	t.setAnchor(_layout.textAnchor(zoom));
+	t.setPen(_paint.pen(_type, zoom));
+	t.setFont(_layout.font(zoom));
+	t.setSymbolPlacement(_layout.symbolPlacement(zoom));
+	t.setRotationAlignment(_layout.textRotationAlignment(zoom));
 }
 
 void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
