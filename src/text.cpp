@@ -13,10 +13,15 @@ Text::~Text()
 
 void Text::render(QPainter *painter) const
 {
+	QSet<QString> set;
+
 	for (int i = 0; i < _items.size(); i++) {
 		const TextItem *ti = _items.at(i);
-		if (ti->isVisible() && _sceneRect.intersects(ti->boundingRect()))
+		if (ti->isVisible() && _sceneRect.intersects(ti->boundingRect())
+		  && !set.contains(ti->text())) {
 			ti->paint(painter);
+			set.insert(ti->text());
+		}
 	}
 }
 
