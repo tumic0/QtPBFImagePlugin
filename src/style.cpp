@@ -522,11 +522,6 @@ bool Style::load(const QString &fileName)
 	return true;
 }
 
-bool Style::match(int zoom, int layer, const QVariantHash &tags) const
-{
-	return _layers.at(layer).match(zoom, tags);
-}
-
 void Style::setupLayer(Tile &tile, int layer) const
 {
 	const Layer &sl = _layers.at(layer);

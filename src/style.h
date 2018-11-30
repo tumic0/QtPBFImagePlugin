@@ -25,10 +25,11 @@ public:
 
 	bool load(const QString &fileName);
 
-	const QStringList &sourceLayers() const {return _sourceLayers;}
+	const QStringList &sourceLayers() const
+	  {return _sourceLayers;}
 
-	bool match(int zoom, int layer, const QVariantHash &tags) const;
-
+	bool match(int zoom, int layer, const QVariantHash &tags) const
+	  {return _layers.at(layer).match(zoom, tags);}
 	void drawBackground(Tile &tile) const;
 	void setupLayer(Tile &tile, int layer) const;
 	void drawFeature(Tile &tile, int layer, const QPainterPath &path,
