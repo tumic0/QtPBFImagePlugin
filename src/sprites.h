@@ -9,8 +9,9 @@ class Sprites
 {
 public:
 	bool load(const QString &jsonFile, const QString &imageFile);
+	bool load2x(const QString &jsonFile, const QString &imageFile);
 
-	QImage icon(const QString &name) const;
+	QImage icon(const QString &name, bool hidpi) const;
 
 private:
 	class Sprite {
@@ -22,8 +23,10 @@ private:
 		QRect _rect;
 	};
 
-	QMap<QString, Sprite> _sprites;
-	QString _imageFile;
+	bool load(const QString &jsonFile, QMap<QString, Sprite> &map);
+
+	QMap<QString, Sprite> _sprites, _sprites2x;
+	QString _imageFile, _image2xFile;
 };
 
 #endif // SPRITES_H

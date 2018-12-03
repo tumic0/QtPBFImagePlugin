@@ -71,7 +71,8 @@ QRectF TextPointItem::fuzzyBoundingRect(const QString &str,
 
 QRectF TextPointItem::computeTextRect(BoundingRectFunction brf) const
 {
-	QRectF iconRect = _icon.isNull() ? QRectF() : _icon.rect();
+	QRectF iconRect = _icon.isNull() ? QRectF()
+	  : QRectF(QPointF(0, 0), QSizeF(_icon.size()) / _icon.devicePixelRatioF());
 	QRectF textRect = brf(text(), font(), _maxWidth);
 
 	switch (_anchor) {
@@ -108,7 +109,8 @@ TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
 	_boundingRect = computeTextRect(fuzzyBoundingRect);
 
 	if (!_icon.isNull()) {
-		QRectF iconRect(_icon.rect());
+		QRectF iconRect(QPointF(0, 0), QSizeF(_icon.size())
+		  / _icon.devicePixelRatioF());
 		iconRect.moveCenter(pos);
 		_boundingRect |= iconRect;
 	}
@@ -125,8 +127,9 @@ void TextPointItem::paint(QPainter *painter) const
 
 	if (!_icon.isNull()) {
 		textRect = computeTextRect(exactBoundingRect);
-		painter->drawImage(_pos - QPointF(_icon.width() / 2,
-		  _icon.height() / 2), _icon);
+		painter->drawImage(_pos - QPointF(_icon.width()
+		  / _icon.devicePixelRatioF() / 2, _icon.height()
+		  / _icon.devicePixelRatioF() / 2), _icon);
 	} else
 		textRect = computeTextRect(fuzzyBoundingRect);
 

@@ -136,7 +136,8 @@ private:
 			Paint(const QJsonObject &json);
 
 			QPen pen(Layer::Type type, int zoom) const;
-			QBrush brush(Layer::Type type, int zoom, const Sprites &sprites) const;
+			QBrush brush(Layer::Type type, int zoom, const Sprites &sprites,
+			  bool hidpi) const;
 			qreal opacity(Layer::Type type, int zoom) const;
 			bool antialias(Layer::Type type, int zoom) const;
 			QString fillPattern(int zoom) const

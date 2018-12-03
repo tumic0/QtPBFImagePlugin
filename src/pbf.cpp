@@ -156,18 +156,20 @@ static void drawFeature(const Feature &feature, Style *style, int styleLayer,
 }
 
 static void drawLayer(const Layer &layer, Style *style, int styleLayer,
-  Tile &tile, const QPointF &scale)
+  Tile &tile)
 {
 	if (layer.data()->version() > 2)
 		return;
 
-	QSizeF factor(tile.size().width() / scale.x() / (qreal)layer.data()->extent(),
-	  tile.size().height() / scale.y() / (qreal)layer.data()->extent());
+	QSizeF factor(tile.size().width() / tile.scale().x() /
+	  (qreal)layer.data()->extent(), tile.size().height() / tile.scale().y()
+	  / (qreal)layer.data()->extent());
 
+	tile.painter().save();
 	style->setupLayer(tile, styleLayer);
-
 	for (int i = 0; i < layer.features().size(); i++)
 		drawFeature(layer.features().at(i), style, styleLayer, factor, tile);
+	tile.painter().restore();
 }
 
 bool PBF::render(const QByteArray &data, int zoom, Style *style,
@@ -192,8 +194,6 @@ bool PBF::render(const QByteArray &data, int zoom, Style *style,
 			layers.insert(name, Layer(&layer));
 	}
 
-	t.painter().save();
-
 	// Process source layers in order of style layers
 	for (int i = 0; i < style->sourceLayers().size(); i++) {
 		QMap<QString, Layer>::const_iterator it = layers.find(
@@ -201,10 +201,9 @@ bool PBF::render(const QByteArray &data, int zoom, Style *style,
 		if (it == layers.constEnd())
 			continue;
 
-		drawLayer(*it, style, i, t, scale);
+		drawLayer(*it, style, i, t);
 	}
 
-	t.painter().restore();
 	t.text().render(&t.painter());
 
 	return true;

@@ -1,4 +1,4 @@
-﻿#include <QFontMetrics>
+#include <QFontMetrics>
 #include <QPainter>
 #include "text.h"
 #include "textpointitem.h"

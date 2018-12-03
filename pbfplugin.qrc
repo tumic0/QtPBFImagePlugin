@@ -3,5 +3,7 @@
 		<file>style/style.json</file>
 		<file>style/sprite.json</file>
 		<file>style/sprite.png</file>
+		<file>style/sprite@2x.json</file>
+		<file>style/sprite@2x.png</file>
 	</qresource>
 </RCC>

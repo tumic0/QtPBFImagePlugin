@@ -223,7 +223,8 @@ QPen Style::Layer::Paint::pen(Type type, int zoom) const
 	return pen;
 }
 
-QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites) const
+QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites,
+  bool hidpi) const
 {
 	QColor color;
 	QBrush brush(Qt::NoBrush);
@@ -236,7 +237,7 @@ QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites) c
 				brush = QBrush(color);
 			pattern = _fillPattern.value(zoom);
 			if (!pattern.isNull())
-				brush.setTextureImage(sprites.icon(pattern));
+				brush.setTextureImage(sprites.icon(pattern, hidpi));
 			break;
 		case Background:
 			color = _backgroundColor.value(zoom);
@@ -244,7 +245,7 @@ QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites) c
 				brush = QBrush(color);
 			pattern = _fillPattern.value(zoom);
 			if (!pattern.isNull())
-				brush.setTextureImage(sprites.icon(pattern));
+				brush.setTextureImage(sprites.icon(pattern, hidpi));
 			break;
 		default:
 			break;
@@ -448,7 +449,8 @@ void Style::Layer::setPathPainter(Tile &tile, const Sprites &sprites) const
 	pen.setJoinStyle(_layout.lineJoin(zoom));
 	pen.setCapStyle(_layout.lineCap(zoom));
 
-	QBrush brush(_paint.brush(_type, zoom, sprites));
+	bool hidpi = qMax(tile.scale().x(), tile.scale().y()) > 1.0 ? true : false;
+	QBrush brush(_paint.brush(_type, zoom, sprites, hidpi));
 
 	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type, zoom));
 	p.setPen(pen);
@@ -478,7 +480,8 @@ void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
 		return;
 
 	QString icon = _layout.icon(tile.zoom(), tags);
-	tile.text().addLabel(text, sprites.icon(icon), path);
+	bool hidpi = qMax(tile.scale().x(), tile.scale().y()) > 1.0 ? true : false;
+	tile.text().addLabel(text, sprites.icon(icon, hidpi), path);
 }
 
 bool Style::load(const QString &fileName)
@@ -509,7 +512,9 @@ bool Style::load(const QString &fileName)
 	for (int i = 0; i < _layers.size(); i++)
 		_sourceLayers.append(_layers.at(i).sourceLayer());
 
+
 	QDir styleDir = QFileInfo(fileName).absoluteDir();
+
 	QString spritesJSON(styleDir.filePath("sprite.json"));
 	if (QFileInfo::exists(spritesJSON)) {
 		QString spritesImg(styleDir.filePath("sprite.png"));
@@ -517,6 +522,15 @@ bool Style::load(const QString &fileName)
 			_sprites.load(spritesJSON, spritesImg);
 		else
 			qCritical() << spritesImg << ": no such file";
+	}
+
+	QString sprites2xJSON(styleDir.filePath("sprite@2x.json"));
+	if (QFileInfo::exists(sprites2xJSON)) {
+		QString sprites2xImg(styleDir.filePath("sprite@2x.png"));
+		if (QFileInfo::exists(sprites2xImg))
+			_sprites.load2x(sprites2xJSON, sprites2xImg);
+		else
+			qCritical() << sprites2xImg << ": no such file";
 	}
 
 	return true;

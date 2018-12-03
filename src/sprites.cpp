@@ -9,11 +9,18 @@
 	Loading the sprites atlas image must be deferred until all image plugins
 	are loaded, otherwise reading the image will cause a deadlock!
 */
-static QImage &atlas(const QString &fileName)
+static const QImage *atlas(const QString &fileName)
 {
 	static QImage *img = new QImage(fileName);
-	return *img;
+	return img;
 }
+
+static const QImage *atlas2x(const QString &fileName)
+{
+	static QImage *img = new QImage(fileName);
+	return img;
+}
+
 
 Sprites::Sprite::Sprite(const QJsonObject &json)
 {
@@ -42,7 +49,17 @@ Sprites::Sprite::Sprite(const QJsonObject &json)
 bool Sprites::load(const QString &jsonFile, const QString &imageFile)
 {
 	_imageFile = imageFile;
+	return load(jsonFile, _sprites);
+}
 
+bool Sprites::load2x(const QString &jsonFile, const QString &imageFile)
+{
+	_image2xFile = imageFile;
+	return load(jsonFile, _sprites2x);
+}
+
+bool Sprites::load(const QString &jsonFile, QMap<QString, Sprite> &map)
+{
 	QFile file(jsonFile);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		qCritical() << jsonFile << ": error opening file";
@@ -64,7 +81,7 @@ bool Sprites::load(const QString &jsonFile, const QString &imageFile)
 		if (val.isObject()) {
 			Sprite s(val.toObject());
 			if (s.rect().isValid())
-				_sprites.insert(it.key(), s);
+				map.insert(it.key(), s);
 			else
 				qWarning() << it.key() << ": invalid sprite definition";
 		} else
@@ -74,20 +91,36 @@ bool Sprites::load(const QString &jsonFile, const QString &imageFile)
 	return true;
 }
 
-QImage Sprites::icon(const QString &name) const
+QImage Sprites::icon(const QString &name, bool hidpi) const
 {
-	if (_imageFile.isNull())
-		return QImage();
-	const QImage &img = atlas(_imageFile);
-	if (img.isNull())
+	qreal ratio;
+	const QImage *img;
+	const QMap<QString, Sprite> *map;
+
+	if (hidpi && !_image2xFile.isNull()) {
+		img = atlas2x(_image2xFile);
+		map = &_sprites2x;
+		ratio = 2;
+	} else if (!_imageFile.isNull()) {
+		img = atlas(_imageFile);
+		map = &_sprites;
+		ratio = 1;
+	} else
 		return QImage();
 
-	QMap<QString, Sprite>::const_iterator it = _sprites.find(name);
-	if (it == _sprites.constEnd())
+	if (img->isNull())
 		return QImage();
 
-	if (!img.rect().contains(it->rect()))
+
+	QMap<QString, Sprite>::const_iterator it = map->find(name);
+	if (it == map->constEnd())
 		return QImage();
 
-	return img.copy(it->rect());
+	if (!img->rect().contains(it->rect()))
+		return QImage();
+
+	QImage ret(img->copy(it->rect()));
+	ret.setDevicePixelRatio(ratio);
+
+	return ret;
 }

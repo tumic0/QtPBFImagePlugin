@@ -34,8 +34,7 @@ public:
 		Auto
 	};
 
-	Text(const QSize &size)
-	  : _sceneRect(QRectF(QPointF(0, 0), size)) {}
+	Text(const QSize &size) : _sceneRect(QRectF(QPointF(0, 0), size)) {}
 	~Text();
 
 	void setFont(const QFont &font) {_font = font;}
