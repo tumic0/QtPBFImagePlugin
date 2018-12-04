@@ -9,24 +9,25 @@ class Sprites
 {
 public:
 	bool load(const QString &jsonFile, const QString &imageFile);
-	bool load2x(const QString &jsonFile, const QString &imageFile);
 
-	QImage icon(const QString &name, bool hidpi) const;
+	bool isNull() const {return _imageFile.isNull();}
+	QImage icon(const QString &name) const;
 
 private:
 	class Sprite {
 	public:
 		Sprite(const QJsonObject &json);
+
 		const QRect &rect() const {return _rect;}
+		qreal pixelRatio() const {return _pixelRatio;}
 
 	private:
 		QRect _rect;
+		qreal _pixelRatio;
 	};
 
-	bool load(const QString &jsonFile, QMap<QString, Sprite> &map);
-
-	QMap<QString, Sprite> _sprites, _sprites2x;
-	QString _imageFile, _image2xFile;
+	QMap<QString, Sprite> _sprites;
+	QString _imageFile;
 };
 
 #endif // SPRITES_H

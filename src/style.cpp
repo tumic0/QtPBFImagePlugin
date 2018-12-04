@@ -223,8 +223,8 @@ QPen Style::Layer::Paint::pen(Type type, int zoom) const
 	return pen;
 }
 
-QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites,
-  bool hidpi) const
+QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites)
+  const
 {
 	QColor color;
 	QBrush brush(Qt::NoBrush);
@@ -237,7 +237,7 @@ QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites,
 				brush = QBrush(color);
 			pattern = _fillPattern.value(zoom);
 			if (!pattern.isNull())
-				brush.setTextureImage(sprites.icon(pattern, hidpi));
+				brush.setTextureImage(sprites.icon(pattern));
 			break;
 		case Background:
 			color = _backgroundColor.value(zoom);
@@ -245,7 +245,7 @@ QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites,
 				brush = QBrush(color);
 			pattern = _fillPattern.value(zoom);
 			if (!pattern.isNull())
-				brush.setTextureImage(sprites.icon(pattern, hidpi));
+				brush.setTextureImage(sprites.icon(pattern));
 			break;
 		default:
 			break;
@@ -449,8 +449,7 @@ void Style::Layer::setPathPainter(Tile &tile, const Sprites &sprites) const
 	pen.setJoinStyle(_layout.lineJoin(zoom));
 	pen.setCapStyle(_layout.lineCap(zoom));
 
-	bool hidpi = qMax(tile.scale().x(), tile.scale().y()) > 1.0 ? true : false;
-	QBrush brush(_paint.brush(_type, zoom, sprites, hidpi));
+	QBrush brush(_paint.brush(_type, zoom, sprites));
 
 	p.setRenderHint(QPainter::Antialiasing, _paint.antialias(_type, zoom));
 	p.setPen(pen);
@@ -480,8 +479,25 @@ void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
 		return;
 
 	QString icon = _layout.icon(tile.zoom(), tags);
-	bool hidpi = qMax(tile.scale().x(), tile.scale().y()) > 1.0 ? true : false;
-	tile.text().addLabel(text, sprites.icon(icon, hidpi), path);
+	tile.text().addLabel(text, sprites.icon(icon), path);
+}
+
+static bool loadSprites(const QDir &styleDir, const QString &json,
+  const QString &img, Sprites &sprites)
+{
+	QString spritesJSON(styleDir.filePath(json));
+
+	if (QFileInfo::exists(spritesJSON)) {
+		QString spritesImg(styleDir.filePath(img));
+		if (QFileInfo::exists(spritesImg))
+			return sprites.load(spritesJSON, spritesImg);
+		else {
+			qCritical() << spritesImg << ": no such file";
+			return false;
+		}
+	}
+
+	return true;
 }
 
 bool Style::load(const QString &fileName)
@@ -512,26 +528,9 @@ bool Style::load(const QString &fileName)
 	for (int i = 0; i < _layers.size(); i++)
 		_sourceLayers.append(_layers.at(i).sourceLayer());
 
-
 	QDir styleDir = QFileInfo(fileName).absoluteDir();
-
-	QString spritesJSON(styleDir.filePath("sprite.json"));
-	if (QFileInfo::exists(spritesJSON)) {
-		QString spritesImg(styleDir.filePath("sprite.png"));
-		if (QFileInfo::exists(spritesImg))
-			_sprites.load(spritesJSON, spritesImg);
-		else
-			qCritical() << spritesImg << ": no such file";
-	}
-
-	QString sprites2xJSON(styleDir.filePath("sprite@2x.json"));
-	if (QFileInfo::exists(sprites2xJSON)) {
-		QString sprites2xImg(styleDir.filePath("sprite@2x.png"));
-		if (QFileInfo::exists(sprites2xImg))
-			_sprites.load2x(sprites2xJSON, sprites2xImg);
-		else
-			qCritical() << sprites2xImg << ": no such file";
-	}
+	loadSprites(styleDir, "sprite.json", "sprite.png", _sprites);
+	loadSprites(styleDir, "sprite@2x.json", "sprite@2x.png", _sprites2x);
 
 	return true;
 }
@@ -539,22 +538,26 @@ bool Style::load(const QString &fileName)
 void Style::setupLayer(Tile &tile, int layer) const
 {
 	const Layer &sl = _layers.at(layer);
+	const Sprites &sprites = (tile.scale().x() > 1.0 || tile.scale().y() > 1.0)
+	  && !_sprites2x.isNull() ? _sprites2x : _sprites;
 
 	if (sl.isSymbol())
 		sl.setTextProperties(tile);
 	else if (sl.isPath())
-		sl.setPathPainter(tile, _sprites);
+		sl.setPathPainter(tile, sprites);
 }
 
 void Style::drawFeature(Tile &tile, int layer, const QPainterPath &path,
   const QVariantHash &tags) const
 {
 	const Layer &sl = _layers.at(layer);
+	const Sprites &sprites = (tile.scale().x() > 1.0 || tile.scale().y() > 1.0)
+	  && !_sprites2x.isNull() ? _sprites2x : _sprites;
 
 	if (sl.isPath())
 		tile.painter().drawPath(path);
 	else if (sl.isSymbol())
-		sl.addSymbol(tile, path, tags, _sprites);
+		sl.addSymbol(tile, path, tags, sprites);
 }
 
 void Style::drawBackground(Tile &tile) const
