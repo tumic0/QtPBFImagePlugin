@@ -4,6 +4,8 @@
 #include <QList>
 #include <QPointF>
 #include <QColor>
+#include <QPair>
+#include <QString>
 
 class QJsonObject;
 
