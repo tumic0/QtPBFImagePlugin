@@ -1,5 +1,6 @@
 #include <QFontMetrics>
 #include <QPainter>
+#include <QSet>
 #include "text.h"
 #include "textpointitem.h"
 #include "textpathitem.h"
