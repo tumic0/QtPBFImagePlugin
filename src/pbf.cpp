@@ -12,9 +12,9 @@
 #define LINE_TO    2
 #define CLOSE_PATH 7
 
-#define POLYGON vector_tile::Tile_GeomType::Tile_GeomType_POLYGON
-#define LINESTRING vector_tile::Tile_GeomType::Tile_GeomType_LINESTRING
-#define POINT vector_tile::Tile_GeomType::Tile_GeomType_POINT
+#define POLYGON vector_tile::Tile_GeomType_POLYGON
+#define LINESTRING vector_tile::Tile_GeomType_LINESTRING
+#define POINT vector_tile::Tile_GeomType_POINT
 
 
 static QVariant value(const vector_tile::Tile_Value &val)
