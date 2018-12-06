@@ -3,6 +3,8 @@
 
 #include <QObject>
 #include <QString>
+#include <QVector>
+#include <QPair>
 #include <QVariantHash>
 #include <QStringList>
 #include <QSet>
@@ -16,6 +18,8 @@
 
 class QPainter;
 class QPainterPath;
+class QJsonArray;
+class QJsonObject;
 class Tile;
 
 class Style : public QObject

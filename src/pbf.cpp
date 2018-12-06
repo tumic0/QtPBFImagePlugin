@@ -1,4 +1,5 @@
 #include <QByteArray>
+#include <QImage>
 #include <QPainter>
 #include <QDebug>
 #include <QVariantHash>
@@ -70,7 +71,7 @@ private:
 	const vector_tile::Tile_Feature *_data;
 };
 
-bool cmp(const Feature &f1, const Feature &f2)
+static bool cmp(const Feature &f1, const Feature &f2)
 {
 	return f1.data()->id() < f2.data()->id();
 }
@@ -113,8 +114,8 @@ static inline QPoint parameters(quint32 v1, quint32 v2)
 	return QPoint(zigzag32decode(v1), zigzag32decode(v2));
 }
 
-static void drawFeature(const Feature &feature, Style *style, int styleLayer,
-  const QSizeF &factor, Tile &tile)
+static void drawFeature(const Feature &feature, const Style *style,
+  int styleLayer, const QSizeF &factor, Tile &tile)
 {
 	if (!style->match(tile.zoom(), styleLayer, feature.tags()))
 		return;
@@ -155,7 +156,7 @@ static void drawFeature(const Feature &feature, Style *style, int styleLayer,
 		style->drawFeature(tile, styleLayer, path, feature.tags());
 }
 
-static void drawLayer(const Layer &layer, Style *style, int styleLayer,
+static void drawLayer(const Layer &layer, const Style *style, int styleLayer,
   Tile &tile)
 {
 	if (layer.data()->version() > 2)
@@ -172,7 +173,7 @@ static void drawLayer(const Layer &layer, Style *style, int styleLayer,
 	tile.painter().restore();
 }
 
-bool PBF::render(const QByteArray &data, int zoom, Style *style,
+bool PBF::render(const QByteArray &data, int zoom, const Style *style,
   const QPointF &scale, QImage *image)
 {
 	vector_tile::Tile tile;

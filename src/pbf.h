@@ -1,14 +1,14 @@
 #ifndef PBF_H
 #define PBF_H
 
-#include <QImage>
-
 class QByteArray;
+class QImage;
 class Style;
+class QPointF;
 
 namespace PBF
 {
-	bool render(const QByteArray &data, int zoom, Style *style,
+	bool render(const QByteArray &data, int zoom, const Style *style,
 	  const QPointF &scale, QImage *render);
 }
 

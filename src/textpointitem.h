@@ -1,11 +1,9 @@
 #ifndef TEXTPOINTITEM_H
 #define TEXTPOINTITEM_H
 
-#include <QPen>
-#include <QFont>
-#include <QString>
-#include "textitem.h"
+#include <QImage>
 #include "text.h"
+#include "textitem.h"
 
 class TextPointItem : public TextItem
 {

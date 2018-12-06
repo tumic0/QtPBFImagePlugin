@@ -1,8 +1,13 @@
 #ifndef TEXTITEM_H
 #define TEXTITEM_H
 
+#include <QString>
 #include <QPainterPath>
+#include <QPen>
 #include <QFont>
+#include <QRectF>
+
+class QPainter;
 
 class TextItem
 {

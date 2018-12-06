@@ -4,6 +4,9 @@
 #include <QRect>
 #include <QMap>
 #include <QImage>
+#include <QString>
+
+class QJsonObject;
 
 class Sprites
 {

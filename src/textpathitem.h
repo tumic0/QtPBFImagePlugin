@@ -1,10 +1,7 @@
 #ifndef TEXTPATHITEM_H
 #define TEXTPATHITEM_H
 
-#include <QFont>
-#include <QString>
 #include "textitem.h"
-#include "text.h"
 
 class TextPathItem : public TextItem
 {
