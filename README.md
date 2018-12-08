@@ -63,7 +63,9 @@ make
 
 ## Install
 Copy the plugin to the system Qt image plugins path to make it work. You may
-also set the QT_PLUGIN_PATH system variable before starting the application.
+also set the QT_PLUGIN_PATH system variable before starting the application. For
+Linux, there are RPM and DEB [packages](https://build.opensuse.org/project/show/home:tumic:QtPBFImagePlugin)
+for most common distros available on OBS.
 
 ## Limitations
 Text PBF features must have a unique id (OpenMapTiles >= v3.7) for the text layout
