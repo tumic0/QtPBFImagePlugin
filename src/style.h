@@ -144,8 +144,6 @@ private:
 			  const;
 			qreal opacity(Layer::Type type, int zoom) const;
 			bool antialias(Layer::Type type, int zoom) const;
-			QString fillPattern(int zoom) const
-			  {return _fillPattern.value(zoom);}
 
 		private:
 			FunctionC _textColor;
