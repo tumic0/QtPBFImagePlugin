@@ -87,6 +87,5 @@ A picture is worth a thousand words. Data and styles from https://openmaptiles.o
 ![klokantech-basic 13](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-13.png)
 ![klokantech-basic 14](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-14.png)
 
-## Applications
-Applications using QtPBFImagePlugin:
+## Applications using QtPBFImagePlugin
 * [GPXSee](https://www.gpxsee.org)
