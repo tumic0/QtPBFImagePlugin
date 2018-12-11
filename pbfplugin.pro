@@ -32,7 +32,8 @@ SOURCES += src/pbfplugin.cpp \
     src/textpathitem.cpp \
     src/textpointitem.cpp \
     src/font.cpp \
-    src/sprites.cpp
+    src/sprites.cpp \
+    src/textitem.cpp
 RESOURCES += pbfplugin.qrc
 
 unix:!macx{

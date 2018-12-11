@@ -5,37 +5,32 @@
 
 #define FLAGS (Qt::AlignCenter | Qt::TextWordWrap | Qt::TextDontClip)
 
-QRectF TextPointItem::exactBoundingRect(const QString &str,
-  const QFont &font, int maxWidth)
+QRectF TextPointItem::exactBoundingRect() const
 {
-	QFontMetrics fm(font);
-	int limit = font.pixelSize() * maxWidth;
+	QFontMetrics fm(font());
+	int limit = font().pixelSize() * _maxWidth;
 	// Italic fonts overflow the computed bounding rect, so reduce it
 	// a little bit.
-	if (font.italic())
-		limit -= font.pixelSize() / 2.0;
+	if (font().italic())
+		limit -= font().pixelSize() / 2.0;
 
-	QRect br = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, str);
+	QRect br = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, text());
 	Q_ASSERT(br.isValid());
 	// Expand the bounding rect back to the real content size
-	if (font.italic())
-		br.adjust(-font.pixelSize() / 4.0, 0, font.pixelSize() / 4.0, 0);
+	if (font().italic())
+		br.adjust(-font().pixelSize() / 4.0, 0, font().pixelSize() / 4.0, 0);
 
 	return br;
 }
 
-QRectF TextPointItem::fuzzyBoundingRect(const QString &str,
-  const QFont &font, int maxWidth)
+QRectF TextPointItem::fuzzyBoundingRect() const
 {
-	int limit = font.pixelSize() * maxWidth;
-	qreal cw = avgCharWidth(str, font);
-	qreal lh = font.pixelSize() * 1.25;
+	int limit = font().pixelSize() * _maxWidth;
+	qreal cw = avgCharWidth();
+	qreal lh = font().pixelSize() * 1.25;
 	int width = 0, lines = 0;
 
-	if (font.italic())
-		limit -= font.pixelSize() / 2.0;
-
-	QStringList l(str.split('\n'));
+	QStringList l(text().split('\n'));
 	for (int i = 0; i < l.size(); i++) {
 		int lw = (int)(l.at(i).length() * cw);
 		if (lw > limit) {
@@ -69,11 +64,11 @@ QRectF TextPointItem::fuzzyBoundingRect(const QString &str,
 }
 
 
-QRectF TextPointItem::computeTextRect(BoundingRectFunction brf) const
+QRectF TextPointItem::computeTextRect(bool exact) const
 {
 	QRectF iconRect = _icon.isNull() ? QRectF()
 	  : QRectF(QPointF(0, 0), QSizeF(_icon.size()) / _icon.devicePixelRatioF());
-	QRectF textRect = brf(text(), font(), _maxWidth);
+	QRectF textRect = exact ? exactBoundingRect() : fuzzyBoundingRect();
 
 	switch (_anchor) {
 		case Text::Center:
@@ -102,11 +97,10 @@ QRectF TextPointItem::computeTextRect(BoundingRectFunction brf) const
 
 TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
   const QFont &font, int maxWidth, Text::Anchor anchor, const QImage &icon)
-  : TextItem(text), _pos(pos), _icon(icon), _maxWidth(maxWidth),
+  : TextItem(text, font), _pos(pos), _icon(icon), _maxWidth(maxWidth),
   _anchor(anchor)
 {
-	setFont(font);
-	_boundingRect = computeTextRect(fuzzyBoundingRect);
+	_boundingRect = computeTextRect(false);
 
 	if (!_icon.isNull()) {
 		QRectF iconRect(QPointF(0, 0), QSizeF(_icon.size())
@@ -126,12 +120,12 @@ void TextPointItem::paint(QPainter *painter) const
 	QRectF textRect;
 
 	if (!_icon.isNull()) {
-		textRect = computeTextRect(exactBoundingRect);
+		textRect = computeTextRect(true);
 		painter->drawImage(_pos - QPointF(_icon.width()
 		  / _icon.devicePixelRatioF() / 2, _icon.height()
 		  / _icon.devicePixelRatioF() / 2), _icon);
 	} else
-		textRect = computeTextRect(fuzzyBoundingRect);
+		textRect = _boundingRect;
 
 	painter->setFont(font());
 	painter->setPen(pen());

@@ -16,14 +16,9 @@ public:
 	void paint(QPainter *painter) const;
 
 private:
-	typedef QRectF (*BoundingRectFunction)(const QString &, const QFont &, int);
-
-	static QRectF exactBoundingRect(const QString &str, const QFont &font,
-	  int maxWidth);
-	static QRectF fuzzyBoundingRect(const QString &str, const QFont &font,
-	  int maxWidth);
-
-	QRectF computeTextRect(BoundingRectFunction brf) const;
+	QRectF exactBoundingRect() const;
+	QRectF fuzzyBoundingRect() const;
+	QRectF computeTextRect(bool exact) const;
 
 	QPointF _pos;
 	QPainterPath _shape;

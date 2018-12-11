@@ -134,9 +134,9 @@ static bool reverse(const QPainterPath &path)
 
 TextPathItem::TextPathItem(const QString &text, const QPainterPath &path,
   const QFont &font, int maxAngle, const QRectF &tileRect)
-  : TextItem(text)
+  : TextItem(text, font)
 {
-	int cw = avgCharWidth(text, font);
+	int cw = avgCharWidth();
 	int textWidth = text.size() * cw;
 	if (textWidth > path.length())
 		return;
@@ -146,7 +146,6 @@ TextPathItem::TextPathItem(const QString &text, const QPainterPath &path,
 		return;
 
 	_path = reverse(tp) ? tp.toReversed() : tp;
-	setFont(font);
 
 	QPainterPathStroker s;
 	s.setWidth(font.pixelSize());
