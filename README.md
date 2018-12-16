@@ -68,7 +68,9 @@ Linux, there are RPM and DEB [packages](https://build.opensuse.org/project/show/
 for most common distros available on OBS.
 
 ## Limitations
-Text PBF features must have a unique id (OpenMapTiles >= v3.7) for the text layout
+* Only data, that is part of the PBF file is displayed. External layers defined in the
+style are ignored.
+* Text PBF features must have a unique id (OpenMapTiles >= v3.7) for the text layout
 algorithm to work properly.
 
 ## Status
