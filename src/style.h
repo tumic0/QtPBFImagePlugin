@@ -11,6 +11,7 @@
 #include <QPen>
 #include <QBrush>
 #include <QFont>
+#include "config.h"
 #include "text.h"
 #include "function.h"
 #include "sprites.h"
@@ -167,9 +168,14 @@ private:
 		Paint _paint;
 	};
 
+	const Sprites &sprites(const QPointF &scale) const;
+
 	QVector<Layer> _layers;
 	QStringList _sourceLayers;
-	Sprites _sprites, _sprites2x;
+	Sprites _sprites;
+#ifdef ENABLE_HIDPI
+	Sprites _sprites2x;
+#endif // QT >= 5.6
 };
 
 #endif // STYLE_H

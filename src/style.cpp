@@ -530,34 +530,43 @@ bool Style::load(const QString &fileName)
 
 	QDir styleDir = QFileInfo(fileName).absoluteDir();
 	loadSprites(styleDir, "sprite.json", "sprite.png", _sprites);
+#ifdef ENABLE_HIDPI
 	loadSprites(styleDir, "sprite@2x.json", "sprite@2x.png", _sprites2x);
+#endif // ENABLE_HIDPI
 
 	return true;
+}
+
+const Sprites &Style::sprites(const QPointF &scale) const
+{
+#ifdef ENABLE_HIDPI
+	return (scale.x() > 1.0 || scale.y() > 1.0)
+	  && !_sprites2x.isNull() ? _sprites2x : _sprites;
+#else // ENABLE_HIDPI
+	Q_UNUSED(scale);
+	return _sprites;
+#endif // ENABLE_HIDPI
 }
 
 void Style::setupLayer(Tile &tile, int layer) const
 {
 	const Layer &sl = _layers.at(layer);
-	const Sprites &sprites = (tile.scale().x() > 1.0 || tile.scale().y() > 1.0)
-	  && !_sprites2x.isNull() ? _sprites2x : _sprites;
 
 	if (sl.isSymbol())
 		sl.setTextProperties(tile);
 	else if (sl.isPath())
-		sl.setPathPainter(tile, sprites);
+		sl.setPathPainter(tile, sprites(tile.scale()));
 }
 
 void Style::drawFeature(Tile &tile, int layer, const QPainterPath &path,
   const QVariantHash &tags) const
 {
 	const Layer &sl = _layers.at(layer);
-	const Sprites &sprites = (tile.scale().x() > 1.0 || tile.scale().y() > 1.0)
-	  && !_sprites2x.isNull() ? _sprites2x : _sprites;
 
 	if (sl.isPath())
 		tile.painter().drawPath(path);
 	else if (sl.isSymbol())
-		sl.addSymbol(tile, path, tags, sprites);
+		sl.addSymbol(tile, path, tags, sprites(tile.scale()));
 }
 
 void Style::drawBackground(Tile &tile) const

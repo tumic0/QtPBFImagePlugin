@@ -1,7 +1,8 @@
 language: c++
+dist: xenial
 
 os:
-#  - linux
+  - linux
   - osx
 
 env:
