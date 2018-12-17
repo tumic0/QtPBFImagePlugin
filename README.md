@@ -40,7 +40,7 @@ you will get 512x512px tiles with a pixel ratio of 2 (= HiDPI tiles).
 
 ## Build
 ### Requirements
-* Qt >= 5.6
+* Qt >= 5.4 (5.6 for HiDPI support)
 * Google Protocol Buffers (protobuf-lite)
 * Zlib
 
