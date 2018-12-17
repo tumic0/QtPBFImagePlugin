@@ -1,7 +1,7 @@
 language: c++
 
 os:
-  - linux
+#  - linux
   - osx
 
 env:
@@ -16,5 +16,6 @@ install:
 
 script:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then PATH=/usr/local/opt/qt/bin/:${PATH}; fi
-  - qmake pbfplugin.pro
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then qmake PROTOBUF=/usr/local pbfplugin.pro; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then qmake pbfplugin.pro; fi
   - make
