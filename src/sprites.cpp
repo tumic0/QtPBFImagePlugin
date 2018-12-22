@@ -83,6 +83,9 @@ bool Sprites::load(const QString &jsonFile, const QString &imageFile)
 
 QImage Sprites::icon(const QString &name) const
 {
+	if (_imageFile.isEmpty())
+		return QImage();
+
 	const QImage *img = atlas(_imageFile);
 	if (img->isNull())
 		return QImage();
