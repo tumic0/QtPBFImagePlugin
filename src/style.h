@@ -11,6 +11,7 @@
 #include <QPen>
 #include <QBrush>
 #include <QFont>
+#include "pbf.h"
 #include "config.h"
 #include "text.h"
 #include "function.h"
@@ -29,16 +30,7 @@ public:
 	Style(QObject *parent = 0) : QObject(parent) {}
 
 	bool load(const QString &fileName);
-
-	const QStringList &sourceLayers() const
-	  {return _sourceLayers;}
-
-	bool match(int zoom, int layer, const QVariantHash &tags) const
-	  {return _layers.at(layer).match(zoom, tags);}
-	void drawBackground(Tile &tile) const;
-	void setupLayer(Tile &tile, int layer) const;
-	void drawFeature(Tile &tile, int layer, const QPainterPath &path,
-	  const QVariantHash &tags) const;
+	void render(const PBF &data, Tile &tile) const;
 
 private:
 	class Layer {
@@ -51,11 +43,11 @@ private:
 		bool isBackground() const {return (_type == Background);}
 		bool isSymbol() const {return (_type == Symbol);}
 
-		bool match(int zoom, const QVariantHash &tags) const;
+		bool match(int zoom, const PBF::Feature &feature) const;
 		void setPathPainter(Tile &tile, const Sprites &sprites) const;
 		void setTextProperties(Tile &tile) const;
 		void addSymbol(Tile &tile, const QPainterPath &path,
-		  const QVariantHash &tags, const Sprites &sprites) const;
+		  const PBF::Feature &feature, const Sprites &sprites) const;
 
 	private:
 		enum Type {
@@ -71,13 +63,13 @@ private:
 			Filter() : _type(None) {}
 			Filter(const QJsonArray &json);
 
-			bool match(const QVariantHash &tags) const;
+			bool match(const PBF::Feature &feature) const;
 		private:
 			enum Type {
 				None, Unknown,
 				EQ, NE, GE, GT, LE, LT,
 				All, Any,
-				In, Has
+				In, Has, GeometryType
 			};
 
 			Type _type;
@@ -91,7 +83,7 @@ private:
 		public:
 			Template() {}
 			Template(const FunctionS &str) : _field(str) {}
-			QString value(int zoom, const QVariantHash &tags) const;
+			QString value(int zoom, const PBF::Feature &feature) const;
 
 		private:
 			FunctionS _field;
@@ -107,10 +99,10 @@ private:
 			  {return _textMaxWidth.value(zoom);}
 			qreal maxTextAngle(int zoom) const
 			  {return _textMaxAngle.value(zoom);}
-			QString text(int zoom, const QVariantHash &tags) const
-			  {return _text.value(zoom, tags).trimmed();}
-			QString icon(int zoom, const QVariantHash &tags) const
-			  {return _icon.value(zoom, tags);}
+			QString text(int zoom, const PBF::Feature &feature) const
+			  {return _text.value(zoom, feature).trimmed();}
+			QString icon(int zoom, const PBF::Feature &feature) const
+			  {return _icon.value(zoom, feature);}
 			QFont font(int zoom) const;
 			Qt::PenCapStyle lineCap(int zoom) const;
 			Qt::PenJoinStyle lineJoin(int zoom) const;
@@ -170,8 +162,14 @@ private:
 
 	const Sprites &sprites(const QPointF &scale) const;
 
+	void drawBackground(Tile &tile) const;
+	void setupLayer(Tile &tile, const Layer &layer) const;
+	void drawFeature(const PBF::Feature &feature, const Layer &layer,
+	  Tile &tile, const QSizeF &factor) const;
+	void drawLayer(const PBF::Layer &pbfLayer, const Layer &styleLayer,
+	  Tile &tile) const;
+
 	QVector<Layer> _layers;
-	QStringList _sourceLayers;
 	Sprites _sprites;
 #ifdef ENABLE_HIDPI
 	Sprites _sprites2x;

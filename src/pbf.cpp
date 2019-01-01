@@ -1,22 +1,24 @@
-#include <QByteArray>
-#include <QImage>
-#include <QPainter>
-#include <QDebug>
-#include <QVariantHash>
-#include "vector_tile.pb.h"
-#include "style.h"
-#include "tile.h"
 #include "pbf.h"
-
-
-#define MOVE_TO    1
-#define LINE_TO    2
-#define CLOSE_PATH 7
 
 #define POLYGON vector_tile::Tile_GeomType_POLYGON
 #define LINESTRING vector_tile::Tile_GeomType_LINESTRING
 #define POINT vector_tile::Tile_GeomType_POINT
 
+#define MOVE_TO    1
+#define LINE_TO    2
+#define CLOSE_PATH 7
+
+
+static inline qint32 zigzag32decode(quint32 value)
+{
+	return static_cast<qint32>((value >> 1u) ^ static_cast<quint32>(
+	  -static_cast<qint32>(value & 1u)));
+}
+
+static inline QPoint parameters(quint32 v1, quint32 v2)
+{
+	return QPoint(zigzag32decode(v1), zigzag32decode(v2));
+}
 
 static QVariant value(const vector_tile::Tile_Value &val)
 {
@@ -38,100 +40,37 @@ static QVariant value(const vector_tile::Tile_Value &val)
 		return QVariant();
 }
 
-class Feature
+const QVariant *PBF::Feature::value(const QString &key) const
 {
-public:
-	Feature() : _data(0) {}
-	Feature(const vector_tile::Tile_Feature *data, const QVector<QString> *keys,
-	  const QVector<QVariant> *values) : _data(data)
-	{
-		for (int i = 0; i < data->tags_size(); i = i + 2)
-			_tags.insert(keys->at(data->tags(i)), values->at(data->tags(i+1)));
+	const KeyHash &keys(_layer->keys());
+	KeyHash::const_iterator it(keys.find(key));
+	if (it == keys.constEnd())
+		return 0;
 
-		switch (data->type()) {
-			case POLYGON:
-				_tags.insert("$type", QVariant("Polygon"));
-				break;
-			case LINESTRING:
-				_tags.insert("$type", QVariant("LineString"));
-				break;
-			case POINT:
-				_tags.insert("$type", QVariant("Point"));
-				break;
-			default:
-				break;
-		}
-	}
+	const google::protobuf::RepeatedField<google::protobuf::uint32>
+	  &tags(_data->tags());
+	google::protobuf::uint32 index = *it;
+	for (int i = 0; i < _data->tags_size(); i = i + 2)
+		if (tags[i] == index)
+			return &(_layer->values().at(tags[i+1]));
 
-	const QVariantHash &tags() const {return _tags;}
-	const vector_tile::Tile_Feature *data() const {return _data;}
-
-private:
-	QVariantHash _tags;
-	const vector_tile::Tile_Feature *_data;
-};
-
-static bool cmp(const Feature &f1, const Feature &f2)
-{
-	return f1.data()->id() < f2.data()->id();
+	return 0;
 }
 
-class Layer
+QPainterPath PBF::Feature::path(const QSizeF &factor) const
 {
-public:
-	Layer(const vector_tile::Tile_Layer *data) : _data(data)
-	{
-		QVector<QString> keys;
-		QVector<QVariant> values;
-
-		for (int i = 0; i < data->keys_size(); i++)
-			keys.append(QString::fromStdString(data->keys(i)));
-		for (int i = 0; i < data->values_size(); i++)
-			values.append(value(data->values(i)));
-
-		_features.reserve(data->features_size());
-		for (int i = 0; i < data->features_size(); i++)
-			_features.append(Feature(&(data->features(i)), &keys, &values));
-		qSort(_features.begin(), _features.end(), cmp);
-	}
-
-	const QVector<Feature> &features() const {return _features;}
-	const vector_tile::Tile_Layer *data() const {return _data;}
-
-private:
-	const vector_tile::Tile_Layer *_data;
-	QVector<Feature> _features;
-};
-
-static inline qint32 zigzag32decode(quint32 value)
-{
-	return static_cast<qint32>((value >> 1u) ^ static_cast<quint32>(
-	  -static_cast<qint32>(value & 1u)));
-}
-
-static inline QPoint parameters(quint32 v1, quint32 v2)
-{
-	return QPoint(zigzag32decode(v1), zigzag32decode(v2));
-}
-
-static void drawFeature(const Feature &feature, const Style *style,
-  int styleLayer, const QSizeF &factor, Tile &tile)
-{
-	if (!style->match(tile.zoom(), styleLayer, feature.tags()))
-		return;
-
 	QPoint cursor;
 	QPainterPath path;
 
-	for (int i = 0; i < feature.data()->geometry_size(); i++) {
-		quint32 g = feature.data()->geometry(i);
+	for (int i = 0; i < _data->geometry_size(); i++) {
+		quint32 g = _data->geometry(i);
 		unsigned cmdId = g & 0x7;
 		unsigned cmdCount = g >> 3;
 
 		if (cmdId == MOVE_TO) {
 			for (unsigned j = 0; j < cmdCount; j++) {
-				QPoint offset = parameters(feature.data()->geometry(i+1),
-				  feature.data()->geometry(i+2));
+				QPoint offset = parameters(_data->geometry(i+1),
+				  _data->geometry(i+2));
 				i += 2;
 				cursor += offset;
 				path.moveTo(QPointF(cursor.x() * factor.width(),
@@ -139,8 +78,8 @@ static void drawFeature(const Feature &feature, const Style *style,
 			}
 		} else if (cmdId == LINE_TO) {
 			for (unsigned j = 0; j < cmdCount; j++) {
-				QPoint offset = parameters(feature.data()->geometry(i+1),
-				  feature.data()->geometry(i+2));
+				QPoint offset = parameters(_data->geometry(i+1),
+				  _data->geometry(i+2));
 				i += 2;
 				cursor += offset;
 				path.lineTo(QPointF(cursor.x() * factor.width(),
@@ -152,60 +91,35 @@ static void drawFeature(const Feature &feature, const Style *style,
 		}
 	}
 
-	if (path.elementCount())
-		style->drawFeature(tile, styleLayer, path, feature.tags());
+	return path;
 }
 
-static void drawLayer(const Layer &layer, const Style *style, int styleLayer,
-  Tile &tile)
+PBF::Layer::Layer(const vector_tile::Tile_Layer *data) : _data(data)
 {
-	if (layer.data()->version() > 2)
-		return;
+	_keys.reserve(data->keys_size());
+	for (int i = 0; i < data->keys_size(); i++)
+		_keys.insert(QString::fromStdString(data->keys(i)), i);
+	_values.reserve(data->values_size());
+	for (int i = 0; i < data->values_size(); i++)
+		_values.append(value(data->values(i)));
 
-	QSizeF factor(tile.size().width() / tile.scale().x() /
-	  (qreal)layer.data()->extent(), tile.size().height() / tile.scale().y()
-	  / (qreal)layer.data()->extent());
-
-	tile.painter().save();
-	style->setupLayer(tile, styleLayer);
-	for (int i = 0; i < layer.features().size(); i++)
-		drawFeature(layer.features().at(i), style, styleLayer, factor, tile);
-	tile.painter().restore();
+	_features.reserve(data->features_size());
+	for (int i = 0; i < data->features_size(); i++)
+		_features.append(Feature(&(data->features(i)), this));
+	qSort(_features.begin(), _features.end());
 }
 
-bool PBF::render(const QByteArray &data, int zoom, const Style *style,
-  const QPointF &scale, QImage *image)
+PBF::PBF(const vector_tile::Tile &tile)
 {
-	vector_tile::Tile tile;
-	if (!tile.ParseFromArray(data.constData(), data.size())) {
-		qCritical() << "Invalid tile protocol buffer data";
-		return false;
-	}
-
-	Tile t(image, zoom, scale);
-
-	style->drawBackground(t);
-
-	// Prepare source layers
-	QMap<QString, Layer> layers;
 	for (int i = 0; i <  tile.layers_size(); i++) {
 		const vector_tile::Tile_Layer &layer = tile.layers(i);
-		QString name(QString::fromStdString(layer.name()));
-		if (style->sourceLayers().contains(name))
-			layers.insert(name, Layer(&layer));
+		_layers.insert(QString::fromStdString(layer.name()), new Layer(&layer));
 	}
+}
 
-	// Process source layers in order of style layers
-	for (int i = 0; i < style->sourceLayers().size(); i++) {
-		QMap<QString, Layer>::const_iterator it = layers.find(
-		  style->sourceLayers().at(i));
-		if (it == layers.constEnd())
-			continue;
-
-		drawLayer(*it, style, i, t);
-	}
-
-	t.text().render(&t.painter());
-
-	return true;
+PBF::~PBF()
+{
+	for (QHash<QString, Layer*>::iterator it = _layers.begin();
+	  it != _layers.end(); it++)
+		delete *it;
 }

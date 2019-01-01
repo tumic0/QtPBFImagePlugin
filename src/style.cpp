@@ -10,8 +10,21 @@
 #include "color.h"
 #include "font.h"
 #include "tile.h"
+#include "pbf.h"
 #include "style.h"
 
+
+static vector_tile::Tile_GeomType geometryType(const QString &str)
+{
+	if (str == "Point")
+		return vector_tile::Tile_GeomType_POINT;
+	else if (str == "LineString")
+		return vector_tile::Tile_GeomType_LINESTRING;
+	else if (str == "Polygon")
+		return vector_tile::Tile_GeomType_POLYGON;
+	else
+		return vector_tile::Tile_GeomType_UNKNOWN;
+}
 
 Style::Layer::Filter::Filter(const QJsonArray &json)
   : _type(Unknown), _not(false)
@@ -27,9 +40,15 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 	if (type == "==") {
 		if (json.size() != 3)
 			INVALID_FILTER(json);
-		_type = EQ;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(),
-		  json.at(2).toVariant());
+		if (json.at(1).toString() == "$type") {
+			_type = GeometryType;
+			_kv = QPair<QString, QVariant>(QString(),
+			  QVariant(geometryType(json.at(2).toString())));
+		} else {
+			_type = EQ;
+			_kv = QPair<QString, QVariant>(json.at(1).toString(),
+			  json.at(2).toVariant());
+		}
 	} else if (type == "!=") {
 		if (json.size() != 3)
 			INVALID_FILTER(json);
@@ -98,45 +117,68 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 		INVALID_FILTER(json);
 }
 
-bool Style::Layer::Filter::match(const QVariantHash &tags) const
+bool Style::Layer::Filter::match(const PBF::Feature &feature) const
 {
+	const QVariant *v;
+
 	switch (_type) {
 		case None:
 			return true;
 		case EQ:
-			return tags.value(_kv.first) == _kv.second;
+			if (!(v = feature.value(_kv.first)))
+				return false;
+			else
+				return *v == _kv.second;
 		case NE:
-			return tags.value(_kv.first) != _kv.second;
+			if (!(v = feature.value(_kv.first)))
+				return true;
+			else
+				return *v != _kv.second;
 		case GT:
-			return tags.value(_kv.first) > _kv.second;
+			if (!(v = feature.value(_kv.first)))
+				return false;
+			else
+				return *v > _kv.second;
 		case GE:
-			return tags.value(_kv.first) >= _kv.second;
+			if (!(v = feature.value(_kv.first)))
+				return false;
+			else
+				return *v >= _kv.second;
 		case LT:
-			return tags.value(_kv.first) < _kv.second;
+			if (!(v = feature.value(_kv.first)))
+				return false;
+			else
+				return *v < _kv.second;
 		case LE:
-			return tags.value(_kv.first) <= _kv.second;
+			if (!(v = feature.value(_kv.first)))
+				return false;
+			else
+				return *v <= _kv.second;
 		case In:
-			return _set.contains(tags.value(_kv.first).toString()) ^ _not;
+			if (!(v = feature.value(_kv.first)))
+				return _not;
+			else
+				return _set.contains((*v).toString()) ^ _not;
 		case Has:
-			return tags.contains(_kv.first) ^ _not;
+			return (feature.value(_kv.first) ? true : false) ^ _not;
 		case All:
-			for (int i = 0; i < _filters.size(); i++) {
-				if (!_filters.at(i).match(tags))
+			for (int i = 0; i < _filters.size(); i++)
+				if (!_filters.at(i).match(feature))
 					return false;
-			}
 			return true;
 		case Any:
-			for (int i = 0; i < _filters.size(); i++) {
-				if (_filters.at(i).match(tags))
+			for (int i = 0; i < _filters.size(); i++)
+				if (_filters.at(i).match(feature))
 					return true;
-			}
 			return false;
+		case GeometryType:
+			return feature.type() == _kv.second.toUInt();
 		default:
 			return false;
 	}
 }
 
-QString Style::Layer::Template::value(int zoom, const QVariantHash &tags) const
+QString Style::Layer::Template::value(int zoom, const PBF::Feature &feature) const
 {
 	QRegExp rx = QRegExp("\\{[^\\}]*\\}");
 	QString text(_field.value(zoom));
@@ -150,8 +192,8 @@ QString Style::Layer::Template::value(int zoom, const QVariantHash &tags) const
 	}
 	for (int i = 0; i < keys.size(); i++) {
 		const QString &key = keys.at(i);
-		const QVariant val = tags.value(key);
-		text.replace(QString("{%1}").arg(key), val.toString());
+		const QVariant *val = feature.value(key);
+		text.replace(QString("{%1}").arg(key), val ? val->toString() : "");
 	}
 
 	return text;
@@ -428,7 +470,7 @@ Style::Layer::Layer(const QJsonObject &json)
 		_paint = Paint(json["paint"].toObject());
 }
 
-bool Style::Layer::match(int zoom, const QVariantHash &tags) const
+bool Style::Layer::match(int zoom, const PBF::Feature &feature) const
 {
 	if (zoom >= 0) {
 		if (_minZoom > 0 && zoom < _minZoom)
@@ -437,7 +479,7 @@ bool Style::Layer::match(int zoom, const QVariantHash &tags) const
 			return false;
 	}
 
-	return _filter.match(tags);
+	return _filter.match(feature);
 }
 
 void Style::Layer::setPathPainter(Tile &tile, const Sprites &sprites) const
@@ -472,13 +514,13 @@ void Style::Layer::setTextProperties(Tile &tile) const
 }
 
 void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
-  const QVariantHash &tags, const Sprites &sprites) const
+  const PBF::Feature &feature, const Sprites &sprites) const
 {
-	QString text = _layout.text(tile.zoom(), tags);
+	QString text = _layout.text(tile.zoom(), feature);
 	if (text.isEmpty())
 		return;
 
-	QString icon = _layout.icon(tile.zoom(), tags);
+	QString icon = _layout.icon(tile.zoom(), feature);
 	tile.text().addLabel(text, sprites.icon(icon), path);
 }
 
@@ -525,9 +567,6 @@ bool Style::load(const QString &fileName)
 				_layers.append(Layer(layers[i].toObject()));
 	}
 
-	for (int i = 0; i < _layers.size(); i++)
-		_sourceLayers.append(_layers.at(i).sourceLayer());
-
 	QDir styleDir = QFileInfo(fileName).absoluteDir();
 	loadSprites(styleDir, "sprite.json", "sprite.png", _sprites);
 #ifdef ENABLE_HIDPI
@@ -548,25 +587,12 @@ const Sprites &Style::sprites(const QPointF &scale) const
 #endif // ENABLE_HIDPI
 }
 
-void Style::setupLayer(Tile &tile, int layer) const
+void Style::setupLayer(Tile &tile, const Layer &layer) const
 {
-	const Layer &sl = _layers.at(layer);
-
-	if (sl.isSymbol())
-		sl.setTextProperties(tile);
-	else if (sl.isPath())
-		sl.setPathPainter(tile, sprites(tile.scale()));
-}
-
-void Style::drawFeature(Tile &tile, int layer, const QPainterPath &path,
-  const QVariantHash &tags) const
-{
-	const Layer &sl = _layers.at(layer);
-
-	if (sl.isPath())
-		tile.painter().drawPath(path);
-	else if (sl.isSymbol())
-		sl.addSymbol(tile, path, tags, sprites(tile.scale()));
+	if (layer.isSymbol())
+		layer.setTextProperties(tile);
+	else if (layer.isPath())
+		layer.setPathPainter(tile, sprites(tile.scale()));
 }
 
 void Style::drawBackground(Tile &tile) const
@@ -586,4 +612,53 @@ void Style::drawBackground(Tile &tile) const
 
 	//tile.painter().setPen(Qt::red);
 	//tile.painter().drawRect(rect);
+}
+
+void Style::drawFeature(const PBF::Feature &feature, const Layer &layer,
+  Tile &tile, const QSizeF &factor) const
+{
+	if (!layer.match(tile.zoom(), feature))
+		return;
+
+	QPainterPath path(feature.path(factor));
+	if (!path.elementCount())
+		return;
+
+	if (layer.isPath())
+		tile.painter().drawPath(path);
+	else if (layer.isSymbol())
+		layer.addSymbol(tile, path, feature, sprites(tile.scale()));
+}
+
+void Style::drawLayer(const PBF::Layer &pbfLayer, const Layer &styleLayer,
+  Tile &tile) const
+{
+	if (pbfLayer.data()->version() > 2)
+		return;
+
+	QSizeF factor(tile.size().width() / tile.scale().x() /
+	  (qreal)pbfLayer.data()->extent(), tile.size().height() / tile.scale().y()
+	  / (qreal)pbfLayer.data()->extent());
+
+	tile.painter().save();
+	setupLayer(tile, styleLayer);
+	for (int i = 0; i < pbfLayer.features().size(); i++)
+		drawFeature(pbfLayer.features().at(i), styleLayer, tile, factor);
+	tile.painter().restore();
+}
+
+void Style::render(const PBF &data, Tile &tile) const
+{
+	drawBackground(tile);
+
+	for (int i = 0; i < _layers.size(); i++) {
+		QHash<QString, PBF::Layer*>::const_iterator it = data.layers().find(
+		  _layers.at(i).sourceLayer());
+		if (it == data.layers().constEnd())
+			continue;
+
+		drawLayer(**it, _layers.at(i), tile);
+	}
+
+	tile.text().render(&tile.painter());
 }

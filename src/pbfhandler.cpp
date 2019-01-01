@@ -1,8 +1,10 @@
 #include <QImage>
 #include <QIODevice>
 #include <QtEndian>
+#include <QDebug>
 #include "gzip.h"
-#include "pbf.h"
+#include "tile.h"
+#include "style.h"
 #include "pbfhandler.h"
 
 
@@ -61,6 +63,11 @@ bool PBFHandler::read(QImage *image)
 		ba = device()->readAll();
 	if (ba.isNull())
 		return false;
+	vector_tile::Tile data;
+	if (!data.ParseFromArray(ba.constData(), ba.size())) {
+		qCritical() << "Invalid PBF data";
+		return false;
+	}
 
 	bool ok;
 	int zoom = format().toInt(&ok);
@@ -71,8 +78,11 @@ bool PBFHandler::read(QImage *image)
 	  ? QPointF(_scaledSize.width() / TILE_SIZE, _scaledSize.height() / TILE_SIZE)
 	  : QPointF(1.0, 1.0);
 	*image = QImage(size, QImage::Format_ARGB32_Premultiplied);
+	Tile tile(image, ok ? zoom : -1, scale);
 
-	return PBF::render(ba, ok ? zoom : -1, _style, scale, image);
+	_style->render(data, tile);
+
+	return true;
 }
 
 bool PBFHandler::supportsOption(ImageOption option) const
