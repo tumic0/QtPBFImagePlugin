@@ -130,7 +130,8 @@ void TextPointItem::paint(QPainter *painter) const
 	QRectF textRect;
 
 	if (!_icon.isNull()) {
-		textRect = computeTextRect(true);
+		textRect = (_anchor != Text::Center)
+		  ? computeTextRect(true) : _boundingRect;
 #ifdef ENABLE_HIDPI
 		painter->drawImage(_pos - QPointF(_icon.width()
 		  / _icon.devicePixelRatioF() / 2, _icon.height()

@@ -26,7 +26,7 @@ int TextItem::avgCharWidth() const
 			ratio *= 1.1;
 	// The rest (Latin scripts, Arabic, ...)
 	} else {
-		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.7 : 0.55;
+		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.7 : 0.58;
 		if (_font.bold())
 			ratio *= 1.1;
 	}
