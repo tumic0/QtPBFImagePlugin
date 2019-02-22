@@ -1,9 +1,5 @@
 #include "pbf.h"
 
-#define POLYGON vector_tile::Tile_GeomType_POLYGON
-#define LINESTRING vector_tile::Tile_GeomType_LINESTRING
-#define POINT vector_tile::Tile_GeomType_POINT
-
 #define MOVE_TO    1
 #define LINE_TO    2
 #define CLOSE_PATH 7
