@@ -3,8 +3,8 @@ Qt image plugin for displaying Mapbox vector tiles
 
 ## Description
 QtPBFImagePlugin is a Qt image plugin that enables applications capable of
-displaying raster MBTiles maps or raster XYZ online maps to also display PBF
-vector tiles without (almost, see usage) any application modifications.
+displaying raster MBTiles maps or raster XYZ online maps to also display
+PBF(MVT) vector tiles without (almost, see usage) any application modifications.
 
 Standard Mapbox GL Styles are used for styling the maps. Most relevant style
 features used by [Maputnik](http://editor.openmaptiles.org) are supported.
