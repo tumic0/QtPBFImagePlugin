@@ -1,4 +1,4 @@
 {
-  "Keys": [ "pbf" ],
-  "MimeTypes": [ "image/pbf" ]
+  "Keys": [ "mvt" ],
+  "MimeTypes": [ "application/vnd.mapbox-vector-tile" ]
 }

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+	<mime-type type="application/vnd.mapbox-vector-tile">
+		<comment>Mapbox Vector Tile</comment>
+		<sub-class-of type="application/octet-stream"/>
+		<generic-icon name="application/octet-stream"/>
+		<glob pattern="*.mvt"/>
+	</mime-type>
+</mime-info>

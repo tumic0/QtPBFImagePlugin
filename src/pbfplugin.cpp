@@ -21,7 +21,7 @@ QImageIOPlugin::Capabilities PBFPlugin::capabilities(QIODevice *device,
   const QByteArray &format) const
 {
 	if (device == 0)
-		return (format == "pbf") ? Capabilities(CanRead) : Capabilities();
+		return (format == "mvt") ? Capabilities(CanRead) : Capabilities();
 	else
 		return (device->isReadable() && PBFHandler::canRead(device))
 		  ? Capabilities(CanRead) : Capabilities();
