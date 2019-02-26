@@ -13,9 +13,7 @@ QColor Color::fromJsonString(const QString &str)
 {
 	QColor ret;
 
-	if (str.startsWith('#'))
-		return QColor(str);
-	else if (str.startsWith("rgb(")) {
+	if (str.startsWith("rgb(")) {
 		QStringList comp(str.mid(4, str.size() - 5).split(','));
 		if (comp.size() != 3)
 			return QColor();
@@ -39,7 +37,8 @@ QColor Color::fromJsonString(const QString &str)
 			return QColor();
 		ret = QColor::fromHslF(comp.at(0).toFloat() / 360.0, pval(comp.at(1)),
 		  pval(comp.at(2)), comp.at(3).toFloat());
-	}
+	} else
+		ret = QColor(str);
 
 	if (!ret.isValid())
 		qWarning() << str << ": invalid color";
