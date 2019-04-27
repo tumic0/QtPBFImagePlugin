@@ -6,6 +6,7 @@
 #include <QPen>
 #include <QFont>
 #include <QRectF>
+#include "text.h"
 
 class QPainter;
 
@@ -19,7 +20,9 @@ public:
 	const QString &text() const {return _text;}
 	const QFont &font() const {return _font;}
 	const QPen &pen() const {return _pen;}
+	const Text::Halo &halo() const {return _halo;}
 	void setPen(const QPen &pen) {_pen = pen;}
+	void setHalo(const Text::Halo &halo) {_halo = halo;}
 
 	virtual QPainterPath shape() const = 0;
 	virtual QRectF boundingRect() const = 0;
@@ -37,6 +40,7 @@ private:
 	QString _text;
 	QFont _font;
 	QPen _pen;
+	Text::Halo _halo;
 	bool _visible;
 };
 

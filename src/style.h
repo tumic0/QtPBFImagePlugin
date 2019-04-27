@@ -137,9 +137,13 @@ private:
 			  const;
 			qreal opacity(Layer::Type type, int zoom) const;
 			bool antialias(Layer::Type type, int zoom) const;
+			Text::Halo halo(int zoom) const
+			  {return Text::Halo(_textHaloColor.value(zoom),
+			  _textHaloWidth.value(zoom), _textHaloBlur.value(zoom));}
 
 		private:
 			FunctionC _textColor;
+			FunctionC _textHaloColor;
 			FunctionC _lineColor;
 			FunctionC _fillColor;
 			FunctionC _fillOutlineColor;
@@ -147,6 +151,8 @@ private:
 			FunctionF _fillOpacity;
 			FunctionF _lineOpacity;
 			FunctionF _lineWidth;
+			FunctionF _textHaloWidth;
+			FunctionF _textHaloBlur;
 			FunctionB _fillAntialias;
 			QVector<qreal> _lineDasharray;
 			FunctionS _fillPattern;

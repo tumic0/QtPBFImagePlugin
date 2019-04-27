@@ -56,6 +56,7 @@ void Text::addLabel(const QString &text, const QImage &icon,
 	}
 
 	ti->setPen(_pen);
+	ti->setHalo(_halo);
 	addItem(ti);
 
 	QList<TextItem*> ci = collidingItems(ti);

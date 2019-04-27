@@ -176,6 +176,18 @@ void TextPathItem::paint(QPainter *painter) const
 
 		painter->translate(point);
 		painter->rotate(-angle);
+		if (halo().color().isValid() && halo().width() > 0) {
+			painter->setPen(halo().color());
+			painter->drawText(QPoint(-1, fm.descent() - 1), text().at(i));
+			painter->drawText(QPoint(1, fm.descent() + 1), text().at(i));
+			painter->drawText(QPoint(-1, fm.descent() + 1), text().at(i));
+			painter->drawText(QPoint(1, fm.descent() -1), text().at(i));
+			painter->drawText(QPoint(0, fm.descent() - 1), text().at(i));
+			painter->drawText(QPoint(0, fm.descent() + 1), text().at(i));
+			painter->drawText(QPoint(-1, fm.descent()), text().at(i));
+			painter->drawText(QPoint(1, fm.descent()), text().at(i));
+			painter->setPen(pen());
+		}
 		painter->drawText(QPoint(0, fm.descent()), text().at(i));
 		painter->setTransform(t);
 

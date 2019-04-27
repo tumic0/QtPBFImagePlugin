@@ -34,6 +34,22 @@ public:
 		Auto
 	};
 
+	class Halo {
+	public:
+		Halo() : _width(0), _blur(0) {}
+		Halo(const QColor &color, qreal width, qreal blur)
+		  : _color(color), _width(width), _blur(blur) {}
+
+		const QColor &color() const {return _color;}
+		qreal width() const {return _width;}
+		qreal blur() const {return _blur;}
+
+	private:
+		QColor _color;
+		qreal _width;
+		qreal _blur;
+	};
+
 	Text(const QSize &size) : _sceneRect(QRectF(QPointF(0, 0), size)) {}
 	~Text();
 
@@ -45,6 +61,7 @@ public:
 	void setSymbolPlacement(SymbolPlacement placement);
 	void setRotationAlignment(RotationAlignment alignment)
 	  {_alignment = alignment;}
+	void setHalo(const Halo &halo) {_halo = halo;}
 
 	void addLabel(const QString &text, const QImage &icon,
 	  const QPainterPath &path);
@@ -65,6 +82,7 @@ private:
 	RotationAlignment _alignment;
 	QFont _font;
 	QPen _pen;
+	Halo _halo;
 };
 
 #endif // TEXT_H

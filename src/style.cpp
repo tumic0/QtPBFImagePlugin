@@ -230,6 +230,9 @@ Style::Layer::Paint::Paint(const QJsonObject &json)
 
 	// text
 	_textColor = FunctionC(json["text-color"]);
+	_textHaloColor = FunctionC(json["text-halo-color"], QColor());
+	_textHaloWidth = FunctionF(json["text-halo-width"]);
+	_textHaloBlur = FunctionF(json["text-halo-blur"]);
 }
 
 QPen Style::Layer::Paint::pen(Type type, int zoom) const
@@ -511,6 +514,7 @@ void Style::Layer::setTextProperties(Tile &tile) const
 	t.setFont(_layout.font(zoom));
 	t.setSymbolPlacement(_layout.symbolPlacement(zoom));
 	t.setRotationAlignment(_layout.textRotationAlignment(zoom));
+	t.setHalo(_paint.halo(zoom));
 }
 
 void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,

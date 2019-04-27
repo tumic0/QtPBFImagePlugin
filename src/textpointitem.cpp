@@ -144,6 +144,29 @@ void TextPointItem::paint(QPainter *painter) const
 		textRect = _boundingRect;
 
 	painter->setFont(font());
+	if (halo().color().isValid() && halo().width() > 0) {
+		QPointF center(textRect.center());
+		painter->setPen(halo().color());
+
+		textRect.moveCenter(QPointF(center.x() - 1, center.y() - 1));
+		painter->drawText(textRect, FLAGS, text());
+		textRect.moveCenter(QPointF(center.x() + 1, center.y() + 1));
+		painter->drawText(textRect, FLAGS, text());
+		textRect.moveCenter(QPointF(center.x() - 1, center.y() + 1));
+		painter->drawText(textRect, FLAGS, text());
+		textRect.moveCenter(QPointF(center.x() + 1, center.y() - 1));
+		painter->drawText(textRect, FLAGS, text());
+		textRect.moveCenter(QPointF(center.x(), center.y() - 1));
+		painter->drawText(textRect, FLAGS, text());
+		textRect.moveCenter(QPointF(center.x(), center.y() + 1));
+		painter->drawText(textRect, FLAGS, text());
+		textRect.moveCenter(QPointF(center.x() - 1, center.y()));
+		painter->drawText(textRect, FLAGS, text());
+		textRect.moveCenter(QPointF(center.x() + 1, center.y()));
+		painter->drawText(textRect, FLAGS, text());
+
+		textRect.moveCenter(center);
+	}
 	painter->setPen(pen());
 	painter->drawText(textRect, FLAGS, text());
 }
