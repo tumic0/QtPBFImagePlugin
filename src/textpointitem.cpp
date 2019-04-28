@@ -128,9 +128,10 @@ void TextPointItem::paint(QPainter *painter) const
 	//painter->drawRect(_boundingRect);
 
 	QRectF textRect;
+	bool hasHalo = halo().color().isValid() && halo().width() > 0;
 
 	if (!_icon.isNull()) {
-		textRect = (_anchor != Text::Center)
+		textRect = (_anchor != Text::Center || hasHalo)
 		  ? computeTextRect(true) : _boundingRect;
 #ifdef ENABLE_HIDPI
 		painter->drawImage(_pos - QPointF(_icon.width()
@@ -141,32 +142,33 @@ void TextPointItem::paint(QPainter *painter) const
 		  _icon.height() / 2), _icon);
 #endif // ENABLE_HIDPI
 	} else
-		textRect = _boundingRect;
+		textRect = hasHalo ? computeTextRect(true) : _boundingRect;
 
-	painter->setFont(font());
-	if (halo().color().isValid() && halo().width() > 0) {
-		QPointF center(textRect.center());
-		painter->setPen(halo().color());
 
-		textRect.moveCenter(QPointF(center.x() - 1, center.y() - 1));
-		painter->drawText(textRect, FLAGS, text());
-		textRect.moveCenter(QPointF(center.x() + 1, center.y() + 1));
-		painter->drawText(textRect, FLAGS, text());
-		textRect.moveCenter(QPointF(center.x() - 1, center.y() + 1));
-		painter->drawText(textRect, FLAGS, text());
-		textRect.moveCenter(QPointF(center.x() + 1, center.y() - 1));
-		painter->drawText(textRect, FLAGS, text());
-		textRect.moveCenter(QPointF(center.x(), center.y() - 1));
-		painter->drawText(textRect, FLAGS, text());
-		textRect.moveCenter(QPointF(center.x(), center.y() + 1));
-		painter->drawText(textRect, FLAGS, text());
-		textRect.moveCenter(QPointF(center.x() - 1, center.y()));
-		painter->drawText(textRect, FLAGS, text());
-		textRect.moveCenter(QPointF(center.x() + 1, center.y()));
-		painter->drawText(textRect, FLAGS, text());
+	if (hasHalo) {
+		QRect ir(textRect.toRect());
+		QImage img(ir.size(), QImage::Format_ARGB32_Premultiplied);
+		img.fill(Qt::transparent);
+		QPainter ip(&img);
+		ip.setPen(halo().color());
+		ip.setFont(font());
+		ip.drawText(img.rect(), FLAGS, text());
 
-		textRect.moveCenter(center);
+		painter->drawImage(ir.x() - 1, ir.y() - 1, img);
+		painter->drawImage(ir.x() + 1, ir.y() + 1, img);
+		painter->drawImage(ir.x() - 1, ir.y() + 1, img);
+		painter->drawImage(ir.x() + 1, ir.y() - 1, img);
+		painter->drawImage(ir.x(), ir.y() - 1, img);
+		painter->drawImage(ir.x(), ir.y() + 1, img);
+		painter->drawImage(ir.x() - 1, ir.y(), img);
+		painter->drawImage(ir.x() + 1, ir.y(), img);
+
+		painter->setFont(font());
+		painter->setPen(pen());
+		painter->drawText(ir, FLAGS, text());
+	} else {
+		painter->setFont(font());
+		painter->setPen(pen());
+		painter->drawText(textRect, FLAGS, text());
 	}
-	painter->setPen(pen());
-	painter->drawText(textRect, FLAGS, text());
 }
