@@ -166,18 +166,17 @@ void TextPathItem::paint(QPainter *painter) const
 	qreal percent = (1.0 - factor) / 2.0;
 
 	painter->setFont(font());
-	painter->setPen(pen());
 
 	QTransform t = painter->transform();
 
-	for (int i = 0; i < text().size(); i++) {
-		QPointF point = _path.pointAtPercent(percent);
-		qreal angle = _path.angleAtPercent(percent);
+	if (halo().color().isValid() && halo().width() > 0) {
+		painter->setPen(halo().color());
+		for (int i = 0; i < text().size(); i++) {
+			QPointF point = _path.pointAtPercent(percent);
+			qreal angle = _path.angleAtPercent(percent);
 
-		painter->translate(point);
-		painter->rotate(-angle);
-		if (halo().color().isValid() && halo().width() > 0) {
-			painter->setPen(halo().color());
+			painter->translate(point);
+			painter->rotate(-angle);
 			painter->drawText(QPoint(-1, fm.descent() - 1), text().at(i));
 			painter->drawText(QPoint(1, fm.descent() + 1), text().at(i));
 			painter->drawText(QPoint(-1, fm.descent() + 1), text().at(i));
@@ -186,8 +185,22 @@ void TextPathItem::paint(QPainter *painter) const
 			painter->drawText(QPoint(0, fm.descent() + 1), text().at(i));
 			painter->drawText(QPoint(-1, fm.descent()), text().at(i));
 			painter->drawText(QPoint(1, fm.descent()), text().at(i));
-			painter->setPen(pen());
+			painter->setTransform(t);
+
+			int width = fm.charWidth(text(), i);
+			percent += ((qreal)width / (qreal)textWidth) * factor;
 		}
+
+		percent = (1.0 - factor) / 2.0;
+	}
+
+	painter->setPen(pen());
+	for (int i = 0; i < text().size(); i++) {
+		QPointF point = _path.pointAtPercent(percent);
+		qreal angle = _path.angleAtPercent(percent);
+
+		painter->translate(point);
+		painter->rotate(-angle);
 		painter->drawText(QPoint(0, fm.descent()), text().at(i));
 		painter->setTransform(t);
 
