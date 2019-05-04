@@ -3,23 +3,23 @@
 #include "textpathitem.h"
 
 
-static QPointF intersection(const QLineF &line, const QRectF &rect)
+static bool intersection(const QLineF &line, const QRectF &rect,
+  QPointF *p)
 {
-	QPointF p;
-	if (line.intersect(QLineF(rect.topLeft(), rect.topRight()), &p)
+	if (line.intersect(QLineF(rect.topLeft(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
-		return p;
-	if (line.intersect(QLineF(rect.topLeft(), rect.bottomLeft()), &p)
+		return true;
+	if (line.intersect(QLineF(rect.topLeft(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection)
-		return p;
-	if (line.intersect(QLineF(rect.bottomRight(), rect.bottomLeft()), &p)
+		return true;
+	if (line.intersect(QLineF(rect.bottomRight(), rect.bottomLeft()), p)
 	  == QLineF::BoundedIntersection)
-		return p;
-	if (line.intersect(QLineF(rect.bottomRight(), rect.topRight()), &p)
+		return true;
+	if (line.intersect(QLineF(rect.bottomRight(), rect.topRight()), p)
 	  == QLineF::BoundedIntersection)
-		return p;
+		return true;
 
-	return rect.center();
+	return false;
 }
 
 static QPainterPath subpath(const QList<QLineF> &lines, int start, int end,
@@ -63,6 +63,7 @@ static QList<QLineF> lineString(const QPainterPath &path,
 {
 	QList<QLineF> lines;
 	int start = 0, end = path.elementCount() - 1;
+	QPointF p;
 
 	for (int i = 0; i < path.elementCount(); i++) {
 		if (boundingRect.contains(path.elementAt(i))) {
@@ -79,16 +80,14 @@ static QList<QLineF> lineString(const QPainterPath &path,
 
 	if (start > 0) {
 		QLineF l(path.elementAt(start-1), path.elementAt(start));
-		QPointF p(intersection(l, boundingRect));
-		if (p != boundingRect.center())
+		if (intersection(l, boundingRect, &p))
 			lines.append(QLineF(p, path.elementAt(start)));
 	}
 	for (int i = start + 1; i <= end; i++)
 		lines.append(QLineF(path.elementAt(i-1), path.elementAt(i)));
 	if (end < path.elementCount() - 1) {
 		QLineF l(path.elementAt(end), path.elementAt(end+1));
-		QPointF p(intersection(l, boundingRect));
-		if (p != boundingRect.center())
+		if (intersection(l, boundingRect, &p))
 			lines.append(QLineF(path.elementAt(end), p));
 	}
 
