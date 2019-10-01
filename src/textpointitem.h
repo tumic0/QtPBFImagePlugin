@@ -22,7 +22,7 @@ private:
 
 	QPointF _pos;
 	QPainterPath _shape;
-	QRectF _boundingRect;
+	QRectF _textRect, _boundingRect;
 	QImage _icon;
 	int _maxWidth;
 	Text::Anchor _anchor;

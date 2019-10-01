@@ -9,17 +9,13 @@
 QRectF TextPointItem::exactBoundingRect() const
 {
 	QFontMetrics fm(font());
-	int limit = font().pixelSize() * _maxWidth;
-	// Italic fonts overflow the computed bounding rect, so reduce it
-	// a little bit.
-	if (font().italic())
-		limit -= font().pixelSize() / 2.0;
 
-	QRect br = fm.boundingRect(QRect(0, 0, limit, 0), FLAGS, text());
+	QRect br = fm.boundingRect(_textRect.toRect(), FLAGS, text());
 	Q_ASSERT(br.isValid());
-	// Expand the bounding rect back to the real content size
+
+	// Italic fonts overflow the computed bounding rect, so expand it
 	if (font().italic())
-		br.adjust(-font().pixelSize() / 4.0, 0, font().pixelSize() / 4.0, 0);
+		br.adjust(-font().pixelSize() / 2.0, 0, font().pixelSize() / 2.0, 0);
 
 	return br;
 }
@@ -74,7 +70,7 @@ QRectF TextPointItem::computeTextRect(bool exact) const
 	QRectF iconRect = _icon.isNull() ? QRectF() : QRectF(QPointF(0, 0),
 	  QSizeF(_icon.size()));
 #endif // ENABLE_HIDPI
-	QRectF textRect = exact ? exactBoundingRect() : fuzzyBoundingRect();
+	QRectF textRect = exact ? exactBoundingRect() : _textRect;
 
 	switch (_anchor) {
 		case Text::Center:
@@ -106,6 +102,7 @@ TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
   : TextItem(text, font), _pos(pos), _icon(icon), _maxWidth(maxWidth),
   _anchor(anchor)
 {
+	_textRect = fuzzyBoundingRect();
 	_boundingRect = computeTextRect(false);
 
 	if (!_icon.isNull()) {
@@ -124,15 +121,10 @@ TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
 
 void TextPointItem::paint(QPainter *painter) const
 {
-	//painter->setPen(Qt::red);
-	//painter->drawRect(_boundingRect);
-
 	QRectF textRect;
-	bool hasHalo = halo().color().isValid() && halo().width() > 0;
 
 	if (!_icon.isNull()) {
-		textRect = (_anchor != Text::Center || hasHalo)
-		  ? computeTextRect(true) : _boundingRect;
+		textRect = computeTextRect(true);
 #ifdef ENABLE_HIDPI
 		painter->drawImage(_pos - QPointF(_icon.width()
 		  / _icon.devicePixelRatioF() / 2, _icon.height()
@@ -142,10 +134,9 @@ void TextPointItem::paint(QPainter *painter) const
 		  _icon.height() / 2), _icon);
 #endif // ENABLE_HIDPI
 	} else
-		textRect = hasHalo ? computeTextRect(true) : _boundingRect;
+		textRect = _boundingRect;
 
-
-	if (hasHalo) {
+	if (halo().color().isValid() && halo().width() > 0) {
 		QRect ir(textRect.toRect());
 		QImage img(ir.size(), QImage::Format_ARGB32_Premultiplied);
 		img.fill(Qt::transparent);
@@ -171,4 +162,10 @@ void TextPointItem::paint(QPainter *painter) const
 		painter->setPen(pen());
 		painter->drawText(textRect, FLAGS, text());
 	}
+
+	//painter->setBrush(Qt::NoBrush);
+	//painter->setPen(Qt::red);
+	//painter->drawRect(_boundingRect);
+	//painter->setPen(Qt::blue);
+	//painter->drawRect(textRect);
 }
