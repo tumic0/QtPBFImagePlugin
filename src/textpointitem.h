@@ -15,10 +15,14 @@ public:
 	QPainterPath shape() const {return _shape;}
 	void paint(QPainter *painter) const;
 
+	void setPos(const QPointF &pos);
+
 private:
 	QRectF exactBoundingRect() const;
 	QRectF fuzzyBoundingRect() const;
 	QRectF computeTextRect(bool exact) const;
+	bool hasHalo() const
+	  {return halo().color().isValid() && halo().width() > 0;}
 
 	QPointF _pos;
 	QPainterPath _shape;

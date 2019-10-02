@@ -31,22 +31,36 @@ void Text::addLabel(const QString &text, const QImage &icon,
 {
 	TextItem *ti;
 
-	switch (_placement) {
-		case Line:
-			if (_alignment == Viewport)
+	if (_alignment == Viewport) {
+		QMap<qreal, int> map;
+		for (int j = 0; j < path.elementCount(); j++) {
+			QLineF l(path.elementAt(j), _sceneRect.center());
+			map.insert(l.length(), j);
+		}
+		QMap<qreal, int>::const_iterator jt = map.constBegin();
+		ti = new TextPointItem(text, path.elementAt(jt.value()), _font,
+		  _maxWidth, _anchor, icon);
+		while (true) {
+			if (_sceneRect.contains(ti->boundingRect()))
+				break;
+			if (++jt == map.constEnd())
+				break;
+			static_cast<TextPointItem*>(ti)->setPos(path.elementAt(
+			  jt.value()));
+		}
+	} else {
+		switch (_placement) {
+			case Line:
+				ti = new TextPathItem(text, path, _font, _maxAngle, _sceneRect);
+				break;
+			case LineCenter:
+				ti = new TextPointItem(text, path.pointAtPercent(0.5), _font,
+				  _maxWidth, _anchor, icon);
+				break;
+			default:
 				ti = new TextPointItem(text, path.elementAt(0), _font,
 				  _maxWidth, _anchor, icon);
-			else
-				ti = new TextPathItem(text, path, _font, _maxAngle, _sceneRect);
-			break;
-		case LineCenter:
-			ti = new TextPointItem(text, path.pointAtPercent(0.5), _font,
-			  _maxWidth, _anchor, icon);
-			break;
-		default:
-			ti = new TextPointItem(text, path.elementAt(0), _font, _maxWidth,
-			  _anchor, icon);
-			break;
+		}
 	}
 
 	// Note: empty path == point geometry (single move)

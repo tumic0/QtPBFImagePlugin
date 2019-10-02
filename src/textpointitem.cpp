@@ -16,6 +16,8 @@ QRectF TextPointItem::exactBoundingRect() const
 	// Italic fonts overflow the computed bounding rect, so expand it
 	if (font().italic())
 		br.adjust(-font().pixelSize() / 2.0, 0, font().pixelSize() / 2.0, 0);
+	if (hasHalo())
+		br.adjust(-1, -1, 1, 1);
 
 	return br;
 }
@@ -119,9 +121,18 @@ TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
 	_shape.addRect(_boundingRect);
 }
 
+void TextPointItem::setPos(const QPointF &pos)
+{
+	QPointF d(_boundingRect.left() - _pos.x(), _boundingRect.top() - _pos.y());
+	_boundingRect.moveTopLeft(pos + d);
+	_shape = QPainterPath();
+	_shape.addRect(_boundingRect);
+	_pos = pos;
+}
+
 void TextPointItem::paint(QPainter *painter) const
 {
-	QRectF textRect;
+	QRectF textRect(_boundingRect);
 
 	if (!_icon.isNull()) {
 		textRect = computeTextRect(true);
@@ -133,10 +144,9 @@ void TextPointItem::paint(QPainter *painter) const
 		painter->drawImage(_pos - QPointF(_icon.width() / 2,
 		  _icon.height() / 2), _icon);
 #endif // ENABLE_HIDPI
-	} else
-		textRect = _boundingRect;
+	}
 
-	if (halo().color().isValid() && halo().width() > 0) {
+	if (hasHalo()) {
 		QRect ir(textRect.toRect());
 		QImage img(ir.size(), QImage::Format_ARGB32_Premultiplied);
 		img.fill(Qt::transparent);
