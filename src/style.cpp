@@ -437,7 +437,7 @@ Text::RotationAlignment Style::Layer::Layout::textRotationAlignment(int zoom)
 }
 
 Style::Layer::Layer(const QJsonObject &json)
-  : _type(Unknown), _minZoom(0), _maxZoom(22)
+  : _type(Unknown), _minZoom(0), _maxZoom(24)
 {
 	// type
 	QString type(json["type"].toString());
