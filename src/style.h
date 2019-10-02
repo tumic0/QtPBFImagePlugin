@@ -35,7 +35,7 @@ public:
 private:
 	class Layer {
 	public:
-		Layer() : _type(Unknown), _minZoom(-1), _maxZoom(-1) {}
+		Layer() : _type(Unknown), _minZoom(0), _maxZoom(22) {}
 		Layer(const QJsonObject &json);
 
 		const QString &sourceLayer() const {return _sourceLayer;}

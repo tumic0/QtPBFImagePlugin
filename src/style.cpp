@@ -437,7 +437,7 @@ Text::RotationAlignment Style::Layer::Layout::textRotationAlignment(int zoom)
 }
 
 Style::Layer::Layer(const QJsonObject &json)
-  : _type(Unknown), _minZoom(-1), _maxZoom(-1)
+  : _type(Unknown), _minZoom(0), _maxZoom(22)
 {
 	// type
 	QString type(json["type"].toString());
@@ -475,12 +475,8 @@ Style::Layer::Layer(const QJsonObject &json)
 
 bool Style::Layer::match(int zoom, const PBF::Feature &feature) const
 {
-	if (zoom >= 0) {
-		if (_minZoom > 0 && zoom < _minZoom)
-			return false;
-		if (_maxZoom > 0 && zoom > _maxZoom)
-			return false;
-	}
+	if (zoom >= 0 && (zoom < _minZoom || zoom > _maxZoom))
+		return false;
 
 	return _filter.match(feature);
 }
