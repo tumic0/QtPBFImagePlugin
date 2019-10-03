@@ -75,8 +75,8 @@ bool PBFHandler::read(QImage *image)
 	QSize size = _scaledSize.isValid()
 	  ? _scaledSize : QSize(TILE_SIZE, TILE_SIZE);
 	QPointF scale = _scaledSize.isValid()
-	  ? QPointF(_scaledSize.width() / TILE_SIZE, _scaledSize.height() / TILE_SIZE)
-	  : QPointF(1.0, 1.0);
+	  ? QPointF((qreal)_scaledSize.width() / TILE_SIZE,
+		(qreal)_scaledSize.height() / TILE_SIZE) : QPointF(1.0, 1.0);
 	*image = QImage(size, QImage::Format_ARGB32_Premultiplied);
 	Tile tile(image, ok ? zoom : -1, scale);
 

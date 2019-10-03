@@ -597,7 +597,8 @@ void Style::setupLayer(Tile &tile, const Layer &layer) const
 
 void Style::drawBackground(Tile &tile) const
 {
-	QRectF rect(QPointF(0, 0), tile.size());
+	QRectF rect(QPointF(0, 0), QSizeF(tile.size().width() / tile.scale().x(),
+	  tile.size().height() / tile.scale().y()));
 	QPainterPath path;
 	path.addRect(rect);
 
