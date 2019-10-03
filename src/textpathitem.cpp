@@ -135,7 +135,7 @@ TextPathItem::TextPathItem(const QString &text, const QPainterPath &path,
   const QFont &font, int maxAngle, const QRectF &tileRect)
   : TextItem(text, font)
 {
-	int cw = avgCharWidth();
+	qreal cw = avgCharWidth();
 	int textWidth = text.size() * cw;
 	if (textWidth > path.length())
 		return;

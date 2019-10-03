@@ -11,7 +11,7 @@ bool TextItem::collidesWithItem(const TextItem *other) const
 	return other->shape().intersects(shape());
 }
 
-int TextItem::avgCharWidth() const
+qreal TextItem::avgCharWidth() const
 {
 	qreal ratio;
 	ushort cp = _text.at(0).unicode();
@@ -21,12 +21,12 @@ int TextItem::avgCharWidth() const
 		ratio = 1.0;
 	// Greek & Cyrilic
 	else if (cp >= 0x03FF && cp <= 0x04FF) {
-		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.80 : 0.72;
+		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.75 : 0.68;
 		if (_font.bold())
 			ratio *= 1.1;
 	// The rest (Latin scripts, Arabic, ...)
 	} else {
-		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.75 : 0.63;
+		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.70 : 0.58;
 		if (_font.bold())
 			ratio *= 1.1;
 	}

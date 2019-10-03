@@ -34,7 +34,7 @@ public:
 	bool collidesWithItem(const TextItem *other) const;
 
 protected:
-	int avgCharWidth() const;
+	qreal avgCharWidth() const;
 
 private:
 	QString _text;
