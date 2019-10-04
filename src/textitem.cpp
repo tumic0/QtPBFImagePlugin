@@ -21,12 +21,12 @@ qreal TextItem::avgCharWidth() const
 		ratio = 1.0;
 	// Greek & Cyrilic
 	else if (cp >= 0x03FF && cp <= 0x04FF) {
-		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.75 : 0.68;
+		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.80 : 0.73;
 		if (_font.bold())
 			ratio *= 1.1;
 	// The rest (Latin scripts, Arabic, ...)
 	} else {
-		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.70 : 0.58;
+		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.75 : 0.63;
 		if (_font.bold())
 			ratio *= 1.1;
 	}

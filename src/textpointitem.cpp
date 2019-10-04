@@ -43,7 +43,11 @@ QRectF TextPointItem::exactBoundingRect() const
 
 QRectF TextPointItem::fuzzyBoundingRect() const
 {
-	int limit = font().pixelSize() * _maxWidth;
+	int fs = font().pixelSize();
+	if (text().size() <= 3)
+		return QRectF(0, 0, text().size() * fs, fs * 1.6);
+
+	int limit = fs * _maxWidth;
 	qreal cw = avgCharWidth();
 	int width = 0, lines = 0;
 
@@ -77,8 +81,7 @@ QRectF TextPointItem::fuzzyBoundingRect() const
 		}
 	}
 
-	return QRectF(0, 0, width, lines > 1 ? lines * font().pixelSize() * 1.3
-	  : font().pixelSize() * 1.5);
+	return QRectF(0, 0, width, lines * fs * 1.6);
 }
 
 
