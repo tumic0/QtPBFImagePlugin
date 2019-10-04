@@ -18,9 +18,8 @@ public:
 	void setPos(const QPointF &pos);
 
 private:
-	QRectF exactBoundingRect() const;
 	QRectF fuzzyBoundingRect() const;
-	QRectF computeTextRect(bool exact) const;
+	QRectF moveTextRect(const QRectF &rect) const;
 	bool hasHalo() const
 	  {return halo().color().isValid() && halo().width() > 0;}
 
