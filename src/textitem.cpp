@@ -24,11 +24,15 @@ qreal TextItem::avgCharWidth() const
 		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.80 : 0.73;
 		if (_font.bold())
 			ratio *= 1.1;
+		if (_font.italic())
+			ratio *= 0.9;
 	// The rest (Latin scripts, Arabic, ...)
 	} else {
 		ratio = (_font.capitalization() == QFont::AllUppercase) ? 0.75 : 0.63;
 		if (_font.bold())
 			ratio *= 1.1;
+		if (_font.italic())
+			ratio *= 0.9;
 	}
 
 	return ratio * _font.pixelSize();
