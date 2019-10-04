@@ -1,45 +1,11 @@
 #include <QPainter>
 #include <QtMath>
+#include <QStaticText>
 #include "config.h"
 #include "textpointitem.h"
 
 
 #define FLAGS (Qt::AlignCenter | Qt::TextWordWrap | Qt::TextDontClip)
-
-static QImage textImage(const QString &text, const QRectF &rect, qreal scale,
-  const QColor &color, const QFont &font)
-{
-	QImage img(QSize(rect.size().width() * scale, rect.size().height() * scale),
-	  QImage::Format_ARGB32_Premultiplied);
-
-	img.fill(Qt::transparent);
-
-	QFont f(font);
-	f.setPixelSize(font.pixelSize() * scale);
-
-	QPainter ip(&img);
-	ip.setPen(color);
-	ip.setFont(f);
-	ip.drawText(img.rect(), FLAGS, text);
-
-	return img;
-}
-
-QRectF TextPointItem::exactBoundingRect() const
-{
-	QFontMetrics fm(font());
-
-	QRect br = fm.boundingRect(_textRect.toRect(), FLAGS, text());
-	Q_ASSERT(br.isValid());
-
-	// Italic fonts overflow the computed bounding rect, so expand it
-	if (font().italic())
-		br.adjust(-font().pixelSize() / 2.0, 0, font().pixelSize() / 2.0, 0);
-	if (hasHalo())
-		br.adjust(-1, -1, 1, 1);
-
-	return br;
-}
 
 QRectF TextPointItem::fuzzyBoundingRect() const
 {
@@ -64,7 +30,7 @@ QRectF TextPointItem::fuzzyBoundingRect() const
 				if (wl + pl < limit) {
 					pl += wl + cw;
 				} else {
-					if (wl > limit) {
+					if (wl >= limit) {
 						if (pl > 0)
 							lines++;
 					} else
@@ -85,7 +51,7 @@ QRectF TextPointItem::fuzzyBoundingRect() const
 }
 
 
-QRectF TextPointItem::computeTextRect(bool exact) const
+QRectF TextPointItem::moveTextRect(const QRectF &rect) const
 {
 #ifdef ENABLE_HIDPI
 	QRectF iconRect = _icon.isNull() ? QRectF()
@@ -94,7 +60,7 @@ QRectF TextPointItem::computeTextRect(bool exact) const
 	QRectF iconRect = _icon.isNull() ? QRectF() : QRectF(QPointF(0, 0),
 	  QSizeF(_icon.size()));
 #endif // ENABLE_HIDPI
-	QRectF textRect = exact ? exactBoundingRect() : _textRect;
+	QRectF textRect(rect);
 
 	switch (_anchor) {
 		case Text::Center:
@@ -127,7 +93,7 @@ TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
   _anchor(anchor)
 {
 	_textRect = fuzzyBoundingRect();
-	_boundingRect = computeTextRect(false);
+	_boundingRect = moveTextRect(_textRect);
 
 	if (!_icon.isNull()) {
 #ifdef ENABLE_HIDPI
@@ -154,10 +120,13 @@ void TextPointItem::setPos(const QPointF &pos)
 
 void TextPointItem::paint(QPainter *painter) const
 {
-	QRectF textRect = (!_icon.isNull() || hasHalo())
-	  ? computeTextRect(true) : _boundingRect;
+	QRectF textRect;
+
+	painter->setFont(font());
+	painter->setPen(pen());
 
 	if (!_icon.isNull()) {
+		textRect = moveTextRect(painter->boundingRect(_textRect, FLAGS, text()));
 #ifdef ENABLE_HIDPI
 		painter->drawImage(_pos - QPointF(_icon.width()
 		  / _icon.devicePixelRatioF() / 2, _icon.height()
@@ -166,34 +135,28 @@ void TextPointItem::paint(QPainter *painter) const
 		painter->drawImage(_pos - QPointF(_icon.width() / 2,
 		  _icon.height() / 2), _icon);
 #endif // ENABLE_HIDPI
-	}
+	} else
+		textRect = moveTextRect(_textRect);
 
 	if (hasHalo()) {
-		const QTransform &t = painter->worldTransform();
-		QPoint p((textRect.topLeft() * t.m11()).toPoint());
-		QImage img(textImage(text(), textRect, t.m11(), halo().color(), font()));
+		QStaticText st(text());
+		st.setTextWidth(textRect.width());
+		st.setTextOption(QTextOption(Qt::AlignHCenter));
+		st.setPerformanceHint(QStaticText::AggressiveCaching);
 
-		painter->save();
-		painter->resetTransform();
-
-		painter->drawImage(p.x() - 1, p.y() - 1, img);
-		painter->drawImage(p.x() + 1, p.y() + 1, img);
-		painter->drawImage(p.x() - 1, p.y() + 1, img);
-		painter->drawImage(p.x() + 1, p.y() - 1, img);
-		painter->drawImage(p.x(), p.y() - 1, img);
-		painter->drawImage(p.x(), p.y() + 1, img);
-		painter->drawImage(p.x() - 1, p.y(), img);
-		painter->drawImage(p.x() + 1, p.y(), img);
-
-		painter->drawImage(p.x(), p.y(), textImage(text(), textRect, t.m11(),
-		  pen().color(), font()));
-
-		painter->restore();
-	} else {
-		painter->setFont(font());
+		painter->setPen(halo().color());
+		painter->drawStaticText(textRect.topLeft() + QPointF(-1, -1), st);
+		painter->drawStaticText(textRect.topLeft() + QPointF(+1, +1), st);
+		painter->drawStaticText(textRect.topLeft() + QPointF(-1, +1), st);
+		painter->drawStaticText(textRect.topLeft() + QPointF(+1, -1), st);
+		painter->drawStaticText(textRect.topLeft() + QPointF(0, -1), st);
+		painter->drawStaticText(textRect.topLeft() + QPointF(0, +1), st);
+		painter->drawStaticText(textRect.topLeft() + QPointF(-1, 0), st);
+		painter->drawStaticText(textRect.topLeft() + QPointF(+1, 0), st);
 		painter->setPen(pen());
+		painter->drawStaticText(textRect.topLeft(), st);
+	} else
 		painter->drawText(textRect, FLAGS, text());
-	}
 
 	//painter->setBrush(Qt::NoBrush);
 	//painter->setPen(Qt::red);
