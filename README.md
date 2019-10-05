@@ -74,6 +74,9 @@ style are ignored.
 * Text PBF features must have a unique id (OpenMapTiles >= v3.7) for the text layout
 algorithm to work properly.
 
+## Changelog
+[Changelog](https://build.opensuse.org/package/view_file/home:tumic:QtPBFImagePlugin/QtPBFImagePlugin/libqt5-qtpbfimageformat.changes)
+
 ## Status
 A picture is worth a thousand words. Data and styles from https://openmaptiles.org.
 #### OSM-liberty
