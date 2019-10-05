@@ -67,12 +67,12 @@ QRectF TextPointItem::moveTextRect(const QRectF &rect) const
 			textRect.moveCenter(_pos);
 			break;
 		case Text::Left:
-			textRect.moveTopLeft(_pos - QPointF(-iconRect.width() / 2,
-			  textRect.height() / 2));
+			textRect.moveTopLeft(_pos - QPointF(-iconRect.width() / 2
+			  - font().pixelSize()/4.0, textRect.height() / 2));
 			break;
 		case Text::Right:
-			textRect.moveTopRight(_pos - QPointF(iconRect.width() / 2,
-			  textRect.height() / 2));
+			textRect.moveTopRight(_pos - QPointF(iconRect.width() / 2
+			  + font().pixelSize()/4.0, textRect.height() / 2));
 			break;
 		case Text::Bottom:
 			textRect.moveTopLeft(_pos - QPointF(textRect.width() / 2,
@@ -136,7 +136,7 @@ void TextPointItem::paint(QPainter *painter) const
 		  _icon.height() / 2), _icon);
 #endif // ENABLE_HIDPI
 	} else
-		textRect = moveTextRect(_textRect);
+		textRect = _boundingRect;
 
 	if (hasHalo()) {
 		QStaticText st(text());
