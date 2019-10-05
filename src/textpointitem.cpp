@@ -140,6 +140,7 @@ void TextPointItem::paint(QPainter *painter) const
 
 	if (hasHalo()) {
 		QStaticText st(text());
+		st.setTextFormat(Qt::PlainText);
 		st.setTextWidth(textRect.width());
 		st.setTextOption(QTextOption(Qt::AlignHCenter));
 		st.setPerformanceHint(QStaticText::AggressiveCaching);
