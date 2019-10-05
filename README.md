@@ -34,10 +34,10 @@ The plugin supports vector scaling using QImageReader's setScaledSize() method,
 so when used like in the following example:
 ```cpp
 QImageReader reader(file, QString::number(zoom).toLatin1());
-reader.setScaledSize(QSize(512, 512));
+reader.setScaledSize(QSize(1024, 1024));
 reader.read(&image);
 ```
-you will get 512x512px tiles with a pixel ratio of 2 (= HiDPI tiles).
+you will get 1024x1024px tiles with a pixel ratio of 2 (= HiDPI tiles).
 
 ## Build
 ### Requirements
