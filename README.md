@@ -16,7 +16,8 @@ placed in the same directory as the style itself. A default fallback style
 (OSM-Liberty) for OpenMapTiles is part of the plugin.
 
 "Plain" PBF files as well as gzip compressed files (as used in MBTiles) are
-supported by the plugin.
+supported by the plugin. The tile size is (since version 2.0 of the plugin) 512px
+to fit the styles and available data (OpenMapTiles, Mapbox tiles).
 
 ## Usage
 Due to a major design flaw in the Mapbox vector tiles specification - the zoom
