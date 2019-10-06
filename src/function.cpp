@@ -40,7 +40,9 @@ static QColor interpolate(const QPair<qreal, QColor> &p0,
 	qreal p1h, p1s, p1l, p1a;
 	p1.second.getHslF(&p1h, &p1s, &p1l, &p1a);
 
-	return QColor::fromHslF(f(p0h, p1h, ratio), f(p0s, p1s, ratio),
+	/* Qt returns a hue of -1 for achromatic colors. We convert it to a hue of 1
+	   using qAbs() to enable interpolation of grayscale colors */
+	return QColor::fromHslF(f(qAbs(p0h), qAbs(p1h), ratio), f(p0s, p1s, ratio),
 	  f(p0l, p1l, ratio), f(p0a, p1a, ratio));
 }
 
