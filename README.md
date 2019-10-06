@@ -16,7 +16,8 @@ placed in the same directory as the style itself. A default fallback style
 (OSM-Liberty) for OpenMapTiles is part of the plugin.
 
 "Plain" PBF files as well as gzip compressed files (as used in MBTiles) are
-supported by the plugin.
+supported by the plugin. The tile size is (since version 2.0 of the plugin) 512px
+to fit the styles and available data (OpenMapTiles, Mapbox tiles).
 
 ## Usage
 Due to a major design flaw in the Mapbox vector tiles specification - the zoom
@@ -33,10 +34,10 @@ The plugin supports vector scaling using QImageReader's setScaledSize() method,
 so when used like in the following example:
 ```cpp
 QImageReader reader(file, QString::number(zoom).toLatin1());
-reader.setScaledSize(QSize(512, 512));
+reader.setScaledSize(QSize(1024, 1024));
 reader.read(&image);
 ```
-you will get 512x512px tiles with a pixel ratio of 2 (= HiDPI tiles).
+you will get 1024x1024px tiles with a pixel ratio of 2 (= HiDPI tiles).
 
 ## Build
 ### Requirements
@@ -72,6 +73,9 @@ for most common distros available on OBS.
 style are ignored.
 * Text PBF features must have a unique id (OpenMapTiles >= v3.7) for the text layout
 algorithm to work properly.
+
+## Changelog
+[Changelog](https://build.opensuse.org/package/view_file/home:tumic:QtPBFImagePlugin/QtPBFImagePlugin/libqt5-qtpbfimageformat.changes)
 
 ## Status
 A picture is worth a thousand words. Data and styles from https://openmaptiles.org.
