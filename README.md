@@ -73,6 +73,7 @@ for most common distros available on OBS.
 style are ignored.
 * Text PBF features must have a unique id (OpenMapTiles >= v3.7) for the text layout
 algorithm to work properly.
+* Expressions not supported in the styles, only property functions are implemented.
 
 ## Changelog
 [Changelog](https://build.opensuse.org/package/view_file/home:tumic:QtPBFImagePlugin/QtPBFImagePlugin/libqt5-qtpbfimageformat.changes)
