@@ -37,6 +37,8 @@ SOURCES += src/pbfplugin.cpp \
     src/textitem.cpp
 RESOURCES += pbfplugin.qrc
 
+DEFINES += QT_NO_DEPRECATED_WARNINGS
+
 unix:!macx{
     LIBS += -lprotobuf-lite \
         -lz

@@ -172,7 +172,7 @@ bool Style::Layer::Filter::match(const PBF::Feature &feature) const
 					return true;
 			return false;
 		case GeometryType:
-			return feature.type() == _kv.second.toUInt();
+			return feature.type() == _kv.second.toInt();
 		default:
 			return false;
 	}
