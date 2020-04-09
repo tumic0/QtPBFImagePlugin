@@ -8,12 +8,7 @@ PBF(MVT) vector tiles without (almost, see usage) any application modifications.
 
 Standard Mapbox GL Styles are used for styling the maps. Most relevant style
 features used by [Maputnik](http://editor.openmaptiles.org) are supported.
-The style is loaded from the
-[$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style/style.json
-file on plugin load. If the style uses a sprite, the sprite JSON file must
-be named sprite.json and the sprite image sprite.png and both files must be
-placed in the same directory as the style itself. A default fallback style
-(OSM-Liberty) for OpenMapTiles is part of the plugin.
+A default fallback style (OSM-Liberty) for OpenMapTiles is part of the plugin.
 
 "Plain" PBF files as well as gzip compressed files (as used in MBTiles) are
 supported by the plugin. The tile size is (since version 2.0 of the plugin) 512px
@@ -38,6 +33,17 @@ reader.setScaledSize(QSize(1024, 1024));
 reader.read(&image);
 ```
 you will get 1024x1024px tiles with a pixel ratio of 2 (= HiDPI tiles).
+
+## Styles
+The map style is loaded from the
+[$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style/style.json
+file on plugin load. If the style uses a sprite, the sprite JSON file must
+be named `sprite.json` and the sprite image `sprite.png` and both files must be
+placed in the same directory as the style itself.
+
+For a list of "ready to use" styles see the
+[QtPBFImagePlugin-styles](https://github.com/tumic0/QtPBFImagePlugin-styles)
+repository.
 
 ## Build
 ### Requirements
@@ -73,7 +79,7 @@ for most common distros available on OBS.
 style are ignored.
 * Text PBF features must have a unique id (OpenMapTiles >= v3.7) for the text layout
 algorithm to work properly.
-* Expressions not supported in the styles, only property functions are implemented.
+* Expressions are not supported in the styles, only property functions are implemented.
 
 ## Changelog
 [Changelog](https://build.opensuse.org/package/view_file/home:tumic:QtPBFImagePlugin/QtPBFImagePlugin/libqt5-qtpbfimageformat.changes)
