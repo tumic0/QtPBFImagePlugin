@@ -85,20 +85,20 @@ algorithm to work properly.
 [Changelog](https://build.opensuse.org/package/view_file/home:tumic:QtPBFImagePlugin/QtPBFImagePlugin/libqt5-qtpbfimageformat.changes)
 
 ## Status
-A picture is worth a thousand words. Data and styles from https://openmaptiles.org.
-#### OSM-liberty
-![osm-liberty 2](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-2.png)
+A picture is worth a thousand words.
+#### OpenMapTiles (OSM-liberty style)
 ![osm-liberty 5](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-5.png)
 ![osm-liberty 8](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-8.png)
-![osm-liberty 11](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-11.png)
+![osm-liberty 12](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-12.png)
 ![osm-liberty 14](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-14.png)
+![osm-liberty 15](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-15.png)
 
-#### Klokantech-basic
-![klokantech-basic 2](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-2.png)
-![klokantech-basic 4](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-4.png)
-![klokantech-basic 8](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-8.png)
-![klokantech-basic 13](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-13.png)
-![klokantech-basic 14](https://tumic0.github.io/QtPBFImagePlugin/images/klokantech-basic-14.png)
+#### Mapbox (Bright style)
+![bright 4](https://tumic0.github.io/QtPBFImagePlugin/images/bright-4.png)
+![bright 6](https://tumic0.github.io/QtPBFImagePlugin/images/bright-6.png)
+![klokantech-basic 13](https://tumic0.github.io/QtPBFImagePlugin/images/bright-13.png)
+![klokantech-basic 15](https://tumic0.github.io/QtPBFImagePlugin/images/bright-15.png)
+![klokantech-basic 17](https://tumic0.github.io/QtPBFImagePlugin/images/bright-17.png)
 
 ## Applications using QtPBFImagePlugin
 * [GPXSee](https://www.gpxsee.org)
