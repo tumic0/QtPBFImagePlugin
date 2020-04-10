@@ -39,7 +39,8 @@ The map style is loaded from the
 [$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style/style.json
 file on plugin load. If the style uses a sprite, the sprite JSON file must
 be named `sprite.json` and the sprite image `sprite.png` and both files must be
-placed in the same directory as the style itself.
+placed in the same directory as the style itself. *A style compatible with the
+tiles data schema (Mapbox, OpenMapTiles, Tilezen) must be used.*
 
 For a list of "ready to use" styles see the
 [QtPBFImagePlugin-styles](https://github.com/tumic0/QtPBFImagePlugin-styles)
