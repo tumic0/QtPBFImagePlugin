@@ -87,14 +87,22 @@ algorithm to work properly.
 
 ## Status
 A picture is worth a thousand words.
-#### OpenMapTiles (OSM-liberty style)
+#### OpenMapTiles
+
+* Data: [MapTiler](https://github.com/tumic0/GPXSee-maps/blob/master/World/MapTiler.tpl)
+* Style: [OSM-liberty](https://github.com/tumic0/QtPBFImagePlugin-styles/blob/master/OpenMapTiles/osm-liberty/style.json)
+
 ![osm-liberty 5](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-5.png)
 ![osm-liberty 8](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-8.png)
 ![osm-liberty 12](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-12.png)
 ![osm-liberty 14](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-14.png)
 ![osm-liberty 15](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-15.png)
 
-#### Mapbox (Bright style)
+#### Mapbox
+
+* Data: [Mapbox](https://github.com/tumic0/GPXSee-maps/blob/master/World/Mapbox.tpl)
+* Style: [Bright](https://github.com/tumic0/QtPBFImagePlugin-styles/blob/master/Mapbox/bright/style.json)
+
 ![bright 4](https://tumic0.github.io/QtPBFImagePlugin/images/bright-4.png)
 ![bright 6](https://tumic0.github.io/QtPBFImagePlugin/images/bright-6.png)
 ![klokantech-basic 13](https://tumic0.github.io/QtPBFImagePlugin/images/bright-13.png)
