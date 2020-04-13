@@ -34,7 +34,7 @@ static bool isPlainPBF(quint32 magic)
 bool PBFHandler::canRead() const
 {
 	if (canRead(device())) {
-		setFormat("pbf");
+		setFormat("mvt");
 		return true;
 	} else
 		return false;
