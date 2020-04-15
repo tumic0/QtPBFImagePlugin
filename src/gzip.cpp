@@ -1,11 +1,10 @@
-#include <QtEndian>
-#include <QDebug>
+#include <QIODevice>
 #include <zlib.h>
 #include "gzip.h"
 
 #define CHUNK 16384
 
-QByteArray Gzip::uncompress(QIODevice *device, qint64 limit)
+QByteArray Gzip::uncompress(QIODevice *device, int limit)
 {
 	int ret;
 	z_stream strm;

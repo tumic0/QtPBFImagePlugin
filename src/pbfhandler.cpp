@@ -65,12 +65,14 @@ bool PBFHandler::read(QImage *image)
 		return false;
 
 	QByteArray ba;
-	if (isGZIPPBF(magic))
+	if (isGZIPPBF(magic)) {
 		ba = Gzip::uncompress(device());
-	else if (isPlainPBF(magic))
+		if (ba.isNull()) {
+			qCritical() << "Invalid gzip data";
+			return false;
+		}
+	} else if (isPlainPBF(magic))
 		ba = device()->readAll();
-	if (ba.isNull())
-		return false;
 	vector_tile::Tile data;
 	if (!data.ParseFromArray(ba.constData(), ba.size())) {
 		qCritical() << "Invalid PBF data";

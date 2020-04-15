@@ -7,7 +7,7 @@ class QIODevice;
 
 namespace Gzip
 {
-	QByteArray uncompress(QIODevice *device, qint64 limit = 0);
+	QByteArray uncompress(QIODevice *device, int limit = 0);
 }
 
 #endif // GZIP_H
