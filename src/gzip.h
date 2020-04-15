@@ -3,9 +3,11 @@
 
 #include <QByteArray>
 
+class QIODevice;
+
 namespace Gzip
 {
-	QByteArray uncompress(const QByteArray &data);
+	QByteArray uncompress(QIODevice *device, qint64 limit = 0);
 }
 
 #endif // GZIP_H
