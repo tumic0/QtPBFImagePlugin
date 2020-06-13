@@ -348,6 +348,10 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 
 	// symbol
 	_symbolPlacement = FunctionS(json["symbol-placement"]);
+
+	// visibility
+	if (json.contains("visibility") && json["visibility"].isString())
+		_visible = !(json["visibility"].toString() == "none");
 }
 
 QFont Style::Layer::Layout::font(int zoom) const
@@ -635,6 +639,9 @@ void Style::drawLayer(const PBF::Layer &pbfLayer, const Layer &styleLayer,
   Tile &tile) const
 {
 	if (pbfLayer.data()->version() > 2)
+		return;
+
+	if (!styleLayer.isVisible())
 		return;
 
 	QSizeF factor(tile.size().width() / tile.scale().x() /

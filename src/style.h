@@ -42,6 +42,7 @@ private:
 		bool isPath() const {return (_type == Line || _type == Fill);}
 		bool isBackground() const {return (_type == Background);}
 		bool isSymbol() const {return (_type == Symbol);}
+		bool isVisible() const {return (_layout.visible());}
 
 		bool match(int zoom, const PBF::Feature &feature) const;
 		void setPathPainter(Tile &tile, const Sprites &sprites) const;
@@ -92,7 +93,7 @@ private:
 		class Layout {
 		public:
 			Layout() : _textSize(16), _textMaxWidth(10), _textMaxAngle(45),
-			  _font("Open Sans") {}
+			  _font("Open Sans"), _visible(true) {}
 			Layout(const QJsonObject &json);
 
 			qreal maxTextWidth(int zoom) const
@@ -109,6 +110,7 @@ private:
 			Text::Anchor textAnchor(int zoom) const;
 			Text::SymbolPlacement symbolPlacement(int zoom) const;
 			Text::RotationAlignment textRotationAlignment(int zoom) const;
+			bool visible() const {return _visible;}
 
 		private:
 			QFont::Capitalization textTransform(int zoom) const;
@@ -125,6 +127,7 @@ private:
 			FunctionS _symbolPlacement;
 			FunctionS _textRotationAlignment;
 			QFont _font;
+			bool _visible;
 		};
 
 		class Paint {
