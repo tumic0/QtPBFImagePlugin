@@ -9,8 +9,7 @@
 
 Text::~Text()
 {
-	for (int i = 0; i < _items.size(); i++)
-		delete _items[i];
+	qDeleteAll(_items);
 }
 
 void Text::render(QPainter *painter) const

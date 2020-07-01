@@ -113,7 +113,5 @@ PBF::PBF(const vector_tile::Tile &tile)
 
 PBF::~PBF()
 {
-	for (QHash<QString, Layer*>::iterator it = _layers.begin();
-	  it != _layers.end(); it++)
-		delete *it;
+	qDeleteAll(_layers);
 }
