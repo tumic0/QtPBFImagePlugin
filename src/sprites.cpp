@@ -9,9 +9,9 @@
 	Loading the sprites atlas image must be deferred until all image plugins
 	are loaded, otherwise reading the image will cause a deadlock!
 */
-static const QImage *atlas(const QString &fileName)
+static const QImage &atlas(const QString &fileName)
 {
-	static QImage *img = new QImage(fileName);
+	static QImage img(fileName);
 	return img;
 }
 
@@ -86,18 +86,18 @@ QImage Sprites::icon(const QString &name) const
 	if (_imageFile.isEmpty())
 		return QImage();
 
-	const QImage *img = atlas(_imageFile);
-	if (img->isNull())
+	const QImage &img = atlas(_imageFile);
+	if (img.isNull())
 		return QImage();
 
 	QMap<QString, Sprite>::const_iterator it = _sprites.find(name);
 	if (it == _sprites.constEnd())
 		return QImage();
 
-	if (!img->rect().contains(it->rect()))
+	if (!img.rect().contains(it->rect()))
 		return QImage();
 
-	QImage ret(img->copy(it->rect()));
+	QImage ret(img.copy(it->rect()));
 	ret.setDevicePixelRatio(it->pixelRatio());
 
 	return ret;
