@@ -34,6 +34,9 @@ reader.read(&image);
 ```
 you will get 1024x1024px tiles with a pixel ratio of 2 (= HiDPI tiles).
 
+For a sample code see the [pbf2png](https://github.com/tumic0/pbf2png)
+conversion utility.
+
 ## Styles
 The map style is loaded from the
 [$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style/style.json
