@@ -352,6 +352,8 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 	// visibility
 	if (json.contains("visibility") && json["visibility"].isString())
 		_visible = !(json["visibility"].toString() == "none");
+	else
+		_visible = true;
 }
 
 QFont Style::Layer::Layout::font(int zoom) const
