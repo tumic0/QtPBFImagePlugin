@@ -100,7 +100,7 @@ PBF::Layer::Layer(const vector_tile::Tile_Layer *data) : _data(data)
 	_features.reserve(data->features_size());
 	for (int i = 0; i < data->features_size(); i++)
 		_features.append(Feature(&(data->features(i)), this));
-	qSort(_features.begin(), _features.end());
+	std::sort(_features.begin(), _features.end());
 }
 
 PBF::PBF(const vector_tile::Tile &tile)

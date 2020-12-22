@@ -20,8 +20,7 @@ HEADERS += src/pbfhandler.h \
     src/textpointitem.h \
     src/font.h \
     src/textitem.h \
-    src/sprites.h \
-    src/config.h
+    src/sprites.h
 SOURCES += src/pbfplugin.cpp \
     src/pbfhandler.cpp \
     src/gzip.cpp \

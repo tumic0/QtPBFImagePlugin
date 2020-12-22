@@ -51,7 +51,7 @@ repository.
 
 ## Build
 ### Requirements
-* Qt >= 5.4 (5.6 for HiDPI support)
+* Qt5 >= 5.12 or Qt6
 * Google Protocol Buffers (protobuf-lite)
 * Zlib
 

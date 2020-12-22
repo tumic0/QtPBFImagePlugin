@@ -5,6 +5,7 @@
 #include <QJsonArray>
 #include <QFileInfo>
 #include <QDir>
+#include <QRegularExpression>
 #include <QDebug>
 #include "text.h"
 #include "color.h"
@@ -138,22 +139,46 @@ bool Style::Layer::Filter::match(const PBF::Feature &feature) const
 			if (!(v = feature.value(_kv.first)))
 				return false;
 			else
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 				return *v > _kv.second;
+#else // QT6
+				return (QVariant::compare(*v, _kv.second)
+				  == QPartialOrdering::Greater);
+#endif // QT6
 		case GE:
-			if (!(v = feature.value(_kv.first)))
+			{if (!(v = feature.value(_kv.first)))
 				return false;
-			else
+			else {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 				return *v >= _kv.second;
+#else // QT6
+				QPartialOrdering res = QVariant::compare(*v, _kv.second);
+				return (res == QPartialOrdering::Greater
+				  || res == QPartialOrdering::Equivalent);
+#endif // QT6
+			}}
 		case LT:
 			if (!(v = feature.value(_kv.first)))
 				return false;
 			else
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 				return *v < _kv.second;
+#else // QT6
+				return (QVariant::compare(*v, _kv.second)
+				  == QPartialOrdering::Less);
+#endif // QT6
 		case LE:
-			if (!(v = feature.value(_kv.first)))
+			{if (!(v = feature.value(_kv.first)))
 				return false;
-			else
+			else {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 				return *v <= _kv.second;
+#else // QT6
+				QPartialOrdering res = QVariant::compare(*v, _kv.second);
+				return (res == QPartialOrdering::Less
+				  || res == QPartialOrdering::Equivalent);
+#endif // QT6
+			}}
 		case In:
 			if (!(v = feature.value(_kv.first)))
 				return _not;
@@ -180,15 +205,15 @@ bool Style::Layer::Filter::match(const PBF::Feature &feature) const
 
 QString Style::Layer::Template::value(int zoom, const PBF::Feature &feature) const
 {
-	QRegExp rx = QRegExp("\\{[^\\}]*\\}");
+	QRegularExpression rx("(\\{[^\\}]*\\})");
 	QString text(_field.value(zoom));
+	QRegularExpressionMatchIterator it = rx.globalMatch(text);
 	QStringList keys;
-	int pos = 0;
 
-	while ((pos = rx.indexIn(text, pos)) != -1) {
-		QString match = rx.capturedTexts().first();
-		keys.append(match.mid(1, match.size() - 2));
-		pos += rx.matchedLength();
+	while (it.hasNext()) {
+		QRegularExpressionMatch match = it.next();
+		QString val = match.captured(1);
+		keys.append(val.mid(1, val.size() - 2));
 	}
 	for (int i = 0; i < keys.size(); i++) {
 		const QString &key = keys.at(i);
@@ -575,22 +600,15 @@ bool Style::load(const QString &fileName)
 
 	QDir styleDir = QFileInfo(fileName).absoluteDir();
 	loadSprites(styleDir, "sprite.json", "sprite.png", _sprites);
-#ifdef ENABLE_HIDPI
 	loadSprites(styleDir, "sprite@2x.json", "sprite@2x.png", _sprites2x);
-#endif // ENABLE_HIDPI
 
 	return true;
 }
 
 const Sprites &Style::sprites(const QPointF &scale) const
 {
-#ifdef ENABLE_HIDPI
 	return (scale.x() > 1.0 || scale.y() > 1.0)
 	  && !_sprites2x.isNull() ? _sprites2x : _sprites;
-#else // ENABLE_HIDPI
-	Q_UNUSED(scale);
-	return _sprites;
-#endif // ENABLE_HIDPI
 }
 
 void Style::setupLayer(Tile &tile, const Layer &layer) const

@@ -12,7 +12,6 @@
 #include <QBrush>
 #include <QFont>
 #include "pbf.h"
-#include "config.h"
 #include "text.h"
 #include "function.h"
 #include "sprites.h"
@@ -179,10 +178,7 @@ private:
 	  Tile &tile) const;
 
 	QVector<Layer> _layers;
-	Sprites _sprites;
-#ifdef ENABLE_HIDPI
-	Sprites _sprites2x;
-#endif // QT >= 5.6
+	Sprites _sprites, _sprites2x;
 };
 
 #endif // STYLE_H

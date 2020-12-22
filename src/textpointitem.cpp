@@ -1,7 +1,6 @@
 #include <QPainter>
 #include <QtMath>
 #include <QStaticText>
-#include "config.h"
 #include "textpointitem.h"
 
 
@@ -50,16 +49,10 @@ QRectF TextPointItem::fuzzyBoundingRect() const
 	return QRectF(0, 0, width, lines * fs * 1.6);
 }
 
-
 QRectF TextPointItem::moveTextRect(const QRectF &rect) const
 {
-#ifdef ENABLE_HIDPI
 	QRectF iconRect = _icon.isNull() ? QRectF()
 	  : QRectF(QPointF(0, 0), QSizeF(_icon.size()) / _icon.devicePixelRatioF());
-#else // ENABLE_HIDPI
-	QRectF iconRect = _icon.isNull() ? QRectF() : QRectF(QPointF(0, 0),
-	  QSizeF(_icon.size()));
-#endif // ENABLE_HIDPI
 	QRectF textRect(rect);
 
 	switch (_anchor) {
@@ -96,12 +89,8 @@ TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
 	_boundingRect = moveTextRect(_textRect);
 
 	if (!_icon.isNull()) {
-#ifdef ENABLE_HIDPI
 		QRectF iconRect(QPointF(0, 0), QSizeF(_icon.size())
 		  / _icon.devicePixelRatioF());
-#else // ENABLE_HIDPI
-		QRectF iconRect(QPointF(0, 0), QSizeF(_icon.size()));
-#endif // ENABLE_HIDPI
 		iconRect.moveCenter(pos);
 		_boundingRect |= iconRect;
 	}
@@ -127,14 +116,9 @@ void TextPointItem::paint(QPainter *painter) const
 
 	if (!_icon.isNull()) {
 		textRect = moveTextRect(painter->boundingRect(_textRect, FLAGS, text()));
-#ifdef ENABLE_HIDPI
 		painter->drawImage(_pos - QPointF(_icon.width()
 		  / _icon.devicePixelRatioF() / 2, _icon.height()
 		  / _icon.devicePixelRatioF() / 2), _icon);
-#else // ENABLE_HIDPI
-		painter->drawImage(_pos - QPointF(_icon.width() / 2,
-		  _icon.height() / 2), _icon);
-#endif // ENABLE_HIDPI
 	} else
 		textRect = _boundingRect;
 

@@ -34,10 +34,14 @@ static QColor interpolate(const QPair<qreal, QColor> &p0,
 	  ? progress / difference
 	  : (pow(base, progress) - 1) / (pow(base, difference) - 1);
 
-
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 	qreal p0h, p0s, p0l, p0a;
-	p0.second.getHslF(&p0h, &p0s, &p0l, &p0a);
 	qreal p1h, p1s, p1l, p1a;
+#else // QT6
+	float p0h, p0s, p0l, p0a;
+	float p1h, p1s, p1l, p1a;
+#endif // QT6
+	p0.second.getHslF(&p0h, &p0s, &p0l, &p0a);
 	p1.second.getHslF(&p1h, &p1s, &p1l, &p1a);
 
 	/* Qt returns a hue of -1 for achromatic colors. We convert it to a hue of 1
