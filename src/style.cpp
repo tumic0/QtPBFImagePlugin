@@ -205,14 +205,14 @@ bool Style::Layer::Filter::match(const PBF::Feature &feature) const
 
 QString Style::Layer::Template::value(int zoom, const PBF::Feature &feature) const
 {
-	QRegularExpression rx("(\\{[^\\}]*\\})");
+	QRegularExpression rx("\\{[^\\}]*\\}");
 	QString text(_field.value(zoom));
 	QRegularExpressionMatchIterator it = rx.globalMatch(text);
 	QStringList keys;
 
 	while (it.hasNext()) {
 		QRegularExpressionMatch match = it.next();
-		QString val = match.captured(1);
+		QString val = match.captured(0);
 		keys.append(val.mid(1, val.size() - 2));
 	}
 	for (int i = 0; i < keys.size(); i++) {
