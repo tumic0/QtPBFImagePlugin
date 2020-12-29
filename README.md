@@ -51,7 +51,7 @@ repository.
 
 ## Build
 ### Requirements
-* Qt5 >= 5.12 or Qt6
+* Qt5 >= 5.11 or Qt6
 * Google Protocol Buffers (protobuf-lite)
 * Zlib
 
