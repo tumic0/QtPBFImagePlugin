@@ -7,7 +7,7 @@ displaying raster MBTiles maps or raster XYZ online maps to also display
 PBF(MVT) vector tiles without (almost, see usage) any application modifications.
 
 Standard Mapbox GL Styles are used for styling the maps. Most relevant style
-features used by [Maputnik](http://editor.openmaptiles.org) are supported.
+features used by [Maputnik](https://maputnik.github.io/editor) are supported.
 A default fallback style (OSM-Liberty) for OpenMapTiles is part of the plugin.
 
 "Plain" PBF files as well as gzip compressed files (as used in MBTiles) are
