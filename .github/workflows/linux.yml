@@ -17,6 +17,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install qtbase5-dev qtbase5-dev-tools qt5-qmake libprotobuf-dev protobuf-compiler zlib1g-dev
       - name: Configure build
-        run: qmake gpxsee.pro
+        run: qmake pbfplugin.pro
       - name: Build project
         run: make -j2
