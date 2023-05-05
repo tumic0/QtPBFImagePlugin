@@ -11,7 +11,10 @@ public:
 	  : _zoom(zoom), _size(img->size()), _scale(scale),
 	  _text(QSize(img->size().width() / scale.x(),
 	  img->size().height() / scale.y())), _painter(img)
-	  {_painter.scale(scale.x(), scale.y());}
+	{
+		img->fill(Qt::transparent);
+		_painter.scale(scale.x(), scale.y());
+	}
 
 	int zoom() const {return _zoom;}
 	const QSize &size() const {return _size;}
