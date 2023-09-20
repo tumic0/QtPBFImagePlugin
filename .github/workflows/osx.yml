@@ -15,7 +15,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependencies
-        run: brew install qt5 protobuf
+        run: brew install qt5 protobuf@21
       - name: Configure build
         run: qmake PROTOBUF=/usr/local pbfplugin.pro
       - name: Build project
