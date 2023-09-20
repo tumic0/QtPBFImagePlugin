@@ -17,6 +17,6 @@ jobs:
       - name: Install dependencies
         run: brew install qt5 protobuf@21
       - name: Configure build
-        run: qmake PROTOBUF=/usr/local pbfplugin.pro
+        run: qmake PROTOBUF=/usr/local/opt/protobuf@21 pbfplugin.pro
       - name: Build project
         run: make -j3
