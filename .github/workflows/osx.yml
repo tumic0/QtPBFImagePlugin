@@ -11,7 +11,7 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Set environment variables
-        run: echo "PATH=/usr/local/opt/qt@5/bin:$PATH" >> $GITHUB_ENV
+        run: echo "PATH=/usr/local/opt/qt@5/bin:/usr/local/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v2
       - name: Install dependencies
