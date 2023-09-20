@@ -6,7 +6,7 @@
 
 QByteArray Gzip::uncompress(QIODevice *device, int limit)
 {
-	int ret;
+	int ret = Z_STREAM_END;
 	z_stream strm;
 	unsigned char in[CHUNK];
 	unsigned char out[CHUNK];
