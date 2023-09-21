@@ -14,7 +14,7 @@ environment:
 
 install:
 - cmd: |-
-    set PATH=%QTDIR%\bin;%VCPKGDIR%\tools;%PATH%
+    set PATH=%QTDIR%\bin;%VCPKGDIR%\tools\protobuf;%PATH%
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat
     vcpkg install protobuf:x64-windows
     vcpkg install zlib:x64-windows
@@ -26,3 +26,6 @@ build_script:
 
 artifacts:
 - path: pbf.dll
+
+cache:
+- C:\tools\vcpkg\installed\
