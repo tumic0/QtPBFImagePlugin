@@ -18,6 +18,7 @@ install:
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat
     vcpkg install protobuf:x64-windows-static
     vcpkg install zlib:x64-windows-static
+    copy /y %VCPKGDIR%\lib\zlib.lib %VCPKGDIR%\lib\zlibstatic.lib
 
 build_script:
 - cmd: |-
