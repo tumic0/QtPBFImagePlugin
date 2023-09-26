@@ -7,7 +7,7 @@ image:
   - Visual Studio 2022
 
 environment:
-  VCPKGDIR: C:\tools\vcpkg\installed\x64-windows
+  VCPKGDIR: C:\tools\vcpkg\installed\x64-windows-static-md
   matrix:
   - QTDIR: C:\Qt\5.15\msvc2019_64
   - QTDIR: C:\Qt\6.5\msvc2019_64
@@ -29,4 +29,4 @@ artifacts:
 - path: release\pbf.dll
 
 cache:
-#- C:\tools\vcpkg\installed\
+- C:\tools\vcpkg\installed\
