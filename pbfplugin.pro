@@ -48,6 +48,8 @@ win32 {
         $$ZLIB/include
     LIBS += $$PROTOBUF/lib/libprotobuf-lite.lib \
         $$ZLIB/lib/zlibstatic.lib
+    QMAKE_TARGET_DESCRIPTION = Qt MVT image plugin
+    QMAKE_TARGET_COPYRIGHT = Copyright (c) 2023 Martin Tůma
 }
 macx {
     INCLUDEPATH += $$PROTOBUF/include
