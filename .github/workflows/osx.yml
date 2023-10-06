@@ -11,45 +11,27 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Set environment variables
-        run: echo "PATH=/usr/local/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
+        run: echo "PATH=/usr/local/opt/qt@5/bin:/usr/local/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: '5.15.2'
-      - name: Install protobuf
-        run: brew install protobuf@21
+      - name: Install dependencies
+        run: brew install qt@5 protobuf@21
       - name: Configure build
         run: qmake PROTOBUF=/usr/local/opt/protobuf@21 pbfplugin.pro
       - name: Build project
         run: make -j3
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: libpbf-qt5.dylib
-          path: libpbf.dylib
 
   qt6:
     name: QtPBFImagePlugin Qt6 build
     runs-on: macos-latest
     steps:
       - name: Set environment variables
-        run: echo "PATH=/usr/local/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
+        run: echo "PATH=/usr/local/opt/qt@6/bin:/usr/local/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Install Qt
-        uses: jurplel/install-qt-action@v3
-        with:
-          version: '6.5.1'
-      - name: Install protobuf
-        run: brew install protobuf@21
+      - name: Install dependencies
+        run: brew install qt@6 protobuf@21
       - name: Configure build
         run: qmake PROTOBUF=/usr/local/opt/protobuf@21 pbfplugin.pro
       - name: Build project
         run: make -j3
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: libpbf-qt6.dylib
-          path: libpbf.dylib
