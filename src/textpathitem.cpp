@@ -145,6 +145,8 @@ static QList<QPolygonF> polyLines(const QPainterPath &path, const QRectF &rect)
 
 			if (lastIn) {
 				QPointF p;
+				if (line.isEmpty())
+					line.append(path.elementAt(i-1));
 				if (intersection(l, rect, &p))
 					line.append(p);
 				lines.append(line);
