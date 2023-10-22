@@ -171,6 +171,12 @@ static QList<QPolygonF> polyLines(const QPainterPath &path, const QRectF &rect)
 	return lines;
 }
 
+static qreal diff(qreal a1, qreal a2)
+{
+	qreal d = qAbs(a1 - a2);
+	return (d > 180) ? 360 - d : d;
+}
+
 static QPainterPath textPath(const QPainterPath &path, qreal textWidth,
   qreal maxAngle, qreal charWidth, const QRectF &tileRect)
 {
@@ -189,11 +195,16 @@ static QPainterPath textPath(const QPainterPath &path, qreal textWidth,
 			qreal sl = l.length();
 			qreal a = l.angle();
 
-			if ((sl < charWidth) || (j > 1 && qAbs(angle - a) > maxAngle)) {
+			if (sl < charWidth) {
 				if (length > textWidth)
 					return subpath(pl, last, j - 1, length - textWidth);
 				last = j;
 				length = 0;
+			} else if (j > 1 && diff(angle, a) > maxAngle) {
+				if (length > textWidth)
+					return subpath(pl, last, j - 1, length - textWidth);
+				last = j - 1;
+				length = sl;
 			} else
 				length += sl;
 
