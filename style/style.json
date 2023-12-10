@@ -2265,7 +2265,6 @@
       "source": "openmaptiles",
       "source-layer": "building",
       "minzoom": 13,
-      "maxzoom": 14,
       "layout": {
         "visibility": "visible"
       },

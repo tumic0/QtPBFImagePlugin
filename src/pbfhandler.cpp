@@ -79,16 +79,17 @@ bool PBFHandler::read(QImage *image)
 		return false;
 	}
 
-	bool ok;
-	int zoom = format().toInt(&ok);
+	QList<QByteArray> list(format().split(';'));
+	int zoom = list.size() ? list.first().toInt() : 0;
+	int overzoom = (list.size() > 1) ? list.at(1).toInt() : 0;
 
 	QSize size = _scaledSize.isValid()
 	  ? _scaledSize : QSize(TILE_SIZE, TILE_SIZE);
-	QPointF scale = _scaledSize.isValid()
-	  ? QPointF((qreal)_scaledSize.width() / TILE_SIZE,
-		(qreal)_scaledSize.height() / TILE_SIZE) : QPointF(1.0, 1.0);
+	QPointF scale((qreal)size.width() / (TILE_SIZE << overzoom),
+	  (qreal)size.height() / (TILE_SIZE << overzoom));
+
 	*image = QImage(size, QImage::Format_ARGB32_Premultiplied);
-	Tile tile(image, ok ? zoom : -1, scale);
+	Tile tile(image, zoom, scale);
 
 	_style->render(data, tile);
 
