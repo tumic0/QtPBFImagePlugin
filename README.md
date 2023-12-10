@@ -34,6 +34,17 @@ reader.read(&image);
 ```
 you will get 1024x1024px tiles with a pixel ratio of 2 (= HiDPI tiles).
 
+Since version 2.7 tile "overzoom" is supported. If you set *format* to
+"$zoom;$overzoom":
+```cpp
+QPixmap pm;
+pm.loadFromData(tileData, QByteArray::number(zoom) + ';' +
+                          QByteArray::number(overzoom));
+```
+you will get (512<<overzoom)x(512<<overzoom)px tiles with a pixel ratio of 1.
+When overzoom is combined with setScaledSize(), the base size is the overzoomed
+tile size.
+
 For a sample code see the [pbf2png](https://github.com/tumic0/pbf2png)
 conversion utility.
 
