@@ -83,10 +83,12 @@ bool PBFHandler::read(QImage *image)
 	int zoom = list.size() ? list.first().toInt() : 0;
 	int overzoom = (list.size() > 1) ? list.at(1).toInt() : 0;
 
-	QSize size = _scaledSize.isValid()
-	  ? _scaledSize : QSize(TILE_SIZE, TILE_SIZE);
-	QPointF scale((qreal)size.width() / (TILE_SIZE << overzoom),
-	  (qreal)size.height() / (TILE_SIZE << overzoom));
+	QSize scaledSize(_scaledSize.isValid()
+	  ? _scaledSize : QSize(TILE_SIZE, TILE_SIZE));
+	QSize size(scaledSize.width()<<overzoom,
+	  scaledSize.height()<<overzoom);
+	QPointF scale((qreal)scaledSize.width() / TILE_SIZE,
+	  (qreal)scaledSize.height() / TILE_SIZE);
 
 	*image = QImage(size, QImage::Format_ARGB32_Premultiplied);
 	Tile tile(image, zoom, scale);
