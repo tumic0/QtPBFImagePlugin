@@ -34,8 +34,8 @@ reader.read(&image);
 ```
 you will get 1024x1024px tiles with a pixel ratio of 2 (= HiDPI tiles).
 
-Since version 2.7 tile "overzoom" is supported. If you set *format* to
-"$zoom;$overzoom":
+Since version 2.7 tile overzoom is supported. If you set *format* to
+`$zoom;$overzoom`:
 ```cpp
 QPixmap pm;
 pm.loadFromData(tileData, QByteArray::number(zoom) + ';' +
