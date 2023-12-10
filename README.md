@@ -25,6 +25,11 @@ to the functions:
 QPixmap pm;
 pm.loadFromData(tileData, QByteArray::number(zoom));
 ```
+
+For a complete code sample see the [pbf2png](https://github.com/tumic0/pbf2png)
+conversion utility.
+
+### HiDPI
 The plugin supports vector scaling using QImageReader's setScaledSize() method,
 so when used like in the following example:
 ```cpp
@@ -34,6 +39,7 @@ reader.read(&image);
 ```
 you will get 1024x1024px tiles with a pixel ratio of 2 (= HiDPI tiles).
 
+### Overzoom
 Since version 2.7 tile overzoom is supported. If you set *format* to
 `$zoom;$overzoom`:
 ```cpp
@@ -44,9 +50,6 @@ pm.loadFromData(tileData, QByteArray::number(zoom) + ';' +
 you will get (512<<overzoom)x(512<<overzoom)px tiles with a pixel ratio of 1.
 When overzoom is combined with setScaledSize(), the base size is the overzoomed
 tile size.
-
-For a sample code see the [pbf2png](https://github.com/tumic0/pbf2png)
-conversion utility.
 
 ## Styles
 The map style is loaded from the
