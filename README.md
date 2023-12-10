@@ -23,12 +23,12 @@ QPixmap::loadFromData() functions. The zoom number is passed as ASCII string
 to the functions:
 ```cpp
 QPixmap pm;
-pm.loadFromData(tileData, QString::number(zoom).toLatin1());
+pm.loadFromData(tileData, QByteArray::number(zoom));
 ```
 The plugin supports vector scaling using QImageReader's setScaledSize() method,
 so when used like in the following example:
 ```cpp
-QImageReader reader(file, QString::number(zoom).toLatin1());
+QImageReader reader(file, QByteArray::number(zoom));
 reader.setScaledSize(QSize(1024, 1024));
 reader.read(&image);
 ```
