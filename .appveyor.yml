@@ -26,7 +26,7 @@ build_script:
     nmake release
 
 artifacts:
-- path: release\pbf2.dll
+- path: release\pbf3.dll
 
 cache:
 - C:\tools\vcpkg\installed\
