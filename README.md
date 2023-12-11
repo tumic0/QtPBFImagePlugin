@@ -18,19 +18,19 @@ to fit the styles and available data (OpenMapTiles, Mapbox tiles).
 Due to a major design flaw in the Mapbox vector tiles specification - the zoom
 is not part of the PBF data - the plugin can not be used "as is", but passing
 the zoom level is necessary. This is done by exploiting the optional *format*
-parameter of the QImage constructor or the QImage::fromData() or
-QPixmap::loadFromData() functions. The zoom number is passed as ASCII string
+parameter of the QImage constructor or the *QImage::loadFromData()* or
+*QPixmap::loadFromData()* functions. The zoom number is passed as ASCII string
 to the functions:
 ```cpp
-QPixmap pm;
-pm.loadFromData(data, QByteArray::number(zoom));
+QImage img;
+img.loadFromData(data, QByteArray::number(zoom));
 ```
 
 For a complete code sample see the [pbf2png](https://github.com/tumic0/pbf2png)
 conversion utility.
 
 ### HiDPI
-The plugin supports vector scaling using QImageReader's setScaledSize() method,
+The plugin supports vector scaling using QImageReader's *setScaledSize()* method,
 so when used like in the following example:
 ```cpp
 QImage img;
@@ -44,9 +44,9 @@ you will get 1024x1024px tiles with a pixel ratio of 2 (= HiDPI tiles).
 Since version 3 of the plugin tile overzoom is supported. If you set *format*
 to `$zoom;$overzoom`:
 ```cpp
-QPixmap pm;
+QImage img;
 QByteArray fmt(QByteArray::number(zoom) + ';' + QByteArray::number(overzoom));
-pm.loadFromData(data, fmt);
+img.loadFromData(data, fmt);
 ```
 you will get (512<<overzoom)x(512<<overzoom)px tiles with a pixel ratio of 1.
 When overzoom is combined with setScaledSize(), the base size is the overzoomed
