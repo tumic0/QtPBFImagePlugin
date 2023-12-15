@@ -42,6 +42,9 @@ DEFINES += QT_NO_DEPRECATED_WARNINGS
 unix:!macx:!android {
     LIBS += -lprotobuf-lite \
         -lz
+
+    target.path += $$[QT_INSTALL_PLUGINS]/imageformats
+    INSTALLS += target
 }
 win32 {
     INCLUDEPATH += $$PROTOBUF/include \
@@ -62,7 +65,7 @@ android {
     INCLUDEPATH += $$PROTOBUF/include
     LIBS += $$PROTOBUF/$$ANDROID_TARGET_ARCH/libprotobuf-lite.a \
         -lz
-}
 
-target.path += $$[QT_INSTALL_PLUGINS]/imageformats
-INSTALLS += target
+    DESTDIR = $$top_builddir/plugins/pbf
+    TARGET = $$qt5LibraryTarget(pbf, "plugins/imageformats/")
+}
