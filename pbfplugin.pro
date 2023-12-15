@@ -66,6 +66,7 @@ android {
     LIBS += $$PROTOBUF/$$ANDROID_TARGET_ARCH/libprotobuf-lite.a \
         -lz
 
+    top_builddir=$$shadowed($$PWD)
     DESTDIR = $$top_builddir/plugins/pbf
     TARGET = $$qt5LibraryTarget(pbf, "plugins/imageformats/")
 }
