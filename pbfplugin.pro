@@ -39,7 +39,7 @@ RESOURCES += pbfplugin.qrc
 
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 
-unix:!macx{
+unix:!macx:!android {
     LIBS += -lprotobuf-lite \
         -lz
 }
@@ -56,6 +56,11 @@ win32 {
 macx {
     INCLUDEPATH += $$PROTOBUF/include
     LIBS += $$PROTOBUF/lib/libprotobuf-lite.a \
+        -lz
+}
+android {
+    INCLUDEPATH += $$PROTOBUF/include
+    LIBS += $$PROTOBUF/$$ANDROID_TARGET_ARCH/libprotobuf-lite.a \
         -lz
 }
 

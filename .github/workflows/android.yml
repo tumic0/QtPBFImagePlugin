@@ -41,7 +41,9 @@ jobs:
           version: '6.4.0'
           target: 'android'
           arch: 'android_arm64_v8a'
+      - name: Install Android Google Protocol Buffers
+        run:  git clone https://github.com/tumic0/android_protobuf.git
       - name: Configure build
-        run:  qmake pbfplugin.pro
+        run:  qmake pbfplugin.pro PROTOBUF=android_protobuf
       - name: Build project
         run:  make -j2
