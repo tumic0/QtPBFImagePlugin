@@ -50,4 +50,4 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          path: libpbf.so
+          path: libpbf_arm64-v8a.so
