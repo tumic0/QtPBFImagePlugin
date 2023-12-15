@@ -42,6 +42,6 @@ jobs:
           target: 'android'
           arch: 'android_arm64_v8a'
       - name: Configure build
-        run:  qmake gpxsee.pro 
+        run:  qmake pbfplugin.pro
       - name: Build project
         run:  make -j2
