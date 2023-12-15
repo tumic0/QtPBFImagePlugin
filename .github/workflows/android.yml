@@ -50,5 +50,5 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v3
         with:
-          name: libplugins_imageformats_pbf_arm64-v8a.so
-          path: plugins/pbf/libplugins_imageformats_pbf_arm64-v8a.so
+          name: libplugins_imageformats_libpbf_arm64-v8a.so
+          path: plugins/pbf/libplugins_imageformats_libpbf_arm64-v8a.so

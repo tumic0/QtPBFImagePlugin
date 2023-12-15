@@ -67,6 +67,6 @@ android {
         -lz
 
     top_builddir=$$shadowed($$PWD)
-    DESTDIR = $$top_builddir/plugins/pbf
-    TARGET = $$qt5LibraryTarget(pbf, "plugins/imageformats/")
+    DESTDIR = $$top_builddir/plugins/libpbf
+    TARGET = $$qt5LibraryTarget(libpbf, "plugins/imageformats/")
 }
