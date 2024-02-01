@@ -8,7 +8,6 @@
 #include <QRegularExpression>
 #include <QDebug>
 #include "text.h"
-#include "color.h"
 #include "font.h"
 #include "tile.h"
 #include "pbf.h"
@@ -634,9 +633,6 @@ void Style::drawBackground(Tile &tile) const
 		_layers.first().setPathPainter(tile, _sprites);
 		tile.painter().drawPath(path);
 	}
-
-	//tile.painter().setPen(Qt::red);
-	//tile.painter().drawRect(rect);
 }
 
 void Style::drawFeature(const PBF::Feature &feature, const Layer &layer,
@@ -689,4 +685,11 @@ void Style::render(const PBF &data, Tile &tile) const
 	}
 
 	tile.text().render(&tile.painter());
+
+	//QRectF rect(QPointF(0, 0), QSizeF(tile.size().width() / tile.scale().x(),
+	//  tile.size().height() / tile.scale().y()));
+	//tile.painter().setPen(Qt::red);
+	//tile.painter().setBrush(Qt::NoBrush);
+	//tile.painter().setRenderHint(QPainter::Antialiasing, false);
+	//tile.painter().drawRect(rect);
 }
