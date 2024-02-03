@@ -54,7 +54,7 @@ win32 {
 
     QMAKE_TARGET_PRODUCT = QtPBFImagePlugin
     QMAKE_TARGET_DESCRIPTION = Qt $$QT_VERSION MVT/PBF image plugin
-    QMAKE_TARGET_COPYRIGHT = Copyright (c) 2023 Martin Tuma
+    QMAKE_TARGET_COPYRIGHT = Copyright (c) 2018-2024 Martin Tuma
 }
 macx {
     INCLUDEPATH += $$PROTOBUF/include
