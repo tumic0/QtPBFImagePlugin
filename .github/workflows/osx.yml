@@ -13,7 +13,7 @@ jobs:
       - name: Set environment variables
         run: echo "PATH=/usr/local/opt/qt@5/bin:/usr/local/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install dependencies
         run: brew install qt@5 protobuf@21
       - name: Configure build
@@ -28,7 +28,7 @@ jobs:
       - name: Set environment variables
         run: echo "PATH=/usr/local/opt/qt@6/bin:/usr/local/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Install dependencies
         run: brew install qt@6 protobuf@21
       - name: Configure build
