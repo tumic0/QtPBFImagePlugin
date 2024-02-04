@@ -108,7 +108,7 @@ algorithm to work properly.
 A picture is worth a thousand words.
 #### OpenMapTiles
 
-* Data: [MapTiler](https://github.com/tumic0/GPXSee-maps/blob/master/World/MapTiler.tpl)
+* Data: [MapTiler](https://github.com/tumic0/GPXSee-maps/blob/master/World/MapTiler-OpenMapTiles.tpl)
 * Style: [OSM-liberty](https://github.com/tumic0/QtPBFImagePlugin-styles/blob/master/OpenMapTiles/osm-liberty/style.json)
 
 ![osm-liberty 5](https://tumic0.github.io/QtPBFImagePlugin/images/osm-liberty-5.png)
