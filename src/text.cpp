@@ -73,7 +73,7 @@ void Text::addLabel(const QString &text, const QImage &icon,
 	ti->setHalo(_halo);
 	addItem(ti);
 
-	QList<TextItem*> ci = collidingItems(ti);
+	QList<TextItem*> ci(collidingItems(ti));
 	for (int i = 0; i < ci.size(); i++)
 		ci[i]->setVisible(false);
 }

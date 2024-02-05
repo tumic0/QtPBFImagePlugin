@@ -204,7 +204,7 @@ bool Style::Layer::Filter::match(const PBF::Feature &feature) const
 
 QString Style::Layer::Template::value(int zoom, const PBF::Feature &feature) const
 {
-	QRegularExpression rx("\\{[^\\}]*\\}");
+	static QRegularExpression rx("\\{[^\\}]*\\}");
 	QString text(_field.value(zoom));
 	QRegularExpressionMatchIterator it = rx.globalMatch(text);
 	QStringList keys;
@@ -546,11 +546,11 @@ void Style::Layer::setTextProperties(Tile &tile) const
 void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
   const PBF::Feature &feature, const Sprites &sprites) const
 {
-	QString text = _layout.text(tile.zoom(), feature);
+	QString text(_layout.text(tile.zoom(), feature));
 	if (text.isEmpty())
 		return;
 
-	QString icon = _layout.icon(tile.zoom(), feature);
+	QString icon(_layout.icon(tile.zoom(), feature));
 	tile.text().addLabel(text, sprites.icon(icon), path);
 }
 
@@ -597,7 +597,7 @@ bool Style::load(const QString &fileName)
 				_layers.append(Layer(layers[i].toObject()));
 	}
 
-	QDir styleDir = QFileInfo(fileName).absoluteDir();
+	QDir styleDir(QFileInfo(fileName).absoluteDir());
 	loadSprites(styleDir, "sprite.json", "sprite.png", _sprites);
 	loadSprites(styleDir, "sprite@2x.json", "sprite@2x.png", _sprites2x);
 
