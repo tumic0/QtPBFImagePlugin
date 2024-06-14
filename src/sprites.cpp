@@ -4,10 +4,10 @@
 #include <QDebug>
 #include "sprites.h"
 
-static void decodeSDF(QImage &img, const QColor &color)
+static QImage sdf2img(const QImage &sdf, const QColor &color)
 {
+	QImage img(sdf.convertToFormat(QImage::Format_ARGB32_Premultiplied));
 	quint32 argb = color.rgba();
-	img.convertTo(QImage::Format_ARGB32_Premultiplied);
 	uchar *bits = img.bits();
 	int bpl = img.bytesPerLine();
 
@@ -17,6 +17,8 @@ static void decodeSDF(QImage &img, const QColor &color)
 			*pixel = ((*pixel >> 24) < 192) ? 0 : argb;
 		}
 	}
+
+	return img;
 }
 
 Sprites::Sprite::Sprite(const QJsonObject &json)
@@ -104,12 +106,9 @@ QImage Sprites::sprite(const Sprite &sprite, const QColor &color, qreal scale)
 			QSize size(img.size().width() * scale, img.size().height() * scale);
 			QImage simg(img.scaled(size, Qt::IgnoreAspectRatio,
 			  Qt::SmoothTransformation));
-			decodeSDF(simg, color);
-			return simg;
-		} else {
-			decodeSDF(img, color);
-			return img;
-		}
+			return sdf2img(simg, color);
+		} else
+			return sdf2img(img, color);
 	} else
 		return img;
 }
