@@ -6,7 +6,7 @@
 
 static QImage sdf2img(const QImage &sdf, const QColor &color)
 {
-	QImage img(sdf.convertToFormat(QImage::Format_ARGB32_Premultiplied));
+	QImage img(sdf.convertToFormat(QImage::Format_ARGB32));
 	quint32 argb = color.rgba();
 	uchar *bits = img.bits();
 	int bpl = img.bytesPerLine();
