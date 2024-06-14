@@ -15,7 +15,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install dependencies
-        run: brew install qt@5 protobuf@21
+        run: |
+          brew update
+          brew install qt@5 protobuf@21
+          brew link --force protobuf@21
+          brew link --force qt@5
       - name: Configure build
         run: qmake PROTOBUF=/usr/local/opt/protobuf@21 pbfplugin.pro
       - name: Build project
@@ -30,7 +34,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install dependencies
-        run: brew install qt@6 protobuf@21
+        run: |
+          brew update
+          brew install qt@6 protobuf@21
+          brew link --force protobuf@21
       - name: Configure build
         run: qmake PROTOBUF=/usr/local/opt/protobuf@21 pbfplugin.pro
       - name: Build project
