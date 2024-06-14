@@ -11,7 +11,7 @@ class Style;
 class PBFHandler : public QImageIOHandler
 {
 public:
-	PBFHandler(const Style *style) : _style(style) {}
+	PBFHandler(Style *style) : _style(style) {}
 	~PBFHandler() {}
 
 	bool canRead() const;
@@ -24,7 +24,7 @@ public:
 	static bool canRead(QIODevice *device);
 
 private:
-	const Style *_style;
+	Style *_style;
 	QSize _scaledSize;
 };
 

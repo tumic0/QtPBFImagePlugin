@@ -85,7 +85,7 @@ TextPointItem::TextPointItem(const QString &text, const QPointF &pos,
   : TextItem(text, font), _pos(pos), _icon(icon), _maxWidth(maxWidth),
   _anchor(anchor)
 {
-	_textRect = fuzzyBoundingRect();
+	_textRect = text.isEmpty() ? QRectF() : fuzzyBoundingRect();
 	_boundingRect = moveTextRect(_textRect);
 
 	if (!_icon.isNull()) {

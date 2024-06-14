@@ -14,15 +14,10 @@ Text::~Text()
 
 void Text::render(QPainter *painter) const
 {
-	QSet<QString> set;
-
 	for (int i = 0; i < _items.size(); i++) {
 		const TextItem *ti = _items.at(i);
-		if (ti->isVisible() && _sceneRect.intersects(ti->boundingRect())
-		  && !set.contains(ti->text())) {
+		if (ti->isVisible() && _sceneRect.intersects(ti->boundingRect()))
 			ti->paint(painter);
-			set.insert(ti->text());
-		}
 	}
 }
 
@@ -51,6 +46,8 @@ void Text::addLabel(const QString &text, const QImage &icon,
 	} else {
 		switch (_placement) {
 			case Line:
+				if (text.isEmpty())
+					return;
 				ti = new TextPathItem(text, path, _font, _maxAngle, _sceneRect);
 				break;
 			case LineCenter:

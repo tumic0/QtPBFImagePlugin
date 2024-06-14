@@ -4,21 +4,24 @@
 #include <QDebug>
 #include "sprites.h"
 
-
-/*
-	Loading the sprites atlas image must be deferred until all image plugins
-	are loaded, otherwise reading the image will cause a deadlock!
-*/
-static const QImage &atlas(const QString &fileName)
+static void decodeSDF(QImage &img, const QColor &color)
 {
-	static QImage img(fileName);
-	return img;
+	quint32 argb = color.rgba();
+	img.convertTo(QImage::Format_ARGB32_Premultiplied);
+	uchar *bits = img.bits();
+	int bpl = img.bytesPerLine();
+
+	for (int y = 0; y < img.height(); y++) {
+		for (int x = 0; x < img.width(); x++) {
+			quint32 *pixel =  (quint32*)(bits + y * bpl + x * 4);
+			*pixel = ((*pixel >> 24) < 192) ? 0 : argb;
+		}
+	}
 }
 
 Sprites::Sprite::Sprite(const QJsonObject &json)
 {
 	int x, y, width, height;
-
 
 	if (json.contains("x") && json["x"].isDouble())
 		x = json["x"].toInt();
@@ -44,12 +47,15 @@ Sprites::Sprite::Sprite(const QJsonObject &json)
 		_pixelRatio = json["pixelRatio"].toDouble();
 	else
 		_pixelRatio = 1.0;
+
+	if (json.contains("sdf") && json["sdf"].isBool())
+		_sdf = json["sdf"].toBool();
+	else
+		_sdf = false;
 }
 
 bool Sprites::load(const QString &jsonFile, const QString &imageFile)
 {
-	_imageFile = imageFile;
-
 	QFile file(jsonFile);
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
 		qCritical() << jsonFile << ": error opening file";
@@ -78,27 +84,63 @@ bool Sprites::load(const QString &jsonFile, const QString &imageFile)
 			qWarning() << it.key() << ": invalid sprite definition";
 	}
 
+	// Loading the sprites atlas image must be deferred until all image plugins
+	// are loaded, otherwise reading the image will cause a deadlock in Qt!
+	_imageFile = imageFile;
+
 	return true;
 }
 
-QImage Sprites::icon(const QString &name) const
+QImage Sprites::sprite(const Sprite &sprite, const QColor &color, qreal scale)
 {
-	if (_imageFile.isEmpty())
+	if (!_img.rect().contains(sprite.rect()))
 		return QImage();
 
-	const QImage &img = atlas(_imageFile);
-	if (img.isNull())
+	QImage img(_img.copy(sprite.rect()));
+	img.setDevicePixelRatio(sprite.pixelRatio());
+
+	if (sprite.sdf()) {
+		if (scale != 1.0) {
+			QSize size(img.size().width() * scale, img.size().height() * scale);
+			QImage simg(img.scaled(size, Qt::IgnoreAspectRatio,
+			  Qt::SmoothTransformation));
+			decodeSDF(simg, color);
+			return simg;
+		} else {
+			decodeSDF(img, color);
+			return img;
+		}
+	} else
+		return img;
+}
+
+QImage Sprites::icon(const QString &name, const QColor &color, qreal size)
+{
+	if (name.isNull())
 		return QImage();
 
-	QMap<QString, Sprite>::const_iterator it = _sprites.find(name);
+	_lock.lock();
+	if (_init <= 0) {
+		if (_init < 0) {
+			_lock.unlock();
+			return QImage();
+		}
+
+		_img = QImage(_imageFile);
+		if (_img.isNull()) {
+			qWarning() << _imageFile << ": invalid sprite atlas image";
+			_init = -1;
+			_lock.unlock();
+			return QImage();
+		}
+
+		_init = 1;
+	}
+	_lock.unlock();
+
+	QMap<QString, Sprite>::const_iterator it = _sprites.constFind(name);
 	if (it == _sprites.constEnd())
 		return QImage();
 
-	if (!img.rect().contains(it->rect()))
-		return QImage();
-
-	QImage ret(img.copy(it->rect()));
-	ret.setDevicePixelRatio(it->pixelRatio());
-
-	return ret;
+	return sprite(*it, color, size);
 }

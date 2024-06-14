@@ -29,7 +29,7 @@ public:
 	Style(QObject *parent = 0) : QObject(parent) {}
 
 	bool load(const QString &fileName);
-	void render(const PBF &data, Tile &tile) const;
+	void render(const PBF &data, Tile &tile);
 
 private:
 	class Layer {
@@ -44,10 +44,10 @@ private:
 		bool isVisible() const {return (_layout.visible());}
 
 		bool match(int zoom, const PBF::Feature &feature) const;
-		void setPathPainter(Tile &tile, const Sprites &sprites) const;
+		void setPathPainter(Tile &tile, Sprites &sprites) const;
 		void setTextProperties(Tile &tile) const;
 		void addSymbol(Tile &tile, const QPainterPath &path,
-		  const PBF::Feature &feature, const Sprites &sprites) const;
+		  const PBF::Feature &feature, Sprites &sprites) const;
 
 	private:
 		enum Type {
@@ -103,6 +103,8 @@ private:
 			  {return _text.value(zoom, feature).trimmed();}
 			QString icon(int zoom, const PBF::Feature &feature) const
 			  {return _icon.value(zoom, feature);}
+			qreal iconSize(int zoom) const
+			  {return _iconSize.value(zoom);}
 			QFont font(int zoom) const;
 			Qt::PenCapStyle lineCap(int zoom) const;
 			Qt::PenJoinStyle lineJoin(int zoom) const;
@@ -116,6 +118,7 @@ private:
 
 			Template _text;
 			Template _icon;
+			FunctionF _iconSize;
 			FunctionF _textSize;
 			FunctionF _textMaxWidth;
 			FunctionF _textMaxAngle;
@@ -135,13 +138,15 @@ private:
 			Paint(const QJsonObject &json);
 
 			QPen pen(Layer::Type type, int zoom) const;
-			QBrush brush(Layer::Type type, int zoom, const Sprites &sprites)
+			QBrush brush(Layer::Type type, int zoom, Sprites &sprites)
 			  const;
 			qreal opacity(Layer::Type type, int zoom) const;
 			bool antialias(Layer::Type type, int zoom) const;
 			Text::Halo halo(int zoom) const
 			  {return Text::Halo(_textHaloColor.value(zoom),
 			  _textHaloWidth.value(zoom), _textHaloBlur.value(zoom));}
+			QColor iconColor(int zoom) const
+			  {return _iconColor.value(zoom);}
 
 		private:
 			FunctionC _textColor;
@@ -150,6 +155,7 @@ private:
 			FunctionC _fillColor;
 			FunctionC _fillOutlineColor;
 			FunctionC _backgroundColor;
+			FunctionC _iconColor;
 			FunctionF _fillOpacity;
 			FunctionF _lineOpacity;
 			FunctionF _lineWidth;
@@ -168,14 +174,14 @@ private:
 		Paint _paint;
 	};
 
-	const Sprites &sprites(const QPointF &scale) const;
+	Sprites &sprites(const QPointF &scale);
 
-	void drawBackground(Tile &tile) const;
-	void setupLayer(Tile &tile, const Layer &layer) const;
+	void drawBackground(Tile &tile);
+	void setupLayer(Tile &tile, const Layer &layer);
 	void drawFeature(const PBF::Feature &feature, const Layer &layer,
-	  Tile &tile, const QSizeF &factor) const;
+	  Tile &tile, const QSizeF &factor);
 	void drawLayer(const PBF::Layer &pbfLayer, const Layer &styleLayer,
-	  Tile &tile) const;
+	  Tile &tile);
 
 	QVector<Layer> _layers;
 	Sprites _sprites, _sprites2x;

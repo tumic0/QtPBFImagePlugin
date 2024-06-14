@@ -257,6 +257,9 @@ Style::Layer::Paint::Paint(const QJsonObject &json)
 	_textHaloColor = FunctionC(json["text-halo-color"], QColor());
 	_textHaloWidth = FunctionF(json["text-halo-width"]);
 	_textHaloBlur = FunctionF(json["text-halo-blur"]);
+
+	// icon
+	_iconColor = FunctionC(json["icon-color"]);
 }
 
 QPen Style::Layer::Paint::pen(Type type, int zoom) const
@@ -292,7 +295,7 @@ QPen Style::Layer::Paint::pen(Type type, int zoom) const
 	return pen;
 }
 
-QBrush Style::Layer::Paint::brush(Type type, int zoom, const Sprites &sprites)
+QBrush Style::Layer::Paint::brush(Type type, int zoom, Sprites &sprites)
   const
 {
 	QColor color;
@@ -369,6 +372,7 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 
 	// icon
 	_icon = Template(FunctionS(json["icon-image"]));
+	_iconSize = FunctionF(json["icon-size"]);
 
 	// symbol
 	_symbolPlacement = FunctionS(json["symbol-placement"]);
@@ -511,7 +515,7 @@ bool Style::Layer::match(int zoom, const PBF::Feature &feature) const
 	return _filter.match(feature);
 }
 
-void Style::Layer::setPathPainter(Tile &tile, const Sprites &sprites) const
+void Style::Layer::setPathPainter(Tile &tile, Sprites &sprites) const
 {
 	QPainter &p = tile.painter();
 	int zoom = tile.zoom();
@@ -544,14 +548,18 @@ void Style::Layer::setTextProperties(Tile &tile) const
 }
 
 void Style::Layer::addSymbol(Tile &tile, const QPainterPath &path,
-  const PBF::Feature &feature, const Sprites &sprites) const
+  const PBF::Feature &feature, Sprites &sprites) const
 {
 	QString text(_layout.text(tile.zoom(), feature));
-	if (text.isEmpty())
+	QString icon(_layout.icon(tile.zoom(), feature));
+	QColor color(_paint.iconColor(tile.zoom()));
+	qreal size(_layout.iconSize(tile.zoom()));
+	QImage img(sprites.icon(icon, color, size));
+
+	if (text.isEmpty() && img.isNull())
 		return;
 
-	QString icon(_layout.icon(tile.zoom(), feature));
-	tile.text().addLabel(text, sprites.icon(icon), path);
+	tile.text().addLabel(text, img, path);
 }
 
 static bool loadSprites(const QDir &styleDir, const QString &json,
@@ -604,13 +612,13 @@ bool Style::load(const QString &fileName)
 	return true;
 }
 
-const Sprites &Style::sprites(const QPointF &scale) const
+Sprites &Style::sprites(const QPointF &scale)
 {
 	return (scale.x() > 1.0 || scale.y() > 1.0)
 	  && !_sprites2x.isNull() ? _sprites2x : _sprites;
 }
 
-void Style::setupLayer(Tile &tile, const Layer &layer) const
+void Style::setupLayer(Tile &tile, const Layer &layer)
 {
 	if (layer.isSymbol())
 		layer.setTextProperties(tile);
@@ -618,7 +626,7 @@ void Style::setupLayer(Tile &tile, const Layer &layer) const
 		layer.setPathPainter(tile, sprites(tile.scale()));
 }
 
-void Style::drawBackground(Tile &tile) const
+void Style::drawBackground(Tile &tile)
 {
 	QRectF rect(QPointF(0, 0), QSizeF(tile.size().width() / tile.scale().x(),
 	  tile.size().height() / tile.scale().y()));
@@ -636,7 +644,7 @@ void Style::drawBackground(Tile &tile) const
 }
 
 void Style::drawFeature(const PBF::Feature &feature, const Layer &layer,
-  Tile &tile, const QSizeF &factor) const
+  Tile &tile, const QSizeF &factor)
 {
 	if (!layer.match(tile.zoom(), feature))
 		return;
@@ -652,7 +660,7 @@ void Style::drawFeature(const PBF::Feature &feature, const Layer &layer,
 }
 
 void Style::drawLayer(const PBF::Layer &pbfLayer, const Layer &styleLayer,
-  Tile &tile) const
+  Tile &tile)
 {
 	if (pbfLayer.data()->version() > 2)
 		return;
@@ -671,7 +679,7 @@ void Style::drawLayer(const PBF::Layer &pbfLayer, const Layer &styleLayer,
 	tile.painter().restore();
 }
 
-void Style::render(const PBF &data, Tile &tile) const
+void Style::render(const PBF &data, Tile &tile)
 {
 	drawBackground(tile);
 
