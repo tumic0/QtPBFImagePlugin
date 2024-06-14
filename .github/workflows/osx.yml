@@ -23,7 +23,9 @@ jobs:
       - name: Configure build
         run: qmake PROTOBUF=/usr/local/opt/protobuf@21 pbfplugin.pro
       - name: Build project
-        run: make -j3
+        run: |
+           which protobuf
+           make -j3
 
   qt6:
     name: QtPBFImagePlugin Qt6 build
@@ -41,4 +43,6 @@ jobs:
       - name: Configure build
         run: qmake PROTOBUF=/usr/local/opt/protobuf@21 pbfplugin.pro
       - name: Build project
-        run: make -j3
+        run: |
+          which protobuf
+          make -j3
