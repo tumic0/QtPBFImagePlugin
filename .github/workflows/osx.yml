@@ -11,38 +11,31 @@ jobs:
     runs-on: macos-latest
     steps:
       - name: Set environment variables
-        run: echo "PATH=/usr/local/opt/qt@5/bin:/usr/local/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
+        run: echo "PATH=/opt/homebrew/opt/qt@5/bin:/opt/homebrew/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           brew update
           brew install qt@5 protobuf@21
-          brew link --force protobuf@21
-          brew link --force qt@5
       - name: Configure build
-        run: qmake PROTOBUF=/usr/local/opt/protobuf@21 pbfplugin.pro
+        run: qmake PROTOBUF=/opt/homebrew/opt/protobuf@21 pbfplugin.pro
       - name: Build project
-        run: |
-           which protobuf
-           make -j3
+        run: make -j3
 
   qt6:
     name: QtPBFImagePlugin Qt6 build
     runs-on: macos-latest
     steps:
       - name: Set environment variables
-        run: echo "PATH=/usr/local/opt/qt@6/bin:/usr/local/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
+        run: echo "PATH=/opt/homebrew/opt/qt@6/bin:/opt/homebrew/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
       - name: Install dependencies
         run: |
           brew update
           brew install qt@6 protobuf@21
-          brew link --force protobuf@21
       - name: Configure build
-        run: qmake PROTOBUF=/usr/local/opt/protobuf@21 pbfplugin.pro
+        run: qmake PROTOBUF=/opt/homebrew/opt/protobuf@21 pbfplugin.pro
       - name: Build project
-        run: |
-          which protobuf
-          make -j3
+        run: make -j3
