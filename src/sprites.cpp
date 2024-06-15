@@ -95,6 +95,25 @@ bool Sprites::load(const QString &jsonFile, const QString &imageFile)
 
 QImage Sprites::sprite(const Sprite &sprite, const QColor &color, qreal scale)
 {
+	_lock.lock();
+	if (_init <= 0) {
+		if (_init < 0) {
+			_lock.unlock();
+			return QImage();
+		}
+
+		_img = QImage(_imageFile);
+		if (_img.isNull()) {
+			qWarning() << _imageFile << ": invalid sprite atlas image";
+			_init = -1;
+			_lock.unlock();
+			return QImage();
+		}
+
+		_init = 1;
+	}
+	_lock.unlock();
+
 	if (!_img.rect().contains(sprite.rect()))
 		return QImage();
 
@@ -117,25 +136,6 @@ QImage Sprites::icon(const QString &name, const QColor &color, qreal size)
 {
 	if (name.isNull())
 		return QImage();
-
-	_lock.lock();
-	if (_init <= 0) {
-		if (_init < 0) {
-			_lock.unlock();
-			return QImage();
-		}
-
-		_img = QImage(_imageFile);
-		if (_img.isNull()) {
-			qWarning() << _imageFile << ": invalid sprite atlas image";
-			_init = -1;
-			_lock.unlock();
-			return QImage();
-		}
-
-		_init = 1;
-	}
-	_lock.unlock();
 
 	QMap<QString, Sprite>::const_iterator it = _sprites.constFind(name);
 	if (it == _sprites.constEnd())
