@@ -26,6 +26,19 @@ static vector_tile::Tile_GeomType geometryType(const QString &str)
 		return vector_tile::Tile_GeomType_UNKNOWN;
 }
 
+static QVariant variant(const QJsonValue &val)
+{
+	switch (val.type()) {
+		case QJsonValue::String:
+			return QVariant(val.toString().toUtf8());
+		case QJsonValue::Double:
+		case QJsonValue::Bool:
+			return val.toVariant();
+		default:
+			return QVariant();
+	}
+}
+
 Style::Layer::Filter::Filter(const QJsonArray &json)
   : _type(Unknown), _not(false)
 {
@@ -42,43 +55,43 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 			INVALID_FILTER(json);
 		if (json.at(1).toString() == "$type") {
 			_type = GeometryType;
-			_kv = QPair<QString, QVariant>(QString(),
+			_kv = QPair<QByteArray, QVariant>(QByteArray(),
 			  QVariant(geometryType(json.at(2).toString())));
 		} else {
 			_type = EQ;
-			_kv = QPair<QString, QVariant>(json.at(1).toString(),
-			  json.at(2).toVariant());
+			_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+			  variant(json.at(2)));
 		}
 	} else if (type == "!=") {
 		if (json.size() != 3)
 			INVALID_FILTER(json);
 		_type = NE;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(),
-		  json.at(2).toVariant());
+		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+		  variant(json.at(2)));
 	} else if (type == "<") {
 		if (json.size() != 3)
 			INVALID_FILTER(json);
 		_type = LT;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(),
-		  json.at(2).toVariant());
+		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+		  variant(json.at(2)));
 	} else if (type == "<=") {
 		if (json.size() != 3)
 			INVALID_FILTER(json);
 		_type = LE;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(),
-		  json.at(2).toVariant());
+		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+		  variant(json.at(2)));
 	} else if (type == ">") {
 		if (json.size() != 3)
 			INVALID_FILTER(json);
 		_type = GT;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(),
-		  json.at(2).toVariant());
+		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+		  variant(json.at(2)));
 	} else if (type == ">=") {
 		if (json.size() != 3)
 			INVALID_FILTER(json);
 		_type = GE;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(),
-		  json.at(2).toVariant());
+		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+		  variant(json.at(2)));
 	} else if (type == "all") {
 		_type = All;
 		for (int i = 1; i < json.size(); i++)
@@ -91,28 +104,32 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 		if (json.size() < 3)
 			INVALID_FILTER(json);
 		_type = In;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(), QVariant());
+		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+		  QVariant());
 		for (int i = 2; i < json.size(); i++)
-			_set.insert(json.at(i).toString());
+			_set.insert(json.at(i).toString().toUtf8());
 	}  else if (type == "!in") {
 		if (json.size() < 3)
 			INVALID_FILTER(json);
 		_type = In;
 		_not = true;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(), QVariant());
+		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+		  QVariant());
 		for (int i = 2; i < json.size(); i++)
-			_set.insert(json.at(i).toString());
+			_set.insert(json.at(i).toString().toUtf8());
 	} else if (type == "has") {
 		if (json.size() < 2)
 			INVALID_FILTER(json);
 		_type = Has;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(), QVariant());
+		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+		  QVariant());
 	} else if (type == "!has") {
 		if (json.size() < 2)
 			INVALID_FILTER(json);
 		_type = Has;
 		_not = true;
-		_kv = QPair<QString, QVariant>(json.at(1).toString(), QVariant());
+		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
+		  QVariant());
 	} else
 		INVALID_FILTER(json);
 }
@@ -182,7 +199,7 @@ bool Style::Layer::Filter::match(const PBF::Feature &feature) const
 			if (!(v = feature.value(_kv.first)))
 				return _not;
 			else
-				return _set.contains((*v).toString()) ^ _not;
+				return _set.contains((*v).toByteArray()) ^ _not;
 		case Has:
 			return (feature.value(_kv.first) ? true : false) ^ _not;
 		case All:
@@ -216,7 +233,7 @@ QString Style::Layer::Template::value(int zoom, const PBF::Feature &feature) con
 	}
 	for (int i = 0; i < keys.size(); i++) {
 		const QString &key = keys.at(i);
-		const QVariant *val = feature.value(key);
+		const QVariant *val = feature.value(key.toUtf8());
 		text.replace(QString("{%1}").arg(key), val ? val->toString() : "");
 	}
 
@@ -486,7 +503,7 @@ Style::Layer::Layer(const QJsonObject &json)
 		_type = Symbol;
 
 	// source-layer
-	_sourceLayer = json["source-layer"].toString();
+	_sourceLayer = json["source-layer"].toString().toUtf8();
 
 	// zooms
 	if (json.contains("minzoom") && json["minzoom"].isDouble())
@@ -684,7 +701,7 @@ void Style::render(const PBF &data, Tile &tile)
 	drawBackground(tile);
 
 	for (int i = 0; i < _layers.size(); i++) {
-		QHash<QString, PBF::Layer*>::const_iterator it = data.layers().find(
+		QHash<QByteArray, PBF::Layer*>::const_iterator it = data.layers().find(
 		  _layers.at(i).sourceLayer());
 		if (it == data.layers().constEnd())
 			continue;

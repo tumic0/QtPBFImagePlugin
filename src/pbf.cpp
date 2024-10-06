@@ -31,12 +31,12 @@ static QVariant value(const vector_tile::Tile_Value &val)
 	else if (val.has_double_value())
 		return QVariant(val.double_value());
 	else if (val.has_string_value())
-		return QVariant(QString::fromStdString(val.string_value()));
+		return QVariant(QByteArray::fromStdString(val.string_value()));
 	else
 		return QVariant();
 }
 
-const QVariant *PBF::Feature::value(const QString &key) const
+const QVariant *PBF::Feature::value(const QByteArray &key) const
 {
 	const KeyHash &keys(_layer->keys());
 	KeyHash::const_iterator it(keys.find(key));
@@ -92,7 +92,7 @@ PBF::Layer::Layer(const vector_tile::Tile_Layer *data) : _data(data)
 {
 	_keys.reserve(data->keys_size());
 	for (int i = 0; i < data->keys_size(); i++)
-		_keys.insert(QString::fromStdString(data->keys(i)), i);
+		_keys.insert(QByteArray::fromStdString(data->keys(i)), i);
 	_values.reserve(data->values_size());
 	for (int i = 0; i < data->values_size(); i++)
 		_values.append(value(data->values(i)));
@@ -107,7 +107,8 @@ PBF::PBF(const vector_tile::Tile &tile)
 {
 	for (int i = 0; i <  tile.layers_size(); i++) {
 		const vector_tile::Tile_Layer &layer = tile.layers(i);
-		_layers.insert(QString::fromStdString(layer.name()), new Layer(&layer));
+		_layers.insert(QByteArray::fromStdString(layer.name()),
+		  new Layer(&layer));
 	}
 }
 

@@ -37,7 +37,7 @@ private:
 		Layer() : _type(Unknown), _minZoom(0), _maxZoom(24) {}
 		Layer(const QJsonObject &json);
 
-		const QString &sourceLayer() const {return _sourceLayer;}
+		const QByteArray &sourceLayer() const {return _sourceLayer;}
 		bool isPath() const {return (_type == Line || _type == Fill);}
 		bool isBackground() const {return (_type == Background);}
 		bool isSymbol() const {return (_type == Symbol);}
@@ -74,8 +74,8 @@ private:
 
 			Type _type;
 			bool _not;
-			QSet<QString> _set;
-			QPair<QString, QVariant> _kv;
+			QSet<QByteArray> _set;
+			QPair<QByteArray, QVariant> _kv;
 			QVector<Filter> _filters;
 		};
 
@@ -167,7 +167,7 @@ private:
 		};
 
 		Type _type;
-		QString _sourceLayer;
+		QByteArray _sourceLayer;
 		int _minZoom, _maxZoom;
 		Filter _filter;
 		Layout _layout;
