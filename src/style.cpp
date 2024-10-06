@@ -49,7 +49,7 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 	if (json.isEmpty())
 		INVALID_FILTER(json);
 
-	QString type = json.at(0).toString();
+	QString type(json.at(0).toString());
 
 	if (type == "==") {
 		if (json.size() != 3)
