@@ -590,7 +590,7 @@ static bool loadSprites(const QDir &styleDir, const QString &json,
 		if (QFileInfo::exists(spritesImg))
 			return sprites.load(spritesJSON, spritesImg);
 		else {
-			qCritical() << spritesImg << ": no such file";
+			qWarning() << spritesImg << ": no such file";
 			return false;
 		}
 	}
