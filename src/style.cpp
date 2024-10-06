@@ -35,6 +35,7 @@ static QVariant variant(const QJsonValue &val)
 		case QJsonValue::Bool:
 			return val.toVariant();
 		default:
+			qWarning() << val << ": invalid filter value";
 			return QVariant();
 	}
 }
