@@ -2,7 +2,7 @@ TARGET  = pbf
 TEMPLATE = lib
 CONFIG += plugin
 QT += gui
-VERSION = 3.1
+VERSION = 3.2
 
 PROTOS = protobuf/vector_tile.proto
 include(protobuf/vector_tile.pri)
