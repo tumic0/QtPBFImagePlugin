@@ -2,7 +2,7 @@ TARGET  = pbf
 TEMPLATE = lib
 CONFIG += plugin
 QT += gui
-VERSION = 3.2
+VERSION = 3.3
 
 PROTOS = protobuf/vector_tile.proto
 include(protobuf/vector_tile.pri)
@@ -54,7 +54,7 @@ win32 {
 
     QMAKE_TARGET_PRODUCT = QtPBFImagePlugin
     QMAKE_TARGET_DESCRIPTION = Qt $$QT_VERSION MVT/PBF image plugin
-    QMAKE_TARGET_COPYRIGHT = Copyright (c) 2018-2024 Martin Tuma
+    QMAKE_TARGET_COPYRIGHT = Copyright (c) 2018-2025 Martin Tuma
 }
 macx {
     INCLUDEPATH += $$PROTOBUF/include
