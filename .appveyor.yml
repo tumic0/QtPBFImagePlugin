@@ -22,7 +22,7 @@ install:
 
 build_script:
 - cmd: |-
-    qmake PROTOBUF=%VCPKGDIR% ZLIB=%VCPKGDIR% pbfplugin.pro
+    qmake PROTOBUF=%VCPKGDIR% ZLIB=%VCPKGDIR% ABSEIL=%VCPKGDIR% pbfplugin.pro
     nmake release
 
 artifacts:

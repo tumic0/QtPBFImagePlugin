@@ -51,6 +51,9 @@ win32 {
         $$ZLIB/include
     LIBS += $$PROTOBUF/lib/libprotobuf-lite.lib \
         $$ZLIB/lib/zlibstatic.lib
+    !isEmpty(ABSEIL) {
+        LIBS += $$ABSEIL/lib/absl.lib
+    }
 
     QMAKE_TARGET_PRODUCT = QtPBFImagePlugin
     QMAKE_TARGET_DESCRIPTION = Qt $$QT_VERSION MVT/PBF image plugin
