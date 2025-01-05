@@ -39,20 +39,26 @@ RESOURCES += pbfplugin.qrc
 
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 
+equals(USE_PKGCONFIG, "true") {
+    CONFIG += link_pkgconfig
+    PKGCONFIG += protobuf-lite zlib
+}
+
 unix:!macx:!android {
-    LIBS += -lprotobuf-lite \
-        -lz
+    !equals(USE_PKGCONFIG, "true") {
+        LIBS += -lprotobuf-lite \
+                -lz
+    }
 
     target.path += $$[QT_INSTALL_PLUGINS]/imageformats
     INSTALLS += target
 }
 win32 {
-    INCLUDEPATH += $$PROTOBUF/include \
-        $$ZLIB/include
-    LIBS += $$PROTOBUF/lib/libprotobuf-lite.lib \
-        $$ZLIB/lib/zlibstatic.lib
-    !isEmpty(ABSEIL) {
-        LIBS += $$ABSEIL/lib/libabsl.lib
+    !equals(USE_PKGCONFIG, "true") {
+        INCLUDEPATH += $$PROTOBUF/include \
+            $$ZLIB/include
+        LIBS += $$PROTOBUF/lib/libprotobuf-lite.lib \
+            $$ZLIB/lib/zlibstatic.lib
     }
 
     QMAKE_TARGET_PRODUCT = QtPBFImagePlugin
@@ -60,14 +66,18 @@ win32 {
     QMAKE_TARGET_COPYRIGHT = Copyright (c) 2018-2025 Martin Tuma
 }
 macx {
-    INCLUDEPATH += $$PROTOBUF/include
-    LIBS += $$PROTOBUF/lib/libprotobuf-lite.a \
-        -lz
+    !equals(USE_PKGCONFIG, "true") {
+        INCLUDEPATH += $$PROTOBUF/include
+        LIBS += $$PROTOBUF/lib/libprotobuf-lite.a \
+            -lz
+    }
 }
 android {
-    INCLUDEPATH += $$PROTOBUF/include
-    LIBS += $$PROTOBUF/$$ANDROID_TARGET_ARCH/libprotobuf-lite.a \
-        -lz
+    !equals(USE_PKGCONFIG, "true") {
+        INCLUDEPATH += $$PROTOBUF/include
+        LIBS += $$PROTOBUF/$$ANDROID_TARGET_ARCH/libprotobuf-lite.a \
+            -lz
+    }
 
     top_builddir=$$shadowed($$PWD)
     DESTDIR = $$top_builddir/plugins
