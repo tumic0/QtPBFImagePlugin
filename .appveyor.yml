@@ -16,6 +16,7 @@ install:
 - cmd: |-
     set PATH=%QTDIR%\bin;%VCPKGDIR%\tools\protobuf;%PATH%
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat
+    vcpkg install pkgconf:x64-windows-static-md-release
     vcpkg install protobuf:x64-windows-static-md-release
     vcpkg install zlib:x64-windows-static-md-release
     copy /y %VCPKGDIR%\lib\zlib.lib %VCPKGDIR%\lib\zlibstatic.lib
