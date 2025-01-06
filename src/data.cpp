@@ -13,6 +13,12 @@ struct CTX
 	quint64 tag;
 };
 
+static inline qint64 zigzag64decode(quint64 value)
+{
+	return static_cast<qint64>((value >> 1u) ^ static_cast<quint64>(
+	  -static_cast<qint64>(value & 1u)));
+}
+
 template<typename T>
 static bool varint(CTX &ctx, T &val)
 {
@@ -155,7 +161,7 @@ static bool value(CTX &ctx, QVariant &val)
 			case 4:
 				if (!varint(ctx, num))
 					return false;
-				val = QVariant((qint64)num);
+				val = QVariant(static_cast<qint64>(num));
 				break;
 			case 5:
 				if (!varint(ctx, num))
@@ -165,7 +171,7 @@ static bool value(CTX &ctx, QVariant &val)
 			case 6:
 				if (!varint(ctx, num))
 					return false;
-				val = QVariant((qint64)((num >> 1) ^ -(num & 1)));
+				val = QVariant(zigzag64decode(num));
 				break;
 			case 7:
 				if (!varint(ctx, num))
