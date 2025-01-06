@@ -68,24 +68,18 @@ repository.
 ## Build
 ### Requirements
 * Qt5 >= 5.11 or Qt6
-* Google Protocol Buffers (protobuf-lite)
 * Zlib
 
 ### Build steps
-#### Linux
+#### Linux, OS X and Android
 ```shell
 qmake pbfplugin.pro
 make
 ```
 #### Windows
 ```shell
-qmake PROTOBUF=path/to/protobuf ZLIB=path/to/zlib pbfplugin.pro
+qmake ZLIB=path/to/zlib pbfplugin.pro
 nmake
-```
-#### OS X
-```shell
-qmake PROTOBUF=path/to/protobuf pbfplugin.pro
-make
 ```
 
 ## Install
