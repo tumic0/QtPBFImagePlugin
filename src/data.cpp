@@ -3,6 +3,11 @@
 #define TYPE(tag) (tag & 0x07)
 #define FIELD(tag) (tag >> 3)
 
+#define VARINT 0
+#define I64    1
+#define LEN    2
+#define I32    5
+
 struct CTX
 {
 	CTX(const QByteArray &ba)
@@ -40,6 +45,8 @@ static bool str(CTX &ctx, QByteArray &val)
 {
 	quint64 len;
 
+	if (TYPE(ctx.tag) != LEN)
+		return false;
 	if (!varint(ctx, len))
 		return false;
 	if (ctx.bp + len > ctx.be)
@@ -52,6 +59,8 @@ static bool str(CTX &ctx, QByteArray &val)
 
 static bool dbl(CTX &ctx, double &val)
 {
+	if (TYPE(ctx.tag) != I64)
+		return false;
 	if (ctx.bp + sizeof(val) > ctx.be)
 		return false;
 
@@ -62,6 +71,8 @@ static bool dbl(CTX &ctx, double &val)
 
 static bool flt(CTX &ctx, float &val)
 {
+	if (TYPE(ctx.tag) != I32)
+		return false;
 	if (ctx.bp + sizeof(val) > ctx.be)
 		return false;
 
@@ -74,7 +85,7 @@ static bool packed(CTX &ctx, QVector<quint32> &vals)
 {
 	quint32 v;
 
-	if (TYPE(ctx.tag) == 2) {
+	if (TYPE(ctx.tag) == LEN) {
 		quint64 len;
 		if (!varint(ctx, len))
 			return false;
@@ -87,7 +98,7 @@ static bool packed(CTX &ctx, QVector<quint32> &vals)
 			vals.append(v);
 		}
 		return (ctx.bp == ee);
-	} else if (TYPE(ctx.tag) == 0) {
+	} else if (TYPE(ctx.tag) == VARINT) {
 		if (!varint(ctx, v))
 			return false;
 		vals.append(v);
@@ -101,16 +112,16 @@ static bool skip(CTX &ctx)
 	quint64 len = 0;
 
 	switch (TYPE(ctx.tag)) {
-		case 0:
+		case VARINT:
 			return varint(ctx, len);
-		case 1:
+		case I64:
 			len = 8;
 			break;
-		case 2:
+		case LEN:
 			if (!varint(ctx, len))
 				return false;
 			break;
-		case 5:
+		case I32:
 			len = 4;
 			break;
 		default:
@@ -126,6 +137,9 @@ static bool skip(CTX &ctx)
 
 static bool value(CTX &ctx, QVariant &val)
 {
+	if (TYPE(ctx.tag) != LEN)
+		return false;
+
 	QByteArray ba;
 	quint64 len, num;
 	double dnum;
@@ -159,21 +173,29 @@ static bool value(CTX &ctx, QVariant &val)
 				val = QVariant(dnum);
 				break;
 			case 4:
+				if (TYPE(ctx.tag) != VARINT)
+					return false;
 				if (!varint(ctx, num))
 					return false;
 				val = QVariant(static_cast<qint64>(num));
 				break;
 			case 5:
+				if (TYPE(ctx.tag) != VARINT)
+					return false;
 				if (!varint(ctx, num))
 					return false;
 				val = QVariant(num);
 				break;
 			case 6:
+				if (TYPE(ctx.tag) != VARINT)
+					return false;
 				if (!varint(ctx, num))
 					return false;
 				val = QVariant(zigzag64decode(num));
 				break;
 			case 7:
+				if (TYPE(ctx.tag) != VARINT)
+					return false;
 				if (!varint(ctx, num))
 					return false;
 				val = QVariant(num ? true : false);
@@ -189,6 +211,9 @@ static bool value(CTX &ctx, QVariant &val)
 
 static bool feature(CTX &ctx, Data::Feature &f)
 {
+	if (TYPE(ctx.tag) != LEN)
+		return false;
+
 	quint64 len;
 	quint8 e;
 	if (!varint(ctx, len))
@@ -204,6 +229,8 @@ static bool feature(CTX &ctx, Data::Feature &f)
 
 		switch (FIELD(ctx.tag)) {
 			case 1:
+				if (TYPE(ctx.tag) != VARINT)
+					return false;
 				if (!varint(ctx, f.id))
 					return false;
 				break;
@@ -212,6 +239,8 @@ static bool feature(CTX &ctx, Data::Feature &f)
 					return false;
 				break;
 			case 3:
+				if (TYPE(ctx.tag) != VARINT)
+					return false;
 				if (!varint(ctx, e))
 					return false;
 				if (e > Data::GeomType::POLYGON)
@@ -233,7 +262,10 @@ static bool feature(CTX &ctx, Data::Feature &f)
 
 static bool layer(CTX &ctx, Data::Layer &l)
 {
-	if (ctx.tag == 0x1a) {
+	if (FIELD(ctx.tag) == 3) {
+		if (TYPE(ctx.tag) != LEN)
+			return false;
+
 		quint64 len;
 		if (!varint(ctx, len))
 			return false;
@@ -267,10 +299,14 @@ static bool layer(CTX &ctx, Data::Layer &l)
 						return false;
 					break;
 				case 5:
+					if (TYPE(ctx.tag) != VARINT)
+						return false;
 					if (!varint(ctx, l.extent))
 						return false;
 					break;
 				case 15:
+					if (TYPE(ctx.tag) != VARINT)
+						return false;
 					if (!varint(ctx, l.version))
 						return false;
 					break;
