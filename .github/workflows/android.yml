@@ -12,10 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install protobuf compiler
-        run: |
-          sudo apt-get update
-          sudo apt-get install protobuf-compiler
       - name: set up JDK 11
         uses: actions/setup-java@v4
         with:
@@ -41,10 +37,8 @@ jobs:
           version: '6.4.0'
           target: 'android'
           arch: 'android_arm64_v8a'
-      - name: Install Android Google Protocol Buffers
-        run:  git clone https://github.com/tumic0/android_protobuf.git
       - name: Configure build
-        run:  qmake pbfplugin.pro PROTOBUF=android_protobuf
+        run:  qmake pbfplugin.pro
       - name: Build project
         run:  make -j2
       - name: Upload artifacts

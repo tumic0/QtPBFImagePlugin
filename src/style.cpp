@@ -14,16 +14,16 @@
 #include "style.h"
 
 
-static vector_tile::Tile_GeomType geometryType(const QString &str)
+static Data::GeomType geometryType(const QString &str)
 {
 	if (str == "Point")
-		return vector_tile::Tile_GeomType_POINT;
+		return Data::GeomType::POINT;
 	else if (str == "LineString")
-		return vector_tile::Tile_GeomType_LINESTRING;
+		return Data::GeomType::LINESTRING;
 	else if (str == "Polygon")
-		return vector_tile::Tile_GeomType_POLYGON;
+		return Data::GeomType::POLYGON;
 	else
-		return vector_tile::Tile_GeomType_UNKNOWN;
+		return Data::GeomType::UNKNOWN;
 }
 
 static QVariant variant(const QJsonValue &val)
@@ -680,15 +680,15 @@ void Style::drawFeature(const PBF::Feature &feature, const Layer &layer,
 void Style::drawLayer(const PBF::Layer &pbfLayer, const Layer &styleLayer,
   Tile &tile)
 {
-	if (pbfLayer.data()->version() > 2)
+	if (pbfLayer.data()->version > 2)
 		return;
 
 	if (!styleLayer.isVisible())
 		return;
 
 	QSizeF factor(tile.size().width() / tile.scale().x() /
-	  (qreal)pbfLayer.data()->extent(), tile.size().height() / tile.scale().y()
-	  / (qreal)pbfLayer.data()->extent());
+	  (qreal)pbfLayer.data()->extent, tile.size().height() / tile.scale().y()
+	  / (qreal)pbfLayer.data()->extent);
 
 	tile.painter().save();
 	setupLayer(tile, styleLayer);

@@ -2,13 +2,10 @@ TARGET  = pbf
 TEMPLATE = lib
 CONFIG += plugin
 QT += gui
-VERSION = 3.3
+VERSION = 4.0
 
-PROTOS = protobuf/vector_tile.proto
-include(protobuf/vector_tile.pri)
-
-INCLUDEPATH += ./protobuf
 HEADERS += src/pbfhandler.h \
+    src/data.h \
     src/pbfplugin.h \
     src/gzip.h \
     src/pbf.h \
@@ -23,6 +20,7 @@ HEADERS += src/pbfhandler.h \
     src/textitem.h \
     src/sprites.h
 SOURCES += src/pbfplugin.cpp \
+    src/data.cpp \
     src/pbfhandler.cpp \
     src/gzip.cpp \
     src/pbf.cpp \
@@ -39,45 +37,25 @@ RESOURCES += pbfplugin.qrc
 
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 
-equals(USE_PKGCONFIG, "true") {
-    CONFIG += link_pkgconfig
-    PKGCONFIG += protobuf-lite zlib
-}
-
 unix:!macx:!android {
-    !equals(USE_PKGCONFIG, "true") {
-        LIBS += -lprotobuf-lite \
-                -lz
-    }
+    LIBS += -lz
 
     target.path += $$[QT_INSTALL_PLUGINS]/imageformats
     INSTALLS += target
 }
 win32 {
-    !equals(USE_PKGCONFIG, "true") {
-        INCLUDEPATH += $$PROTOBUF/include \
-            $$ZLIB/include
-        LIBS += $$PROTOBUF/lib/libprotobuf-lite.lib \
-            $$ZLIB/lib/zlibstatic.lib
-    }
+    INCLUDEPATH += $$ZLIB/include
+    LIBS += $$ZLIB/lib/zlibstatic.lib
 
     QMAKE_TARGET_PRODUCT = QtPBFImagePlugin
     QMAKE_TARGET_DESCRIPTION = Qt $$QT_VERSION MVT/PBF image plugin
     QMAKE_TARGET_COPYRIGHT = Copyright (c) 2018-2025 Martin Tuma
 }
 macx {
-    !equals(USE_PKGCONFIG, "true") {
-        INCLUDEPATH += $$PROTOBUF/include
-        LIBS += $$PROTOBUF/lib/libprotobuf-lite.a \
-            -lz
-    }
+    LIBS += -lz
 }
 android {
-    !equals(USE_PKGCONFIG, "true") {
-        INCLUDEPATH += $$PROTOBUF/include
-        LIBS += $$PROTOBUF/$$ANDROID_TARGET_ARCH/libprotobuf-lite.a \
-            -lz
-    }
+    LIBS += -lz
 
     top_builddir=$$shadowed($$PWD)
     DESTDIR = $$top_builddir/plugins

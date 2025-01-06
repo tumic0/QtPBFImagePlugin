@@ -3,6 +3,7 @@
 #include <QtEndian>
 #include <QDebug>
 #include "gzip.h"
+#include "data.h"
 #include "tile.h"
 #include "style.h"
 #include "pbfhandler.h"
@@ -73,8 +74,8 @@ bool PBFHandler::read(QImage *image)
 		}
 	} else if (isPlainPBF(magic))
 		ba = device()->readAll();
-	vector_tile::Tile data;
-	if (!data.ParseFromArray(ba.constData(), ba.size())) {
+	Data data;
+	if (!data.load(ba)) {
 		qCritical() << "Invalid PBF data";
 		return false;
 	}

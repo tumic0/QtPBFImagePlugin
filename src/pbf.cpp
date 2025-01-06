@@ -4,7 +4,6 @@
 #define LINE_TO    2
 #define CLOSE_PATH 7
 
-
 static inline qint32 zigzag32decode(quint32 value)
 {
 	return static_cast<qint32>((value >> 1u) ^ static_cast<quint32>(
@@ -16,26 +15,6 @@ static inline QPoint parameters(quint32 v1, quint32 v2)
 	return QPoint(zigzag32decode(v1), zigzag32decode(v2));
 }
 
-static QVariant value(const vector_tile::Tile_Value &val)
-{
-	if (val.has_bool_value())
-		return QVariant(val.bool_value());
-	else if (val.has_int_value())
-		return QVariant((qlonglong)val.int_value());
-	else if (val.has_sint_value())
-		return QVariant((qlonglong)val.sint_value());
-	else if (val.has_uint_value())
-		return QVariant((qulonglong)val.uint_value());
-	else if (val.has_float_value())
-		return QVariant(val.float_value());
-	else if (val.has_double_value())
-		return QVariant(val.double_value());
-	else if (val.has_string_value())
-		return QVariant(QByteArray::fromStdString(val.string_value()));
-	else
-		return QVariant();
-}
-
 const QVariant *PBF::Feature::value(const QByteArray &key) const
 {
 	const KeyHash &keys(_layer->keys());
@@ -43,10 +22,10 @@ const QVariant *PBF::Feature::value(const QByteArray &key) const
 	if (it == keys.constEnd())
 		return 0;
 
-	google::protobuf::uint32 index = *it;
-	for (int i = 0; i < _data->tags_size(); i = i + 2)
-		if (_data->tags(i) == index)
-			return &(_layer->values().at(_data->tags(i+1)));
+	quint32 index = *it;
+	for (int i = 0; i < _data->tags.size(); i = i + 2)
+		if (_data->tags.at(i) == index)
+			return &(_layer->values().at(_data->tags.at(i+1)));
 
 	return 0;
 }
@@ -56,15 +35,15 @@ QPainterPath PBF::Feature::path(const QSizeF &factor) const
 	QPoint cursor;
 	QPainterPath path;
 
-	for (int i = 0; i < _data->geometry_size(); i++) {
-		quint32 g = _data->geometry(i);
+	for (int i = 0; i < _data->geometry.size(); i++) {
+		quint32 g = _data->geometry.at(i);
 		unsigned cmdId = g & 0x7;
 		unsigned cmdCount = g >> 3;
 
 		if (cmdId == MOVE_TO) {
 			for (unsigned j = 0; j < cmdCount; j++) {
-				QPoint offset = parameters(_data->geometry(i+1),
-				  _data->geometry(i+2));
+				QPoint offset = parameters(_data->geometry.at(i+1),
+				  _data->geometry.at(i+2));
 				i += 2;
 				cursor += offset;
 				path.moveTo(QPointF(cursor.x() * factor.width(),
@@ -72,8 +51,8 @@ QPainterPath PBF::Feature::path(const QSizeF &factor) const
 			}
 		} else if (cmdId == LINE_TO) {
 			for (unsigned j = 0; j < cmdCount; j++) {
-				QPoint offset = parameters(_data->geometry(i+1),
-				  _data->geometry(i+2));
+				QPoint offset = parameters(_data->geometry.at(i+1),
+				  _data->geometry.at(i+2));
 				i += 2;
 				cursor += offset;
 				path.lineTo(QPointF(cursor.x() * factor.width(),
@@ -88,27 +67,23 @@ QPainterPath PBF::Feature::path(const QSizeF &factor) const
 	return path;
 }
 
-PBF::Layer::Layer(const vector_tile::Tile_Layer *data) : _data(data)
+PBF::Layer::Layer(const Data::Layer *layer) : _data(layer)
 {
-	_keys.reserve(data->keys_size());
-	for (int i = 0; i < data->keys_size(); i++)
-		_keys.insert(QByteArray::fromStdString(data->keys(i)), i);
-	_values.reserve(data->values_size());
-	for (int i = 0; i < data->values_size(); i++)
-		_values.append(value(data->values(i)));
+	_keys.reserve(layer->keys.size());
+	for (int i = 0; i < layer->keys.size(); i++)
+		_keys.insert(layer->keys.at(i), i);
 
-	_features.reserve(data->features_size());
-	for (int i = 0; i < data->features_size(); i++)
-		_features.append(Feature(&(data->features(i)), this));
+	_features.reserve(layer->features.size());
+	for (int i = 0; i < layer->features.size(); i++)
+		_features.append(Feature(&(layer->features.at(i)), this));
 	std::sort(_features.begin(), _features.end());
 }
 
-PBF::PBF(const vector_tile::Tile &tile)
+PBF::PBF(const Data &data)
 {
-	for (int i = 0; i <  tile.layers_size(); i++) {
-		const vector_tile::Tile_Layer &layer = tile.layers(i);
-		_layers.insert(QByteArray::fromStdString(layer.name()),
-		  new Layer(&layer));
+	for (int i = 0; i <  data.layers().size(); i++) {
+		const Data::Layer &layer = data.layers().at(i);
+		_layers.insert(layer.name, new Layer(&layer));
 	}
 }
 

@@ -1,4 +1,4 @@
-version: 3.2.{build}
+version: 4.0.{build}
 
 configuration:
   - Release
@@ -14,16 +14,14 @@ environment:
 
 install:
 - cmd: |-
-    set PATH=%QTDIR%\bin;%VCPKGDIR%\tools\protobuf;%PATH%
+    set PATH=%QTDIR%\bin;%PATH%
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat
-    vcpkg install pkgconf:x64-windows-static-md-release
-    vcpkg install protobuf:x64-windows-static-md-release
     vcpkg install zlib:x64-windows-static-md-release
     copy /y %VCPKGDIR%\lib\zlib.lib %VCPKGDIR%\lib\zlibstatic.lib
 
 build_script:
 - cmd: |-
-    qmake USE_PKGCONFIG=true pbfplugin.pro
+    qmake ZLIB=%VCPKGDIR% pbfplugin.pro
     nmake release
 
 artifacts:

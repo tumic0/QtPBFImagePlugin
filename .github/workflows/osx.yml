@@ -6,36 +6,22 @@ on:
       - master
 
 jobs:
-  qt5:
-    name: QtPBFImagePlugin Qt5 build
+  build:
+    name: QtPBFImagePlugin
     runs-on: macos-latest
     steps:
-      - name: Set environment variables
-        run: echo "PATH=/opt/homebrew/opt/qt@5/bin:/opt/homebrew/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          brew update
-          brew install qt@5 protobuf@21
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.8.1'
       - name: Configure build
-        run: qmake PROTOBUF=/opt/homebrew/opt/protobuf@21 pbfplugin.pro
+        run: qmake pbfplugin.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64h arm64"
       - name: Build project
         run: make -j3
-
-  qt6:
-    name: QtPBFImagePlugin Qt6 build
-    runs-on: macos-latest
-    steps:
-      - name: Set environment variables
-        run: echo "PATH=/opt/homebrew/opt/qt@6/bin:/opt/homebrew/opt/protobuf@21/bin:$PATH" >> $GITHUB_ENV
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Install dependencies
-        run: |
-          brew update
-          brew install qt@6 protobuf@21
-      - name: Configure build
-        run: qmake PROTOBUF=/opt/homebrew/opt/protobuf@21 pbfplugin.pro
-      - name: Build project
-        run: make -j3
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          path: libpbf.dylib
+          name: libpbf.dylib
