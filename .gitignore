@@ -1,10 +1,6 @@
 # Object files
 *.o
 
-# Protobuf stuff
-protobuf/vector_tile.pb.cc
-protobuf/vector_tile.pb.h
-
 # Qt stuff
 /.qmake.stash
 moc_*.cpp
@@ -14,4 +10,4 @@ Makefile*
 
 # lib
 libpbf.so
-pbf.dylib
+libpbf.dylib
