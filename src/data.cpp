@@ -15,7 +15,7 @@ struct CTX
 
 	const char *bp;
 	const char *be;
-	quint64 tag;
+	quint32 tag;
 };
 
 static inline qint64 zigzag64decode(quint64 value)
@@ -29,9 +29,8 @@ static bool varint(CTX &ctx, T &val)
 {
 	val = 0;
 	uint shift = 0;
-	const char *end = qMin(ctx.be, ctx.bp + sizeof(val));
 
-	while (ctx.bp < end) {
+	while (ctx.bp < ctx.be) {
 		val |= ((quint8)*ctx.bp & 0x7F) << shift;
 		shift += 7;
 		if (!((quint8)*ctx.bp++ & 0x80))
@@ -43,7 +42,7 @@ static bool varint(CTX &ctx, T &val)
 
 static bool str(CTX &ctx, QByteArray &val)
 {
-	quint64 len;
+	qint32 len;
 
 	if (TYPE(ctx.tag) != LEN)
 		return false;
@@ -89,7 +88,7 @@ static bool packed(CTX &ctx, QVector<quint32> &vals)
 	quint32 v;
 
 	if (TYPE(ctx.tag) == LEN) {
-		quint64 len;
+		qint32 len;
 		if (!varint(ctx, len))
 			return false;
 		const char *ee = ctx.bp + len;
@@ -112,7 +111,7 @@ static bool packed(CTX &ctx, QVector<quint32> &vals)
 
 static bool skip(CTX &ctx)
 {
-	quint64 len = 0;
+	qint32 len = 0;
 
 	switch (TYPE(ctx.tag)) {
 		case VARINT:
@@ -143,8 +142,9 @@ static bool value(CTX &ctx, QVariant &val)
 	if (TYPE(ctx.tag) != LEN)
 		return false;
 
+	qint32 len;
 	QByteArray ba;
-	quint64 len, num;
+	quint64 num;
 	double dnum;
 	float fnum;
 
@@ -214,11 +214,12 @@ static bool value(CTX &ctx, QVariant &val)
 
 static bool feature(CTX &ctx, Data::Feature &f)
 {
+	quint32 e;
+
 	if (TYPE(ctx.tag) != LEN)
 		return false;
 
-	quint64 len;
-	quint8 e;
+	qint32 len;
 	if (!varint(ctx, len))
 		return false;
 
@@ -269,7 +270,7 @@ static bool layer(CTX &ctx, Data::Layer &l)
 		if (TYPE(ctx.tag) != LEN)
 			return false;
 
-		quint64 len;
+		qint32 len;
 		if (!varint(ctx, len))
 			return false;
 
