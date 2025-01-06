@@ -65,6 +65,7 @@ static bool dbl(CTX &ctx, double &val)
 		return false;
 
 	memcpy(&val, ctx.bp, sizeof(val));
+	ctx.bp += sizeof(val);
 
 	return true;
 }
@@ -77,6 +78,7 @@ static bool flt(CTX &ctx, float &val)
 		return false;
 
 	memcpy(&val, ctx.bp, sizeof(val));
+	ctx.bp += sizeof(val);
 
 	return true;
 }
