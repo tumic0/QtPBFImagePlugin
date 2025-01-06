@@ -96,7 +96,7 @@ algorithm to work properly.
 * Expressions are not supported in the styles, only property functions are implemented.
 
 ## Changelog
-[Changelog](https://build.opensuse.org/package/view_file/home:tumic:QtPBFImagePlugin/QtPBFImagePlugin/libqt5-qtpbfimageformat.changes)
+[Changelog](https://build.opensuse.org/projects/home:tumic:QtPBFImagePlugin/packages/QtPBFImagePlugin/files/qt6-qtpbfimageformat.changes)
 
 ## Status
 A picture is worth a thousand words.
