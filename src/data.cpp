@@ -51,6 +51,7 @@ static bool str(CTX &ctx, QByteArray &val)
 		return false;
 	if (ctx.bp + len > ctx.be)
 		return false;
+
 	val = QByteArray::fromRawData(ctx.bp, len);
 	ctx.bp += len;
 
@@ -247,7 +248,7 @@ static bool feature(CTX &ctx, Data::Feature &f)
 					return false;
 				if (e > Data::GeomType::POLYGON)
 					return false;
-				f.type = (Data::GeomType)e;
+				f.type = static_cast<Data::GeomType>(e);
 				break;
 			case 4:
 				if (!packed(ctx, f.geometry))
