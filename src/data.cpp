@@ -18,8 +18,9 @@ static bool varint(CTX &ctx, T &val)
 {
 	val = 0;
 	uint shift = 0;
+	const char *end = qMin(ctx.be, ctx.bp + sizeof(val));
 
-	while (ctx.bp < ctx.be) {
+	while (ctx.bp < end) {
 		val |= ((quint8)*ctx.bp & 0x7F) << shift;
 		shift += 7;
 		if (!((quint8)*ctx.bp++ & 0x80))
