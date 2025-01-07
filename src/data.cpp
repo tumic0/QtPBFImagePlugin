@@ -48,7 +48,7 @@ static bool length(CTX &ctx, qint32 &val)
 	if (!varint(ctx, val))
 		return false;
 
-	return (val > 0);
+	return (val >= 0);
 }
 
 static bool str(CTX &ctx, QByteArray &val)
@@ -98,7 +98,7 @@ static bool packed(CTX &ctx, QVector<quint32> &vals)
 
 	if (TYPE(ctx.tag) == LEN) {
 		qint32 len;
-		if (!varint(ctx, len) || len <= 0)
+		if (!varint(ctx, len) || len < 0)
 			return false;
 		const char *ee = ctx.bp + len;
 		if (ee > ctx.be)
@@ -129,7 +129,7 @@ static bool skip(CTX &ctx)
 			len = 8;
 			break;
 		case LEN:
-			if (!varint(ctx, len) || len <= 0)
+			if (!varint(ctx, len) || len < 0)
 				return false;
 			break;
 		case I32:
