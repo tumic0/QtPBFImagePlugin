@@ -84,16 +84,19 @@ nmake
 
 ## Install
 Copy the plugin to the system Qt image plugins path to make it work. You may
-also set the QT_PLUGIN_PATH system variable before starting the application. For
-Linux, there are RPM and DEB [packages](https://build.opensuse.org/project/show/home:tumic:QtPBFImagePlugin)
+also set the QT_PLUGIN_PATH system variable before starting the application.
+For Linux, there are RPM and DEB [packages](https://build.opensuse.org/project/show/home:tumic:QtPBFImagePlugin)
 for most common distros available on OBS.
 
 ## Limitations
-* Only data that is part of the PBF file is displayed. External layers defined in the
-style are ignored.
-* Text PBF features must have a unique id (OpenMapTiles >= v3.7) for the text layout
-algorithm to work properly.
-* Expressions are not supported in the styles, only property functions are implemented.
+* Only data that is part of the PBF file is displayed. External layers defined
+in the style are ignored.
+* Text PBF features must have a unique id (OpenMapTiles >= v3.7) for the text
+layout algorithm to work properly. Additionally, the tile buffer must be large
+enough to contain all neighboring text features overlapping to the tile bounds
+(only data from the tile itself can be drawn to the resulting image).
+* Expressions are not supported in the styles, only property functions are
+implemented.
 
 ## Changelog
 [Changelog](https://build.opensuse.org/projects/home:tumic:QtPBFImagePlugin/packages/QtPBFImagePlugin/files/qt6-qtpbfimageformat.changes)
