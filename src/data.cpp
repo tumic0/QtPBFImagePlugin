@@ -40,13 +40,22 @@ static bool varint(CTX &ctx, T &val)
 	return false;
 }
 
+static bool length(CTX &ctx, qint32 &val)
+{
+	if (TYPE(ctx.tag) != LEN)
+		return false;
+
+	if (!varint(ctx, val))
+		return false;
+
+	return (val > 0);
+}
+
 static bool str(CTX &ctx, QByteArray &val)
 {
 	qint32 len;
 
-	if (TYPE(ctx.tag) != LEN)
-		return false;
-	if (!varint(ctx, len))
+	if (!length(ctx, len))
 		return false;
 	if (ctx.bp + len > ctx.be)
 		return false;
@@ -89,7 +98,7 @@ static bool packed(CTX &ctx, QVector<quint32> &vals)
 
 	if (TYPE(ctx.tag) == LEN) {
 		qint32 len;
-		if (!varint(ctx, len))
+		if (!varint(ctx, len) || len <= 0)
 			return false;
 		const char *ee = ctx.bp + len;
 		if (ee > ctx.be)
@@ -120,7 +129,7 @@ static bool skip(CTX &ctx)
 			len = 8;
 			break;
 		case LEN:
-			if (!varint(ctx, len))
+			if (!varint(ctx, len) || len <= 0)
 				return false;
 			break;
 		case I32:
@@ -139,16 +148,13 @@ static bool skip(CTX &ctx)
 
 static bool value(CTX &ctx, QVariant &val)
 {
-	if (TYPE(ctx.tag) != LEN)
-		return false;
-
 	qint32 len;
 	QByteArray ba;
 	quint64 num;
 	double dnum;
 	float fnum;
 
-	if (!varint(ctx, len))
+	if (!length(ctx, len))
 		return false;
 
 	const char *ee = ctx.bp + len;
@@ -214,13 +220,10 @@ static bool value(CTX &ctx, QVariant &val)
 
 static bool feature(CTX &ctx, Data::Feature &f)
 {
+	qint32 len;
 	quint32 e;
 
-	if (TYPE(ctx.tag) != LEN)
-		return false;
-
-	qint32 len;
-	if (!varint(ctx, len))
+	if (!length(ctx, len))
 		return false;
 
 	const char *ee = ctx.bp + len;
@@ -266,63 +269,58 @@ static bool feature(CTX &ctx, Data::Feature &f)
 
 static bool layer(CTX &ctx, Data::Layer &l)
 {
-	if (FIELD(ctx.tag) == 3) {
-		if (TYPE(ctx.tag) != LEN)
+	qint32 len;
+
+	if (!length(ctx, len))
+		return false;
+
+	const char *ee = ctx.bp + len;
+	if (ee > ctx.be)
+		return false;
+
+	while (ctx.bp < ee) {
+		if (!varint(ctx, ctx.tag))
 			return false;
 
-		qint32 len;
-		if (!varint(ctx, len))
-			return false;
-
-		const char *ee = ctx.bp + len;
-		if (ee > ctx.be)
-			return false;
-
-		while (ctx.bp < ee) {
-			if (!varint(ctx, ctx.tag))
-				return false;
-
-			switch (FIELD(ctx.tag)) {
-				case 1:
-					if (!str(ctx, l.name))
-						return false;
-					break;
-				case 2:
-					l.features.append(Data::Feature());
-					if (!feature(ctx, l.features.last()))
-						return false;
-					break;
-				case 3:
-					l.keys.append(QByteArray());
-					if (!str(ctx, l.keys.last()))
-						return false;
-					break;
-				case 4:
-					l.values.append(QVariant());
-					if (!value(ctx, l.values.last()))
-						return false;
-					break;
-				case 5:
-					if (TYPE(ctx.tag) != VARINT)
-						return false;
-					if (!varint(ctx, l.extent))
-						return false;
-					break;
-				case 15:
-					if (TYPE(ctx.tag) != VARINT)
-						return false;
-					if (!varint(ctx, l.version))
-						return false;
-					break;
-				default:
-					if (!skip(ctx))
-						return false;
-			}
+		switch (FIELD(ctx.tag)) {
+			case 1:
+				if (!str(ctx, l.name))
+					return false;
+				break;
+			case 2:
+				l.features.append(Data::Feature());
+				if (!feature(ctx, l.features.last()))
+					return false;
+				break;
+			case 3:
+				l.keys.append(QByteArray());
+				if (!str(ctx, l.keys.last()))
+					return false;
+				break;
+			case 4:
+				l.values.append(QVariant());
+				if (!value(ctx, l.values.last()))
+					return false;
+				break;
+			case 5:
+				if (TYPE(ctx.tag) != VARINT)
+					return false;
+				if (!varint(ctx, l.extent))
+					return false;
+				break;
+			case 15:
+				if (TYPE(ctx.tag) != VARINT)
+					return false;
+				if (!varint(ctx, l.version))
+					return false;
+				break;
+			default:
+				if (!skip(ctx))
+					return false;
 		}
+	}
 
-		return (ctx.bp == ee);
-	} else
-		return skip(ctx);
+	return (ctx.bp == ee);
 }
 
 bool Data::load(const QByteArray &ba)
@@ -332,9 +330,17 @@ bool Data::load(const QByteArray &ba)
 	while (ctx.bp < ctx.be) {
 		if (!varint(ctx, ctx.tag))
 			return false;
-		_layers.append(Layer());
-		if (!layer(ctx, _layers.last()))
-			return false;
+
+		switch (FIELD(ctx.tag)) {
+			case 3:
+				_layers.append(Layer());
+				if (!layer(ctx, _layers.last()))
+					return false;
+				break;
+			default:
+				if (!skip(ctx))
+					return false;
+		}
 	}
 
 	return (ctx.bp == ctx.be);
