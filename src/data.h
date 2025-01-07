@@ -17,6 +17,8 @@ public:
 
 	struct Feature
 	{
+		Feature() : id(0), type(UNKNOWN) {}
+
 		quint64 id;
 		QVector<quint32> tags;
 		GeomType type;
@@ -25,6 +27,8 @@ public:
 
 	struct Layer
 	{
+		Layer() : version(1), extent(4096) {}
+
 		quint32 version;
 		QByteArray name;
 		QVector<Feature> features;
