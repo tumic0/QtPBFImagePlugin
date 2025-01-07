@@ -27,8 +27,8 @@ static inline qint64 zigzag64decode(quint64 value)
 template<typename T>
 static bool varint(CTX &ctx, T &val)
 {
+	unsigned int shift = 0;
 	val = 0;
-	uint shift = 0;
 
 	while (ctx.bp < ctx.be) {
 		val |= ((quint8)*ctx.bp & 0x7F) << shift;
@@ -148,11 +148,11 @@ static bool skip(CTX &ctx)
 
 static bool value(CTX &ctx, QVariant &val)
 {
-	qint32 len;
 	QByteArray ba;
 	quint64 num;
 	double dnum;
 	float fnum;
+	qint32 len;
 
 	if (!length(ctx, len))
 		return false;
