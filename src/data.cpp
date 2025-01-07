@@ -325,9 +325,6 @@ static bool layer(CTX &ctx, Data::Layer &l)
 
 bool Data::load(const QByteArray &ba)
 {
-	if (ba.isEmpty())
-		return true;
-
 	CTX ctx(ba);
 
 	while (ctx.bp < ctx.be) {
