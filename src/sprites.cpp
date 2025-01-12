@@ -22,6 +22,7 @@ static QImage sdf2img(const QImage &sdf, const QColor &color)
 }
 
 Sprites::Sprite::Sprite(const QJsonObject &json)
+  : _pixelRatio(1.0), _sdf(false)
 {
 	int x, y, width, height;
 
@@ -44,16 +45,10 @@ Sprites::Sprite::Sprite(const QJsonObject &json)
 
 	_rect = QRect(x, y, width, height);
 
-
 	if (json.contains("pixelRatio") && json["pixelRatio"].isDouble())
 		_pixelRatio = json["pixelRatio"].toDouble();
-	else
-		_pixelRatio = 1.0;
-
 	if (json.contains("sdf") && json["sdf"].isBool())
 		_sdf = json["sdf"].toBool();
-	else
-		_sdf = false;
 }
 
 bool Sprites::load(const QString &jsonFile, const QString &imageFile)

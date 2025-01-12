@@ -11,7 +11,7 @@
 struct CTX
 {
 	CTX(const QByteArray &ba)
-	  : bp(ba.constData()), be(bp + ba.size()) {}
+	  : bp(ba.constData()), be(bp + ba.size()), tag(0) {}
 
 	const char *bp;
 	const char *be;
