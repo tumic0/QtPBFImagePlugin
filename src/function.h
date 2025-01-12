@@ -6,6 +6,7 @@
 #include <QColor>
 #include <QPair>
 #include <QString>
+#include <QJsonValue>
 
 class QJsonObject;
 
