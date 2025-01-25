@@ -7,7 +7,3 @@ moc_*.cpp
 moc_*.h
 qrc_*.cpp
 Makefile*
-
-# lib
-libpbf.so
-libpbf.dylib
