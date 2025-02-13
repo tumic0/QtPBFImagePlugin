@@ -60,7 +60,14 @@ static bool str(CTX &ctx, QByteArray &val)
 	if (ctx.bp + len > ctx.be)
 		return false;
 
+/* In Qt5 the (later) conversion to QString is broken when the QByteArray is
+   not nul terminated so we have to use the "deep copy" constructor that
+   nul-terminates the byte array when it is created. */
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+	val = QByteArray(ctx.bp, len);
+#else
 	val = QByteArray::fromRawData(ctx.bp, len);
+#endif
 	ctx.bp += len;
 
 	return true;
