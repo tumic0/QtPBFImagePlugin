@@ -67,7 +67,7 @@ repository.
 
 ## Build
 ### Requirements
-* Qt5 >= 5.11 or Qt6
+* Qt5 >= 5.15 or Qt6
 * Zlib
 
 ### Build steps
