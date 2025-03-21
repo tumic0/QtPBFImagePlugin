@@ -40,7 +40,7 @@ jobs:
       - name: Configure build
         run:  qmake pbfplugin.pro
       - name: Build project
-        run:  make -j2
+        run:  make -j4
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
