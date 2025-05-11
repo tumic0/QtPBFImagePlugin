@@ -37,7 +37,7 @@ RESOURCES += pbfplugin.qrc
 
 DEFINES += QT_NO_DEPRECATED_WARNINGS
 
-unix:!macx:!android {
+unix:!android {
     LIBS += -lz
 
     target.path += $$[QT_INSTALL_PLUGINS]/imageformats
@@ -50,9 +50,6 @@ win32 {
     QMAKE_TARGET_PRODUCT = QtPBFImagePlugin
     QMAKE_TARGET_DESCRIPTION = Qt $$QT_VERSION MVT/PBF image plugin
     QMAKE_TARGET_COPYRIGHT = Copyright (c) 2018-2025 Martin Tuma
-}
-macx {
-    LIBS += -lz
 }
 android {
     LIBS += -lz
