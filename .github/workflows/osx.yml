@@ -15,7 +15,7 @@ jobs:
       - name: Install Qt
         uses: jurplel/install-qt-action@v4
         with:
-          version: '6.8.2'
+          version: '6.9.1'
       - name: Configure build
         run: qmake pbfplugin.pro QMAKE_APPLE_DEVICE_ARCHS="x86_64h arm64"
       - name: Build project
