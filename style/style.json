@@ -3610,6 +3610,18 @@
           "<=",
           "ref_length",
           6
+        ],
+        [
+          "!=",
+          "subclass",
+          "junction"
+        ],
+        [
+          "in",
+          "class",
+          "motorway",
+          "primary",
+          "secondary"
         ]
       ],
       "layout": {
