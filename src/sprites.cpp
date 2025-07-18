@@ -123,8 +123,15 @@ QImage Sprites::sprite(const Sprite &sprite, const QColor &color, qreal scale)
 			return sdf2img(simg, color);
 		} else
 			return sdf2img(img, color);
-	} else
-		return img;
+	} else {
+		if (scale != 1.0) {
+			QSize size(img.size().width() * scale, img.size().height() * scale);
+			QImage simg(img.scaled(size, Qt::IgnoreAspectRatio,
+			  Qt::SmoothTransformation));
+			return simg;
+		} else
+			return img;
+	}
 }
 
 QImage Sprites::icon(const QString &name, const QColor &color, qreal size)

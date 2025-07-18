@@ -91,8 +91,8 @@ private:
 
 		class Layout {
 		public:
-			Layout() : _textSize(16), _textMaxWidth(10), _textMaxAngle(45),
-			  _font("Open Sans"), _visible(true) {}
+			Layout() : _iconSize(1.0), _textSize(16), _textMaxWidth(10),
+			  _textMaxAngle(45), _font("Open Sans"), _visible(true) {}
 			Layout(const QJsonObject &json);
 
 			qreal maxTextWidth(int zoom) const
