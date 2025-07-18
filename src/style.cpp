@@ -415,9 +415,10 @@ Text::Anchor Style::Layer::Layout::textAnchor(int zoom) const
 {
 	QString anchor(_textAnchor.value(zoom));
 
-	if (anchor == "left")
+	if (anchor == "left" || anchor == "top-left" || anchor == "bottom-left")
 		return Text::Left;
-	else if (anchor == "right")
+	else if (anchor == "right" || anchor == "top-right"
+	  || anchor == "bottom-right")
 		return Text::Right;
 	else if (anchor == "top")
 		return Text::Top;
