@@ -2,7 +2,7 @@ TARGET  = pbf
 TEMPLATE = lib
 CONFIG += plugin
 QT += gui
-VERSION = 4.3
+VERSION = 4.4
 
 HEADERS += src/pbfhandler.h \
     src/data.h \
