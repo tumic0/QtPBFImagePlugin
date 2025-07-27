@@ -126,9 +126,8 @@ QImage Sprites::sprite(const Sprite &sprite, const QColor &color, qreal scale)
 	} else {
 		if (scale != 1.0) {
 			QSize size(img.size().width() * scale, img.size().height() * scale);
-			QImage simg(img.scaled(size, Qt::IgnoreAspectRatio,
-			  Qt::SmoothTransformation));
-			return simg;
+			return img.scaled(size, Qt::IgnoreAspectRatio,
+			  Qt::SmoothTransformation);
 		} else
 			return img;
 	}
