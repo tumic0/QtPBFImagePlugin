@@ -390,7 +390,7 @@ Style::Layer::Layout::Layout(const QJsonObject &json)
 
 	// icon
 	_icon = Template(FunctionS(json["icon-image"]));
-	_iconSize = FunctionF(json["icon-size"]);
+	_iconSize = FunctionF(json["icon-size"], 1.0);
 
 	// symbol
 	_symbolPlacement = FunctionS(json["symbol-placement"]);
