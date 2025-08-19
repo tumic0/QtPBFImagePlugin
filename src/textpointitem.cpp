@@ -68,7 +68,7 @@ QRectF TextPointItem::moveTextRect(const QRectF &rect) const
 			  + font().pixelSize()/4.0, textRect.height() / 2));
 			break;
 		case Text::Bottom:
-			textRect.moveTopLeft(_pos - QPointF(textRect.width() / 2,
+			textRect.moveBottomLeft(_pos - QPointF(textRect.width() / 2,
 			  iconRect.height() / 2));
 			break;
 		case Text::Top:
