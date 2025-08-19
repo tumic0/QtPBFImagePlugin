@@ -74,7 +74,7 @@ private:
 
 			Type _type;
 			bool _not;
-			QSet<QByteArray> _set;
+			QVector<QVariant> _set;
 			QPair<QByteArray, QVariant> _kv;
 			QVector<Filter> _filters;
 		};

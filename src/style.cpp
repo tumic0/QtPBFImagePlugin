@@ -108,7 +108,7 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
 		  QVariant());
 		for (int i = 2; i < json.size(); i++)
-			_set.insert(json.at(i).toString().toUtf8());
+			_set.append(variant(json.at(i)));
 	}  else if (type == "!in") {
 		if (json.size() < 3)
 			INVALID_FILTER(json);
@@ -117,7 +117,7 @@ Style::Layer::Filter::Filter(const QJsonArray &json)
 		_kv = QPair<QByteArray, QVariant>(json.at(1).toString().toUtf8(),
 		  QVariant());
 		for (int i = 2; i < json.size(); i++)
-			_set.insert(json.at(i).toString().toUtf8());
+			_set.append(variant(json.at(i)));
 	} else if (type == "has") {
 		if (json.size() < 2)
 			INVALID_FILTER(json);
@@ -200,7 +200,7 @@ bool Style::Layer::Filter::match(const PBF::Feature &feature) const
 			if (!(v = feature.value(_kv.first)))
 				return _not;
 			else
-				return _set.contains((*v).toByteArray()) ^ _not;
+				return _set.contains(*v) ^ _not;
 		case Has:
 			return (feature.value(_kv.first) ? true : false) ^ _not;
 		case All:
