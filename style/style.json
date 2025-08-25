@@ -3656,6 +3656,43 @@
       "paint": {}
     },
     {
+      "id": "airport_label_major",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "aerodrome_label",
+      "minzoom": 10,
+      "filter": [
+        "all",
+        [
+          "has",
+          "iata"
+        ]
+      ],
+      "layout": {
+        "text-padding": 2,
+        "text-font": [
+          "Roboto Condensed Italic"
+        ],
+        "text-anchor": "top",
+        "icon-image": "airport_11",
+        "text-field": "{name:latin}\n{name:nonlatin}",
+        "text-offset": [
+          0,
+          0.6
+        ],
+        "text-size": 12,
+        "text-max-width": 9,
+        "visibility": "visible",
+        "text-optional": true
+      },
+      "paint": {
+        "text-halo-blur": 0.5,
+        "text-color": "#4898ff",
+        "text-halo-width": 1,
+        "text-halo-color": "#ffffff"
+      }
+    },
+    {
       "id": "place_other",
       "type": "symbol",
       "metadata": {},
