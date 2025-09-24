@@ -40,7 +40,7 @@ static bool varint(CTX &ctx, T &val)
 	return false;
 }
 
-static bool length(CTX &ctx, qint32 &val)
+static bool length(CTX &ctx, quint32 &val)
 {
 	if (TYPE(ctx.tag) != LEN)
 		return false;
@@ -48,12 +48,12 @@ static bool length(CTX &ctx, qint32 &val)
 	if (!varint(ctx, val))
 		return false;
 
-	return (val >= 0);
+	return true;
 }
 
 static bool str(CTX &ctx, QByteArray &val)
 {
-	qint32 len;
+	quint32 len;
 
 	if (!length(ctx, len))
 		return false;
@@ -104,8 +104,8 @@ static bool packed(CTX &ctx, QVector<quint32> &vals)
 	quint32 v;
 
 	if (TYPE(ctx.tag) == LEN) {
-		qint32 len;
-		if (!varint(ctx, len) || len < 0)
+		quint32 len;
+		if (!varint(ctx, len))
 			return false;
 		const char *ee = ctx.bp + len;
 		if (ee > ctx.be)
@@ -127,7 +127,7 @@ static bool packed(CTX &ctx, QVector<quint32> &vals)
 
 static bool skip(CTX &ctx)
 {
-	qint32 len = 0;
+	quint32 len = 0;
 
 	switch (TYPE(ctx.tag)) {
 		case VARINT:
@@ -136,7 +136,7 @@ static bool skip(CTX &ctx)
 			len = 8;
 			break;
 		case LEN:
-			if (!varint(ctx, len) || len < 0)
+			if (!varint(ctx, len))
 				return false;
 			break;
 		case I32:
@@ -159,7 +159,7 @@ static bool value(CTX &ctx, QVariant &val)
 	quint64 num;
 	double dnum;
 	float fnum;
-	qint32 len;
+	quint32 len;
 
 	if (!length(ctx, len))
 		return false;
@@ -227,7 +227,7 @@ static bool value(CTX &ctx, QVariant &val)
 
 static bool feature(CTX &ctx, Data::Feature &f)
 {
-	qint32 len;
+	quint32 len;
 	quint32 e;
 
 	if (!length(ctx, len))
@@ -276,7 +276,7 @@ static bool feature(CTX &ctx, Data::Feature &f)
 
 static bool layer(CTX &ctx, Data::Layer &l)
 {
-	qint32 len;
+	quint32 len;
 
 	if (!length(ctx, len))
 		return false;
