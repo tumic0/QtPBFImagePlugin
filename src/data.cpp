@@ -30,7 +30,7 @@ static bool varint(CTX &ctx, T &val)
 	unsigned int shift = 0;
 	val = 0;
 
-	while (ctx.bp < ctx.be) {
+	while ((ctx.bp < ctx.be) && (shift < sizeof(T) * 7)) {
 		val |= static_cast<T>((quint8)*ctx.bp & 0x7F) << shift;
 		shift += 7;
 		if (!((quint8)*ctx.bp++ & 0x80))
