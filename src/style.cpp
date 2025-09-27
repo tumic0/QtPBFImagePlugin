@@ -528,7 +528,7 @@ Style::Layer::Layer(const QJsonObject &json)
 
 bool Style::Layer::match(int zoom, const PBF::Feature &feature) const
 {
-	if (zoom >= 0 && (zoom < _minZoom || zoom > _maxZoom))
+	if (zoom >= 0 && (zoom < _minZoom || zoom >= _maxZoom))
 		return false;
 
 	return _filter.match(feature);
