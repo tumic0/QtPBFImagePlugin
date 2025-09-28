@@ -8,9 +8,10 @@ PBF(MVT) vector tiles without (almost, see usage) any application modifications.
 
 Standard Mapbox GL Styles are used for styling the maps. Most relevant style
 features used by [Maputnik](https://maputnik.github.io/editor) are supported.
-A default fallback style (OSM-Liberty) for OpenMapTiles is part of the plugin.
-The tile size is (since version 2.0 of the plugin) 512px to fit the styles and
-available data (OpenMapTiles, Mapbox tiles).
+A set of default styles for the OpenMapTiles, Mapbox, Tilezen, Esri and
+Versatiles tile shemes is part of the plugin.
+
+The default tile size is 512px.
 
 ## Usage
 Due to a major design flaw in the Mapbox vector tiles specification - the zoom
@@ -50,24 +51,78 @@ you will get (512<<overzoom)x(512<<overzoom)px tiles with a pixel ratio of 1.
 When overzoom is combined with setScaledSize(), the base size is the overzoomed
 tile size.
 
-## Styles
-The map style is loaded from the
-[$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style/style.json
-file on plugin load. If the style uses a sprite, the sprite JSON file must
-be named `sprite.json` and the sprite image `sprite.png` and both files must be
-placed in the same directory as the style itself. *A style compatible with the
-tiles data schema (Mapbox, OpenMapTiles, Tilezen, Ordnance Survey, Esri, ...)
-must be used.*
+### Style selection
+Since version 5 of the plugin style selection is supported. If you set *format*
+to `$zoom;$overzoom;$style`:
+```cpp
+QImage img;
+QByteArray fmt(QByteArray::number(zoom) + ';' + QByteArray::number(overzoom) \
+  + ';' + QByteArray::number(style));
+img.loadFromData(data, fmt);
+```
+the style-th style available will be used to render the tile.
 
-For a list of "ready to use" styles see the
+To retrieve a list of available styles, call `QImageReader::text()` with the
+"Description" key:
+```cpp
+QImageReader reader(&imageData);
+QString info(reader.text("Description"));
+```
+This will fill *info* with a JSON array like:
+```json
+[
+  {
+    "layers": [
+      "aerodrome_label",
+      "aeroway",
+      "boundary",
+      "building",
+      "landcover",
+      "landuse",
+      "park",
+      "place",
+      "poi",
+      "transportation",
+      "transportation_name",
+      "water",
+      "water_name",
+      "waterway"
+    ],
+    "name": "OpenMapTiles"
+  },
+  {
+    "layers": [
+      "boundaries",
+      "buildings",
+      "earth",
+      "landcover",
+      "landuse",
+      "places",
+      "pois",
+      "roads",
+      "water"
+    ],
+    "name": "Tilezen"
+  }
+]
+```
+
+## Styles
+The map styles are loaded from the subdirectories of the
+[$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style
+directory on plugin load, one style per subdirectory. If the style uses a sprite,
+the sprite JSON file must be named `sprite.json` and the sprite image `sprite.png`
+and both files must be placed in the same directory as the style itself.
+
+For a list of compatible styles for various different tile schemes see the
 [QtPBFImagePlugin-styles](https://github.com/tumic0/QtPBFImagePlugin-styles)
 repository.
 
 ## Build
-### Requirements
+### Prerequisites
 * Qt5 >= 5.15 or Qt6 (Android builds require Qt6)
 
-### Build steps
+### Steps
 #### Linux, OS X and Android
 ```shell
 qmake pbfplugin.pro
