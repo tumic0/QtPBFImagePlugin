@@ -1,6 +1,7 @@
 #include <QImage>
 #include <QIODevice>
 #include <QtEndian>
+#include <QJsonDocument>
 #include <QJsonArray>
 #include <QDebug>
 #include "data.h"
