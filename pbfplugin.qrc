@@ -1,9 +1,29 @@
 <RCC>
 	<qresource prefix="/">
-		<file>style/style.json</file>
-		<file>style/sprite.json</file>
-		<file>style/sprite.png</file>
-		<file>style/sprite@2x.json</file>
-		<file>style/sprite@2x.png</file>
+		<file>style/OpenMapTiles/style.json</file>
+		<file>style/OpenMapTiles/sprite.json</file>
+		<file>style/OpenMapTiles/sprite.png</file>
+		<file>style/OpenMapTiles/sprite@2x.json</file>
+		<file>style/OpenMapTiles/sprite@2x.png</file>
+		<file>style/Tilezen/style.json</file>
+		<file>style/Tilezen/sprite.json</file>
+		<file>style/Tilezen/sprite.png</file>
+		<file>style/Tilezen/sprite@2x.json</file>
+		<file>style/Tilezen/sprite@2x.png</file>
+		<file>style/Mapbox/style.json</file>
+		<file>style/Mapbox/sprite.json</file>
+		<file>style/Mapbox/sprite.png</file>
+		<file>style/Mapbox/sprite@2x.json</file>
+		<file>style/Mapbox/sprite@2x.png</file>
+		<file>style/Esri/style.json</file>
+		<file>style/Esri/sprite.json</file>
+		<file>style/Esri/sprite.png</file>
+		<file>style/Esri/sprite@2x.json</file>
+		<file>style/Esri/sprite@2x.png</file>
+		<file>style/Versatiles/style.json</file>
+		<file>style/Versatiles/sprite.json</file>
+		<file>style/Versatiles/sprite.png</file>
+		<file>style/Versatiles/sprite@2x.json</file>
+		<file>style/Versatiles/sprite@2x.png</file>
 	</qresource>
 </RCC>

@@ -1,6 +1,6 @@
 {
   "version": 8,
-  "name": "OSM Liberty",
+  "name": "OpenMapTiles",
   "metadata": {
     "mapbox:type": "template"
   },

@@ -9,10 +9,8 @@ PBF(MVT) vector tiles without (almost, see usage) any application modifications.
 Standard Mapbox GL Styles are used for styling the maps. Most relevant style
 features used by [Maputnik](https://maputnik.github.io/editor) are supported.
 A default fallback style (OSM-Liberty) for OpenMapTiles is part of the plugin.
-
-"Plain" PBF files as well as gzip compressed files (as used in MBTiles) are
-supported by the plugin. The tile size is (since version 2.0 of the plugin) 512px
-to fit the styles and available data (OpenMapTiles, Mapbox tiles).
+The tile size is (since version 2.0 of the plugin) 512px to fit the styles and
+available data (OpenMapTiles, Mapbox tiles).
 
 ## Usage
 Due to a major design flaw in the Mapbox vector tiles specification - the zoom
@@ -67,8 +65,7 @@ repository.
 
 ## Build
 ### Requirements
-* Qt5 >= 5.15 or Qt6
-* Zlib
+* Qt5 >= 5.15 or Qt6 (Android builds require Qt6)
 
 ### Build steps
 #### Linux, OS X and Android
@@ -78,7 +75,7 @@ make
 ```
 #### Windows
 ```shell
-qmake ZLIB=path/to/zlib pbfplugin.pro
+qmake pbfplugin.pro
 nmake
 ```
 

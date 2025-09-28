@@ -599,24 +599,27 @@ static bool loadSprites(const QDir &styleDir, const QString &json,
 	return true;
 }
 
-bool Style::load(const QString &fileName)
+Style::Style(const QString &fileName) : _valid(false)
 {
 	QFile file(fileName);
+	if (!file.exists())
+		return;
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-		qCritical() << fileName << ": error opening file";
-		return false;
+		qCritical() << fileName << ":" << file.errorString();
+		return;
 	}
 	QByteArray ba(file.readAll());
-	file.close();
 
 	QJsonParseError error;
 	QJsonDocument doc(QJsonDocument::fromJson(ba, &error));
 	if (doc.isNull()) {
 		qCritical() << fileName << ":" << error.errorString();
-		return false;
+		return;
 	}
-
 	QJsonObject json(doc.object());
+
+	_name = json["name"].toString();
+
 	if (json.contains("layers") && json["layers"].isArray()) {
 		QJsonArray layers = json["layers"].toArray();
 		for (int i = 0; i < layers.size(); i++)
@@ -628,7 +631,7 @@ bool Style::load(const QString &fileName)
 	loadSprites(styleDir, "sprite.json", "sprite.png", _sprites);
 	loadSprites(styleDir, "sprite@2x.json", "sprite@2x.png", _sprites2x);
 
-	return true;
+	_valid = true;
 }
 
 Sprites &Style::sprites(const QPointF &scale)
@@ -719,4 +722,18 @@ void Style::render(const PBF &data, Tile &tile)
 	//tile.painter().setBrush(Qt::NoBrush);
 	//tile.painter().setRenderHint(QPainter::Antialiasing, false);
 	//tile.painter().drawRect(rect);
+}
+
+QStringList Style::layers() const
+{
+	QSet<QString> set;
+
+	for (int i = 0; i < _layers.size(); i++)
+		if (!_layers.at(i).sourceLayer().isEmpty())
+			set.insert(_layers.at(i).sourceLayer());
+
+	QStringList list(set.values());
+	std::sort(list.begin(), list.end());
+
+	return list;
 }

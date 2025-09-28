@@ -1,5 +1,4 @@
 #include <QImageIOPlugin>
-#include "style.h"
 
 class Style;
 
@@ -11,12 +10,14 @@ class PBFPlugin : public QImageIOPlugin
 
 public:
 	PBFPlugin();
-	~PBFPlugin() {}
+	~PBFPlugin();
 
 	Capabilities capabilities(QIODevice *device, const QByteArray &format) const;
 	QImageIOHandler *create(QIODevice *device,
 	  const QByteArray &format = QByteArray()) const;
 
 private:
-	Style *_style;
+	void loadStyles(const QString &path);
+
+	QList<Style*> _styles;
 };

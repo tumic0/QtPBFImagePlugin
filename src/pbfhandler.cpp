@@ -1,36 +1,15 @@
 #include <QImage>
 #include <QIODevice>
 #include <QtEndian>
+#include <QJsonArray>
 #include <QDebug>
-#include "gzip.h"
 #include "data.h"
 #include "tile.h"
 #include "style.h"
 #include "pbfhandler.h"
 
-
 #define TILE_SIZE 512
-
-#define GZIP_MAGIC      0x1F8B
-#define GZIP_MAGIC_MASK 0xFFFF
-#define PBF_MAGIC       0x1A00
-#define PBF_MAGIC_MASK  0xFF00
-
-static bool isMagic(quint16 magic, quint16 mask, quint16 value)
-{
-	return ((qFromBigEndian(value) & mask) == magic);
-}
-
-static bool isGZIPPBF(quint16 magic)
-{
-	return isMagic(GZIP_MAGIC, GZIP_MAGIC_MASK, magic);
-}
-
-static bool isPlainPBF(quint16 magic)
-{
-	return isMagic(PBF_MAGIC, PBF_MAGIC_MASK, magic);
-}
-
+#define MAGIC     0x1A
 
 bool PBFHandler::canRead() const
 {
@@ -43,37 +22,17 @@ bool PBFHandler::canRead() const
 
 bool PBFHandler::canRead(QIODevice *device)
 {
-	quint16 magic;
+	quint8 magic;
 	qint64 size = device->peek((char*)&magic, sizeof(magic));
 	if (size != sizeof(magic))
 		return false;
 
-	if (isPlainPBF(magic))
-		return true;
-	else if (isGZIPPBF(magic)) {
-		QByteArray ba(Gzip::uncompress(device, sizeof(magic)));
-		if (ba.size() < (int)sizeof(magic))
-			return false;
-		return isPlainPBF(*((quint16*)ba.constData()));
-	} else
-		return false;
+	return (magic == MAGIC);
 }
 
 bool PBFHandler::read(QImage *image)
 {
-	quint16 magic;
-	if (device()->peek((char*)&magic, sizeof(magic)) != sizeof(magic))
-		return false;
-
-	QByteArray ba;
-	if (isGZIPPBF(magic)) {
-		ba = Gzip::uncompress(device());
-		if (ba.isNull()) {
-			qCritical() << "Invalid gzip data";
-			return false;
-		}
-	} else if (isPlainPBF(magic))
-		ba = device()->readAll();
+	QByteArray ba(device()->readAll());
 	Data data;
 	if (!data.load(ba)) {
 		qCritical() << "Invalid PBF data";
@@ -83,6 +42,7 @@ bool PBFHandler::read(QImage *image)
 	QList<QByteArray> list(format().split(';'));
 	int zoom = list.size() ? list.first().toInt() : 0;
 	int overzoom = (list.size() > 1) ? list.at(1).toInt() : 0;
+	int style = (list.size() > 2) ? list.at(2).toInt() : 0;
 
 	QSize scaledSize(_scaledSize.isValid()
 	  ? _scaledSize : QSize(TILE_SIZE, TILE_SIZE));
@@ -94,14 +54,14 @@ bool PBFHandler::read(QImage *image)
 	*image = QImage(size, QImage::Format_ARGB32_Premultiplied);
 	Tile tile(image, zoom, scale);
 
-	_style->render(data, tile);
+	_styles.at(style < _styles.size() ? style : 0)->render(data, tile);
 
 	return true;
 }
 
 bool PBFHandler::supportsOption(ImageOption option) const
 {
-	return (option == Size || option == ScaledSize);
+	return (option == Size || option == ScaledSize || option == Description);
 }
 
 
@@ -114,5 +74,27 @@ void PBFHandler::setOption(QImageIOHandler::ImageOption option,
 
 QVariant PBFHandler::option(ImageOption option) const
 {
-	return (option == Size) ? QSize(TILE_SIZE, TILE_SIZE) : QVariant();
+	switch (option) {
+		case Size:
+			return QSize(TILE_SIZE, TILE_SIZE);
+		case Description:
+			return description();
+		default:
+			return QVariant();
+	};
+}
+
+QString PBFHandler::description() const
+{
+	QJsonArray styles;
+
+	for (int i = 0; i < _styles.size(); i++) {
+		QJsonObject style;
+		style.insert("name", _styles.at(i)->name());
+		style.insert("layers", QJsonArray::fromStringList(
+			_styles.at(i)->layers()));
+		styles.append(style);
+	}
+
+	return QJsonDocument(styles).toJson();
 }

@@ -1,0 +1,3178 @@
+{
+  "landcover/bare rock": {
+    "x": 0,
+    "y": 0,
+    "width": 256,
+    "height": 256,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "beach/coarse sand": {
+    "x": 256,
+    "y": 0,
+    "width": 256,
+    "height": 256,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "landcover/sand": {
+    "x": 512,
+    "y": 0,
+    "width": 128,
+    "height": 128,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "beach/sand": {
+    "x": 512,
+    "y": 0,
+    "width": 128,
+    "height": 128,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "water area/basin (intermittent)": {
+    "x": 640,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "water area/reservoir (intermittent)": {
+    "x": 640,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "water area/water (intermittent)": {
+    "x": 640,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "waterway/riverbank (intermittent)": {
+    "x": 640,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "wetland/reed bed": {
+    "x": 704,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "wetland/swamp": {
+    "x": 768,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "water area/glacier": {
+    "x": 832,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "wetland/mangrove": {
+    "x": 896,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "wetland/salt marsh": {
+    "x": 960,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "wetland/wet meadow": {
+    "x": 960,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "wetland/bog": {
+    "x": 1024,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "wetland/fen": {
+    "x": 1024,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "wetland/tidal flat": {
+    "x": 1088,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "wetland/other": {
+    "x": 1088,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "landcover/scrub": {
+    "x": 1152,
+    "y": 0,
+    "width": 64,
+    "height": 64,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "landcover/salt pond": {
+    "x": 0,
+    "y": 256,
+    "width": 32,
+    "height": 32,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "landcover/vineyard": {
+    "x": 32,
+    "y": 256,
+    "width": 32,
+    "height": 32,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "landcover/dog park": {
+    "x": 64,
+    "y": 256,
+    "width": 32,
+    "height": 32,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/golf course": {
+    "x": 96,
+    "y": 256,
+    "width": 18,
+    "height": 20,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/golf course": {
+    "x": 114,
+    "y": 256,
+    "width": 18,
+    "height": 20,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/traffic signal": {
+    "x": 132,
+    "y": 256,
+    "width": 8,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/Christian - other": {
+    "x": 140,
+    "y": 256,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/Shinto": {
+    "x": 154,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/helipad": {
+    "x": 172,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/fitness": {
+    "x": 190,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/primary shield/1": {
+    "x": 206,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/primary shield/1": {
+    "x": 206,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/primary shield/1": {
+    "x": 206,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/tertiary shield/1": {
+    "x": 222,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/tertiary shield/1": {
+    "x": 222,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/tertiary shield/1": {
+    "x": 222,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/secondary shield/1": {
+    "x": 238,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/secondary shield/1": {
+    "x": 238,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/secondary shield/1": {
+    "x": 238,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/trunk shield/1": {
+    "x": 254,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/trunk shield/1": {
+    "x": 254,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/trunk shield/1": {
+    "x": 254,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/motorway shield/1": {
+    "x": 254,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/motorway shield/1": {
+    "x": 254,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/motorway shield/1": {
+    "x": 254,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit name and number/1": {
+    "x": 270,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit number/1": {
+    "x": 270,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/primary shield/7": {
+    "x": 286,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/primary shield/7": {
+    "x": 286,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/primary shield/7": {
+    "x": 286,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/tertiary shield/7": {
+    "x": 324,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/tertiary shield/7": {
+    "x": 324,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/tertiary shield/7": {
+    "x": 324,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/secondary shield/7": {
+    "x": 362,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/secondary shield/7": {
+    "x": 362,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/secondary shield/7": {
+    "x": 362,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/trunk shield/7": {
+    "x": 400,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/motorway shield/7": {
+    "x": 400,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/trunk shield/7": {
+    "x": 400,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/motorway shield/7": {
+    "x": 400,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/trunk shield/7": {
+    "x": 400,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/motorway shield/7": {
+    "x": 400,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit name and number/7": {
+    "x": 438,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit number/7": {
+    "x": 438,
+    "y": 256,
+    "width": 38,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/primary shield/6": {
+    "x": 476,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/primary shield/6": {
+    "x": 476,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/primary shield/6": {
+    "x": 476,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/tertiary shield/6": {
+    "x": 510,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/tertiary shield/6": {
+    "x": 510,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/tertiary shield/6": {
+    "x": 510,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/secondary shield/6": {
+    "x": 544,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/secondary shield/6": {
+    "x": 544,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/secondary shield/6": {
+    "x": 544,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/trunk shield/6": {
+    "x": 578,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/trunk shield/6": {
+    "x": 578,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/motorway shield/6": {
+    "x": 578,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/motorway shield/6": {
+    "x": 578,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/motorway shield/6": {
+    "x": 578,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/trunk shield/6": {
+    "x": 578,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit name and number/6": {
+    "x": 612,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit number/6": {
+    "x": 612,
+    "y": 256,
+    "width": 34,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/primary shield/5": {
+    "x": 646,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/primary shield/5": {
+    "x": 646,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/primary shield/5": {
+    "x": 646,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/tertiary shield/5": {
+    "x": 676,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/tertiary shield/5": {
+    "x": 676,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/tertiary shield/5": {
+    "x": 676,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/secondary shield/5": {
+    "x": 706,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/secondary shield/5": {
+    "x": 706,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/secondary shield/5": {
+    "x": 706,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/trunk shield/5": {
+    "x": 736,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/motorway shield/5": {
+    "x": 736,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/motorway shield/5": {
+    "x": 736,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/trunk shield/5": {
+    "x": 736,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/motorway shield/5": {
+    "x": 736,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/trunk shield/5": {
+    "x": 736,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit name and number/5": {
+    "x": 766,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit number/5": {
+    "x": 766,
+    "y": 256,
+    "width": 30,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/primary shield/4": {
+    "x": 796,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/primary shield/4": {
+    "x": 796,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/primary shield/4": {
+    "x": 796,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/tertiary shield/4": {
+    "x": 822,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/tertiary shield/4": {
+    "x": 822,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/tertiary shield/4": {
+    "x": 822,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/secondary shield/4": {
+    "x": 848,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/secondary shield/4": {
+    "x": 848,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/secondary shield/4": {
+    "x": 848,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/trunk shield/4": {
+    "x": 874,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/motorway shield/4": {
+    "x": 874,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/trunk shield/4": {
+    "x": 874,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/motorway shield/4": {
+    "x": 874,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/motorway shield/4": {
+    "x": 874,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/trunk shield/4": {
+    "x": 874,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit number/4": {
+    "x": 900,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit name and number/4": {
+    "x": 900,
+    "y": 256,
+    "width": 26,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/primary shield/3": {
+    "x": 926,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/primary shield/3": {
+    "x": 926,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/primary shield/3": {
+    "x": 926,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/tertiary shield/3": {
+    "x": 948,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/tertiary shield/3": {
+    "x": 948,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/tertiary shield/3": {
+    "x": 948,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/secondary shield/3": {
+    "x": 970,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/secondary shield/3": {
+    "x": 970,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/secondary shield/3": {
+    "x": 970,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/trunk shield/3": {
+    "x": 992,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/motorway shield/3": {
+    "x": 992,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/motorway shield/3": {
+    "x": 992,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/trunk shield/3": {
+    "x": 992,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/motorway shield/3": {
+    "x": 992,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/trunk shield/3": {
+    "x": 992,
+    "y": 256,
+    "width": 22,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit number/3": {
+    "x": 1014,
+    "y": 256,
+    "width": 24,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit name and number/3": {
+    "x": 1014,
+    "y": 256,
+    "width": 24,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/primary shield/2": {
+    "x": 1038,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/primary shield/2": {
+    "x": 1038,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/primary shield/2": {
+    "x": 1038,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/tertiary shield/2": {
+    "x": 1056,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/tertiary shield/2": {
+    "x": 1056,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/tertiary shield/2": {
+    "x": 1056,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/secondary shield/2": {
+    "x": 1074,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/secondary shield/2": {
+    "x": 1074,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/secondary shield/2": {
+    "x": 1074,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/trunk shield/2": {
+    "x": 1092,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/trunk shield/2": {
+    "x": 1092,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road/motorway shield/2": {
+    "x": 1092,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/motorway shield/2": {
+    "x": 1092,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (tunnel)/motorway shield/2": {
+    "x": 1092,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "road (bridge)/trunk shield/2": {
+    "x": 1092,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit number/2": {
+    "x": 1110,
+    "y": 256,
+    "width": 20,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "junction point/exit name and number/2": {
+    "x": 1110,
+    "y": 256,
+    "width": 20,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/hospital": {
+    "x": 1130,
+    "y": 256,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/arts centre": {
+    "x": 1146,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/jewelry": {
+    "x": 1164,
+    "y": 256,
+    "width": 12,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/pet": {
+    "x": 1176,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/dog park": {
+    "x": 1194,
+    "y": 256,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/car repair": {
+    "x": 0,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/bicycle repair station": {
+    "x": 14,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/townhall": {
+    "x": 28,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/tyres": {
+    "x": 42,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/beauty": {
+    "x": 56,
+    "y": 288,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/toll booth": {
+    "x": 72,
+    "y": 288,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/video games": {
+    "x": 88,
+    "y": 288,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "railway station area": {
+    "x": 106,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "railway station point": {
+    "x": 120,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/traffic signal": {
+    "x": 134,
+    "y": 288,
+    "width": 8,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/Christian - other": {
+    "x": 142,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/Shinto": {
+    "x": 156,
+    "y": 288,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/helipad": {
+    "x": 174,
+    "y": 288,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/fitness": {
+    "x": 192,
+    "y": 288,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/hospital": {
+    "x": 208,
+    "y": 288,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/arts centre": {
+    "x": 224,
+    "y": 288,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/jewelry": {
+    "x": 242,
+    "y": 288,
+    "width": 12,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/pet": {
+    "x": 254,
+    "y": 288,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/car repair": {
+    "x": 272,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/bicycle repair station": {
+    "x": 286,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/townhall": {
+    "x": 300,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/tyres": {
+    "x": 314,
+    "y": 288,
+    "width": 14,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/beauty": {
+    "x": 328,
+    "y": 288,
+    "width": 16,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/video games": {
+    "x": 344,
+    "y": 288,
+    "width": 18,
+    "height": 18,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point (low priority)/motorcycle barrier": {
+    "x": 362,
+    "y": 288,
+    "width": 10,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/food court": {
+    "x": 372,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/restaurant": {
+    "x": 372,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/parking entrance underground": {
+    "x": 386,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "parking entrance multi-storey": {
+    "x": 402,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "vending machine point/public transport tickets": {
+    "x": 418,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "vending machine point/parking tickets": {
+    "x": 434,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/fabric": {
+    "x": 450,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/nightclub": {
+    "x": 466,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/mobile phone": {
+    "x": 482,
+    "y": 288,
+    "width": 10,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/supermarket": {
+    "x": 492,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/hostel": {
+    "x": 508,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/dentist": {
+    "x": 524,
+    "y": 288,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/fire station": {
+    "x": 536,
+    "y": 288,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/ice cream": {
+    "x": 548,
+    "y": 288,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/vehicle inspection": {
+    "x": 560,
+    "y": 288,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/police": {
+    "x": 572,
+    "y": 288,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/car wash": {
+    "x": 584,
+    "y": 288,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/pharmacy": {
+    "x": 596,
+    "y": 288,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/gift": {
+    "x": 608,
+    "y": 288,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/motorcycle": {
+    "x": 620,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/Sikh": {
+    "x": 636,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/fuel": {
+    "x": 650,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/monument": {
+    "x": 664,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/variety store": {
+    "x": 678,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/florist": {
+    "x": 692,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/car rental": {
+    "x": 706,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access point/bicycle repair station": {
+    "x": 720,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/Jewish": {
+    "x": 734,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/laundry": {
+    "x": 748,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/outdoor": {
+    "x": 762,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/bicycle rental": {
+    "x": 776,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access point/motorcycle parking": {
+    "x": 792,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/motorcycle parking": {
+    "x": 808,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/bus station": {
+    "x": 824,
+    "y": 288,
+    "width": 18,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/other": {
+    "x": 842,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/Christian - Jehovah's Witness": {
+    "x": 842,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/sports": {
+    "x": 856,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/ferry terminal": {
+    "x": 872,
+    "y": 288,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/motel": {
+    "x": 886,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/books": {
+    "x": 902,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/library": {
+    "x": 918,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/atm": {
+    "x": 934,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/marketplace": {
+    "x": 950,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/hairdresser": {
+    "x": 966,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/theatre": {
+    "x": 982,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/courthouse": {
+    "x": 998,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/Taoist": {
+    "x": 1014,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/taxi": {
+    "x": 1030,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/beverages": {
+    "x": 1046,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/boat rental": {
+    "x": 1062,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/camp site": {
+    "x": 1078,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/prison": {
+    "x": 1094,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/cinema": {
+    "x": 1110,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/electronics": {
+    "x": 1126,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/charging station": {
+    "x": 1142,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access point/charging station": {
+    "x": 1158,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access point/bicycle parking": {
+    "x": 1174,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/bicycle parking": {
+    "x": 1190,
+    "y": 288,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/computer": {
+    "x": 0,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/hardware": {
+    "x": 16,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/Buddhist": {
+    "x": 32,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/viewpoint": {
+    "x": 48,
+    "y": 306,
+    "width": 18,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/ford": {
+    "x": 66,
+    "y": 306,
+    "width": 18,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/department store": {
+    "x": 84,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/obelisk": {
+    "x": 98,
+    "y": 306,
+    "width": 10,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/obelisk": {
+    "x": 108,
+    "y": 306,
+    "width": 10,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/restaurant": {
+    "x": 118,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/food court": {
+    "x": 132,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "vending machine area/public transport tickets": {
+    "x": 146,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "vending machine area/parking tickets": {
+    "x": 162,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/fabric": {
+    "x": 178,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/nightclub": {
+    "x": 194,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/mobile phone": {
+    "x": 210,
+    "y": 306,
+    "width": 10,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/supermarket": {
+    "x": 220,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/hostel": {
+    "x": 236,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/dentist": {
+    "x": 252,
+    "y": 306,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/fire station": {
+    "x": 264,
+    "y": 306,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/ice cream": {
+    "x": 276,
+    "y": 306,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/vehicle inspection": {
+    "x": 288,
+    "y": 306,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/police": {
+    "x": 300,
+    "y": 306,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/car wash": {
+    "x": 312,
+    "y": 306,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/pharmacy": {
+    "x": 324,
+    "y": 306,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/gift": {
+    "x": 336,
+    "y": 306,
+    "width": 12,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/motorcycle": {
+    "x": 348,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/Sikh": {
+    "x": 364,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/fuel": {
+    "x": 378,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/monument": {
+    "x": 392,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/variety store": {
+    "x": 406,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/florist": {
+    "x": 420,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/car rental": {
+    "x": 434,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access area/bicycle repair station": {
+    "x": 448,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/Jewish": {
+    "x": 462,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/laundry": {
+    "x": 476,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/outdoor": {
+    "x": 490,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/bicycle rental": {
+    "x": 504,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access area/motorcycle parking": {
+    "x": 520,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/motorcycle parking": {
+    "x": 536,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/bus station": {
+    "x": 552,
+    "y": 306,
+    "width": 18,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/Christian - Jehovah's Witness": {
+    "x": 570,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/other": {
+    "x": 570,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/sports": {
+    "x": 584,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/ferry terminal": {
+    "x": 600,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/motel": {
+    "x": 614,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/books": {
+    "x": 630,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/library": {
+    "x": 646,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/atm": {
+    "x": 662,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/marketplace": {
+    "x": 678,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/hairdresser": {
+    "x": 694,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/theatre": {
+    "x": 710,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/courthouse": {
+    "x": 726,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/Taoist": {
+    "x": 742,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/taxi": {
+    "x": 758,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/beverages": {
+    "x": 774,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/boat rental": {
+    "x": 790,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/camp site": {
+    "x": 806,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/prison": {
+    "x": 822,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/cinema": {
+    "x": 838,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/electronics": {
+    "x": 854,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/charging station": {
+    "x": 870,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access area/charging station": {
+    "x": 886,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access area/bicycle parking": {
+    "x": 902,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/bicycle parking": {
+    "x": 918,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/computer": {
+    "x": 934,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/hardware": {
+    "x": 950,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/Buddhist": {
+    "x": 966,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/viewpoint": {
+    "x": 982,
+    "y": 306,
+    "width": 18,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/department store": {
+    "x": 1000,
+    "y": 306,
+    "width": 14,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity line/ford": {
+    "x": 1014,
+    "y": 306,
+    "width": 18,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "landcover/plant nursery": {
+    "x": 1032,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "landcover/garden": {
+    "x": 1032,
+    "y": 306,
+    "width": 16,
+    "height": 16,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "aerodrome point": {
+    "x": 1048,
+    "y": 306,
+    "width": 14,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/slipway": {
+    "x": 1062,
+    "y": 306,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/casino": {
+    "x": 1078,
+    "y": 306,
+    "width": 18,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access point/parking": {
+    "x": 1096,
+    "y": 306,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/parking": {
+    "x": 1112,
+    "y": 306,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/pub": {
+    "x": 1128,
+    "y": 306,
+    "width": 12,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/convenience": {
+    "x": 1140,
+    "y": 306,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/bar": {
+    "x": 1156,
+    "y": 306,
+    "width": 14,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/car": {
+    "x": 1170,
+    "y": 306,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/bicycle": {
+    "x": 1186,
+    "y": 306,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/clothes": {
+    "x": 0,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/cafe": {
+    "x": 16,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/massage": {
+    "x": 32,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/doctor": {
+    "x": 48,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/clinic": {
+    "x": 64,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/Muslim": {
+    "x": 80,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/community centre": {
+    "x": 96,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/car parts": {
+    "x": 112,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/museum": {
+    "x": 128,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship point/Hindu": {
+    "x": 144,
+    "y": 322,
+    "width": 18,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "aerodrome area": {
+    "x": 162,
+    "y": 322,
+    "width": 14,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/casino": {
+    "x": 176,
+    "y": 322,
+    "width": 18,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access area/parking": {
+    "x": 194,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/parking": {
+    "x": 210,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/pub": {
+    "x": 226,
+    "y": 322,
+    "width": 12,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/convenience": {
+    "x": 238,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/bar": {
+    "x": 254,
+    "y": 322,
+    "width": 14,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/car": {
+    "x": 268,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/bicycle": {
+    "x": 284,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/clothes": {
+    "x": 300,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/cafe": {
+    "x": 316,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/massage": {
+    "x": 332,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/doctor": {
+    "x": 348,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/clinic": {
+    "x": 364,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/Muslim": {
+    "x": 380,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/community centre": {
+    "x": 396,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/car parts": {
+    "x": 412,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/museum": {
+    "x": 428,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place of worship area/Hindu": {
+    "x": 444,
+    "y": 322,
+    "width": 18,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity line/slipway": {
+    "x": 462,
+    "y": 322,
+    "width": 16,
+    "height": 14,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/bus stop": {
+    "x": 478,
+    "y": 322,
+    "width": 10,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point (low priority)/railway crossing": {
+    "x": 488,
+    "y": 322,
+    "width": 12,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point (low priority)/railway level crossing": {
+    "x": 488,
+    "y": 322,
+    "width": 12,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point (low priority)/gate": {
+    "x": 500,
+    "y": 322,
+    "width": 14,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/optician": {
+    "x": 514,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/bank": {
+    "x": 530,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/furniture": {
+    "x": 546,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/caravan site": {
+    "x": 562,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/post office": {
+    "x": 578,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/fast food": {
+    "x": 594,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/bus stop": {
+    "x": 610,
+    "y": 322,
+    "width": 10,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "station point/subway entrance": {
+    "x": 620,
+    "y": 322,
+    "width": 12,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "capital": {
+    "x": 632,
+    "y": 322,
+    "width": 12,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area (low priority)/gate": {
+    "x": 644,
+    "y": 322,
+    "width": 14,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/optician": {
+    "x": 658,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/bank": {
+    "x": 674,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/furniture": {
+    "x": 690,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/caravan site": {
+    "x": 706,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/post office": {
+    "x": 722,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/fast food": {
+    "x": 738,
+    "y": 322,
+    "width": 16,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "aerialway/chair lift, drag lift, t-bar, j-bar, platter, rope tow, zip line/0": {
+    "x": 754,
+    "y": 322,
+    "width": 6,
+    "height": 12,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access point/parking street side": {
+    "x": 760,
+    "y": 322,
+    "width": 8,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/parking street side": {
+    "x": 768,
+    "y": 322,
+    "width": 8,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point (low priority)/railway crossing_1": {
+    "x": 776,
+    "y": 322,
+    "width": 10,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point (low priority)/railway level crossing_1": {
+    "x": 776,
+    "y": 322,
+    "width": 10,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/bakery": {
+    "x": 786,
+    "y": 322,
+    "width": 16,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/hotel": {
+    "x": 802,
+    "y": 322,
+    "width": 16,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/shoes": {
+    "x": 818,
+    "y": 322,
+    "width": 18,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "private access area/parking street side": {
+    "x": 836,
+    "y": 322,
+    "width": 8,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/parking street side": {
+    "x": 844,
+    "y": 322,
+    "width": 8,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place (high importance)": {
+    "x": 852,
+    "y": 322,
+    "width": 10,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/bakery": {
+    "x": 862,
+    "y": 322,
+    "width": 16,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/hotel": {
+    "x": 878,
+    "y": 322,
+    "width": 16,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop area/shoes": {
+    "x": 894,
+    "y": 322,
+    "width": 18,
+    "height": 10,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point (low priority)/lift gate, swing gate": {
+    "x": 912,
+    "y": 322,
+    "width": 10,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area/office": {
+    "x": 922,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity area (low priority)/lift gate, swing gate": {
+    "x": 930,
+    "y": 322,
+    "width": 10,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "station area/tram stop": {
+    "x": 940,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "station area/aerialway station, halt": {
+    "x": 940,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "station point/aerialway station, halt": {
+    "x": 948,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "station point/tram stop": {
+    "x": 948,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/health care": {
+    "x": 956,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point/office": {
+    "x": 964,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "shop point/other": {
+    "x": 972,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "place (medium importance)": {
+    "x": 980,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "landcover/allotments": {
+    "x": 988,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "landcover/orchard": {
+    "x": 996,
+    "y": 322,
+    "width": 8,
+    "height": 8,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "amenity point (low priority)/cycle barrier": {
+    "x": 1004,
+    "y": 322,
+    "width": 12,
+    "height": 6,
+    "pixelRatio": 1,
+    "sdf": false
+  },
+  "aerialway/cable car, gondola, mixed lift/0": {
+    "x": 1016,
+    "y": 322,
+    "width": 6,
+    "height": 6,
+    "pixelRatio": 1,
+    "sdf": false
+  }
+}

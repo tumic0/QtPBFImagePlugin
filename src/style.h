@@ -1,7 +1,6 @@
 #ifndef STYLE_H
 #define STYLE_H
 
-#include <QObject>
 #include <QString>
 #include <QVector>
 #include <QPair>
@@ -23,12 +22,15 @@ class QJsonArray;
 class QJsonObject;
 class Tile;
 
-class Style : public QObject
+class Style
 {
 public:
-	Style(QObject *parent = 0) : QObject(parent) {}
+	Style(const QString &fileName);
 
-	bool load(const QString &fileName);
+	bool isValid() const {return _valid;}
+	const QString &name() const {return _name;}
+	QStringList layers() const;
+
 	void render(const PBF &data, Tile &tile);
 
 private:
@@ -183,8 +185,10 @@ private:
 	void drawLayer(const PBF::Layer &pbfLayer, const Layer &styleLayer,
 	  Tile &tile);
 
+	QString _name;
 	QVector<Layer> _layers;
 	Sprites _sprites, _sprites2x;
+	bool _valid;
 };
 
 #endif // STYLE_H

@@ -1,4 +1,5 @@
 #include <QStandardPaths>
+#include <QDir>
 #include "pbfplugin.h"
 #include "pbfhandler.h"
 #include "style.h"
@@ -6,15 +7,19 @@
 
 PBFPlugin::PBFPlugin()
 {
-	_style = new Style(this);
+	QString styleDir(QStandardPaths::locate(QStandardPaths::AppDataLocation,
+	  "style", QStandardPaths::LocateDirectory));
+	loadStyles(styleDir);
 
-	QString style(QStandardPaths::locate(QStandardPaths::AppDataLocation,
-	  "style/style.json"));
-
-	if (style.isEmpty() || !_style->load(style)) {
+	if (_styles.isEmpty()) {
 		Q_INIT_RESOURCE(pbfplugin);
-		_style->load(":/style/style.json");
+		loadStyles(":/style");
 	}
+}
+
+PBFPlugin::~PBFPlugin()
+{
+	qDeleteAll(_styles);
 }
 
 QImageIOPlugin::Capabilities PBFPlugin::capabilities(QIODevice *device,
@@ -30,8 +35,23 @@ QImageIOPlugin::Capabilities PBFPlugin::capabilities(QIODevice *device,
 QImageIOHandler *PBFPlugin::create(QIODevice *device,
   const QByteArray &format) const
 {
-	QImageIOHandler *handler = new PBFHandler(_style);
+	QImageIOHandler *handler = new PBFHandler(_styles);
 	handler->setDevice(device);
 	handler->setFormat(format);
 	return handler;
+}
+
+void PBFPlugin::loadStyles(const QString &path)
+{
+	QDir dir(path);
+	QFileInfoList styles(dir.entryInfoList(QDir::Dirs | QDir::NoDotAndDotDot));
+
+	for (int i = 0; i < styles.size(); i++) {
+		QDir d(styles.at(i).absoluteFilePath());
+		Style *style = new Style(d.filePath("style.json"));
+		if (style->isValid())
+			_styles.append(style);
+		else
+			delete style;
+	}
 }

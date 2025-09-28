@@ -7,24 +7,18 @@ image:
   - Visual Studio 2022
 
 environment:
-  VCPKGDIR: C:\tools\vcpkg\installed\x64-windows-static-md-release
   QTDIR: C:\Qt\6.9\msvc2022_64
 
 install:
 - cmd: |-
     set PATH=%QTDIR%\bin;%PATH%
     call "C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Auxiliary\Build\vcvars64.bat
-    vcpkg install zlib:x64-windows-static-md-release
-    copy /y %VCPKGDIR%\lib\zlib.lib %VCPKGDIR%\lib\zlibstatic.lib
 
 build_script:
 - cmd: |-
-    qmake ZLIB=%VCPKGDIR% pbfplugin.pro
+    qmake pbfplugin.pro
     nmake release
 
 artifacts:
 - path: release\pbf4.dll
   name: pbf4.dll
-
-cache:
-- C:\tools\vcpkg\installed\
