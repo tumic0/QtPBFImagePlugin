@@ -20,5 +20,5 @@ build_script:
     nmake release
 
 artifacts:
-- path: release\pbf4.dll
-  name: pbf4.dll
+- path: release\pbf5.dll
+  name: pbf5.dll
