@@ -29,8 +29,8 @@ For a complete code sample see the [pbf2png](https://github.com/tumic0/pbf2png)
 conversion utility.
 
 ### HiDPI
-The plugin supports vector scaling using QImageReader's *setScaledSize()* method,
-so when used like in the following example:
+The plugin supports vector scaling using the *QImageReader::setScaledSize()*
+method, so when used like in the following example:
 ```cpp
 QImage img;
 QImageReader reader(file, QByteArray::number(zoom));
@@ -48,7 +48,7 @@ QByteArray fmt(QByteArray::number(zoom) + ';' + QByteArray::number(overzoom));
 img.loadFromData(data, fmt);
 ```
 you will get (512<<overzoom)x(512<<overzoom)px tiles with a pixel ratio of 1.
-When overzoom is combined with setScaledSize(), the base size is the overzoomed
+When overzoom is combined with *setScaledSize()*, the base size is the overzoomed
 tile size.
 
 ### Style selection
@@ -62,7 +62,7 @@ img.loadFromData(data, fmt);
 ```
 the style-th style available will be used to render the tile.
 
-To retrieve a list of available styles, call `QImageReader::text()` with the
+To retrieve a list of available styles, call *QImageReader::text()* with the
 "Description" key:
 ```cpp
 QImageReader reader(&imageData);
@@ -108,13 +108,13 @@ This will fill *info* with a JSON array like:
 ```
 
 ## Styles
-The map styles are loaded from the subdirectories of the
+The map styles are loaded from subdirectories of the
 [$AppDataLocation](http://doc.qt.io/qt-5/qstandardpaths.html)/style
 directory on plugin load, one style per subdirectory. If the style uses a sprite,
 the sprite JSON file must be named `sprite.json` and the sprite image `sprite.png`
 and both files must be placed in the same directory as the style itself.
 
-For a list of compatible styles for various different tile schemes see the
+For a set of compatible styles for various different tile schemes see the
 [QtPBFImagePlugin-styles](https://github.com/tumic0/QtPBFImagePlugin-styles)
 repository.
 
@@ -147,8 +147,8 @@ in the style are ignored.
 layout algorithm to work properly. Additionally, the tile buffer must be large
 enough to contain all neighboring text features overlapping to the tile bounds
 (only data from the tile itself can be drawn to the resulting image).
-* Expressions are not supported in the styles, only property functions are
-implemented.
+* Expressions are not supported in the styles, only the original GL zoom
+functions are implemented.
 
 ## Changelog
 [Changelog](https://build.opensuse.org/projects/home:tumic:QtPBFImagePlugin/packages/QtPBFImagePlugin/files/qt6-qtpbfimageformat.changes)
