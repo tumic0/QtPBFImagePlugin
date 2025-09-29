@@ -5,11 +5,11 @@
 		<file>style/OpenMapTiles/sprite.png</file>
 		<file>style/OpenMapTiles/sprite@2x.json</file>
 		<file>style/OpenMapTiles/sprite@2x.png</file>
-		<file>style/Tilezen/style.json</file>
-		<file>style/Tilezen/sprite.json</file>
-		<file>style/Tilezen/sprite.png</file>
-		<file>style/Tilezen/sprite@2x.json</file>
-		<file>style/Tilezen/sprite@2x.png</file>
+		<file>style/Protomaps/style.json</file>
+		<file>style/Protomaps/sprite.json</file>
+		<file>style/Protomaps/sprite.png</file>
+		<file>style/Protomaps/sprite@2x.json</file>
+		<file>style/Protomaps/sprite@2x.png</file>
 		<file>style/Mapbox/style.json</file>
 		<file>style/Mapbox/sprite.json</file>
 		<file>style/Mapbox/sprite.png</file>
