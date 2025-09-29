@@ -1,6 +1,6 @@
 {
     "version": 8,
-    "name": "Tilezen",
+    "name": "Protomaps",
     "sources": {
         "protomaps": {
             "type": "vector",

@@ -8,7 +8,7 @@ PBF(MVT) vector tiles without (almost, see usage) any application modifications.
 
 Standard Mapbox GL Styles are used for styling the maps. Most relevant style
 features used by [Maputnik](https://maputnik.github.io/editor) are supported.
-A set of default styles for the OpenMapTiles, Mapbox, Tilezen and Versatiles
+A set of default styles for the OpenMapTiles, Mapbox, Protomaps and Versatiles
 tile shemes is part of the plugin.
 
 The default tile size is 512px.
@@ -102,7 +102,7 @@ This will fill *info* with a JSON array like:
       "roads",
       "water"
     ],
-    "name": "Tilezen"
+    "name": "Protomaps"
   }
 ]
 ```
