@@ -41,21 +41,24 @@ bool PBFHandler::read(QImage *image)
 	}
 
 	QList<QByteArray> list(format().split(';'));
-	int zoom = list.size() ? list.first().toInt() : 0;
-	int overzoom = (list.size() > 1) ? list.at(1).toInt() : 0;
-	int style = (list.size() > 2) ? list.at(2).toInt() : 0;
+	unsigned zoom = list.size() ? list.first().toUInt() : 0;
+	unsigned overzoom = (list.size() > 1) ? list.at(1).toUInt() : 0;
+	unsigned style = (list.size() > 2) ? list.at(2).toUInt() : 0;
+
+	if (style >= _styles.size())
+		style = 0;
 
 	QSize scaledSize(_scaledSize.isValid()
 	  ? _scaledSize : QSize(TILE_SIZE, TILE_SIZE));
-	QSize size(scaledSize.width()<<overzoom,
-	  scaledSize.height()<<overzoom);
+	QSize size(qMin(scaledSize.width()<<overzoom, 4096),
+	  qMin(scaledSize.height()<<overzoom, 4096));
 	QPointF scale((qreal)scaledSize.width() / TILE_SIZE,
 	  (qreal)scaledSize.height() / TILE_SIZE);
 
 	*image = QImage(size, QImage::Format_ARGB32_Premultiplied);
 	Tile tile(image, zoom, scale);
 
-	_styles.at(style < _styles.size() ? style : 0)->render(data, tile);
+	_styles.at(style)->render(data, tile);
 
 	return true;
 }
