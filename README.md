@@ -38,7 +38,7 @@ reader.setScaledSize(QSize(1024, 1024));
 reader.read(&img);
 ```
 you will get 1024x1024px tiles with a pixel ratio of 2 (= HiDPI tiles). The maximal
-tile size is 4096x4096.
+tile size is 4096x4096px.
 
 ### Overzoom
 Since version 3 of the plugin tile overzoom is supported. If you set *format*
