@@ -9,7 +9,8 @@ PBFPlugin::PBFPlugin()
 {
 	QString styleDir(QStandardPaths::locate(QStandardPaths::AppDataLocation,
 	  "style", QStandardPaths::LocateDirectory));
-	loadStyles(styleDir);
+	if (!styleDir.isEmpty())
+		loadStyles(styleDir);
 
 	if (_styles.isEmpty()) {
 		Q_INIT_RESOURCE(pbfplugin);
