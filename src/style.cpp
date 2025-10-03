@@ -732,8 +732,5 @@ QStringList Style::layers() const
 		if (!_layers.at(i).sourceLayer().isEmpty())
 			set.insert(_layers.at(i).sourceLayer());
 
-	QStringList list(set.values());
-	std::sort(list.begin(), list.end());
-
-	return list;
+	return set.values();
 }
