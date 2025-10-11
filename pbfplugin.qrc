@@ -20,5 +20,10 @@
 		<file>style/Versatiles/sprite.png</file>
 		<file>style/Versatiles/sprite@2x.json</file>
 		<file>style/Versatiles/sprite@2x.png</file>
+		<file>style/COROS/style.json</file>
+		<file>style/COROS/sprite.json</file>
+		<file>style/COROS/sprite.png</file>
+		<file>style/COROS/sprite@2x.json</file>
+		<file>style/COROS/sprite@2x.png</file>
 	</qresource>
 </RCC>
