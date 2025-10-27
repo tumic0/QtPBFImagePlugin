@@ -1,3 +1,6 @@
+> [!CAUTION]
+> This project is abandoned now.
+
 # QtPBFImagePlugin
 Qt image plugin for displaying Mapbox vector tiles
 
@@ -190,4 +193,4 @@ A picture is worth a thousand words.
 ![apollo-bright 16](https://tumic0.github.io/QtPBFImagePlugin/images/apollo-bright-16.png)
 
 ## Applications using QtPBFImagePlugin
-* [GPXSee](https://www.gpxsee.org)
+* ~~[GPXSee](https://www.gpxsee.org)~~ (in versions < 15.0)
